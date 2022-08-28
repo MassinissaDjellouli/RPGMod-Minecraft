@@ -11,5 +11,4 @@ public class ToolTiers {
     public static final Tier COPPER =
             new ForgeTier(2,875,9,2f,13, BlockTags.NEEDS_IRON_TOOL,
             () -> Ingredient.of(Items.COPPER_INGOT));
-
 }
