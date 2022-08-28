@@ -35,6 +35,9 @@ public class ModItems {
                     new Item.Properties().tab(CreativeModeTab.TAB_COMBAT)));
 
 
+    //Steel
+    public static final RegistryObject<Item> STEEL_INGOT = ITEM_DEFERRED_REGISTER.register("steel_ingot",
+            ()-> new Item(new Item.Properties().tab(CreativeModeTab.TAB_MISC)));
     public static void registerItems(IEventBus eventBus){
         ITEM_DEFERRED_REGISTER.register(eventBus);
     }
