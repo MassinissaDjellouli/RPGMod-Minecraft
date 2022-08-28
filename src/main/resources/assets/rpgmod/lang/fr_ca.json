@@ -1,3 +1,7 @@
 {
-
+    "item.rpgmod.copper_pickaxe": "Pioche en cuivre",
+    "item.rpgmod.copper_axe": "Hache en cuivre",
+    "item.rpgmod.copper_shovel": "Pelle en cuivre",
+    "item.rpgmod.copper_hoe": "Houe en cuivre",
+    "item.rpgmod.copper_sword": "Épée en cuivre"
 }
