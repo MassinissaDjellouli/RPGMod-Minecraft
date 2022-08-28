@@ -4,5 +4,8 @@
     "item.rpgmod.copper_shovel": "Pelle en cuivre",
     "item.rpgmod.copper_hoe": "Houe en cuivre",
     "item.rpgmod.copper_sword": "Épée en cuivre",
-    "item.rpgmod.steel_ingot": "Lingot d'acier"
+    "item.rpgmod.steel_ingot": "Lingot d'acier",
+    "item.rpgmod.fire_crystal": "Cristal de feu",
+    "item.rpgmod.ice_crystal": "Cristal de glace",
+    "item.rpgmod.poison_crystal": "Cristal de poison"
 }

@@ -38,6 +38,16 @@ public class ModItems {
     //Steel
     public static final RegistryObject<Item> STEEL_INGOT = ITEM_DEFERRED_REGISTER.register("steel_ingot",
             ()-> new Item(new Item.Properties().tab(CreativeModeTab.TAB_MISC)));
+
+    //Crystals
+    public static final RegistryObject<Item> FIRE_CRYSTAL = ITEM_DEFERRED_REGISTER.register("fire_crystal",
+            ()-> new Item(new Item.Properties().tab(CreativeModeTab.TAB_MISC)));
+    public static final RegistryObject<Item> ICE_CRYSTAL = ITEM_DEFERRED_REGISTER.register("ice_crystal",
+            ()-> new Item(new Item.Properties().tab(CreativeModeTab.TAB_MISC)));
+    public static final RegistryObject<Item> POISON_CRYSTAL = ITEM_DEFERRED_REGISTER.register("poison_crystal",
+            ()-> new Item(new Item.Properties().tab(CreativeModeTab.TAB_MISC)));
+
+
     public static void registerItems(IEventBus eventBus){
         ITEM_DEFERRED_REGISTER.register(eventBus);
     }
