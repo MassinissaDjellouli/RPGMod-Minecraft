@@ -1,0 +1,6 @@
+{
+  "parent": "block/cube_all",
+  "textures": {
+    "all": "rpgmod:blocks/deepslate_poison_crystal_ore"
+  }
+}

@@ -31,6 +31,22 @@ public class ModBlocks {
             ()-> new DropExperienceBlock(
             BlockBehaviour.Properties.of(Material.STONE).strength(7.6f).requiresCorrectToolForDrops(),
         UniformInt.of(3,7)),CreativeModeTab.TAB_BUILDING_BLOCKS);
+    public static final RegistryObject<Block> ICE_CRYSTAL_ORE = registerBlock("ice_crystal_ore",
+            ()-> new DropExperienceBlock(
+            BlockBehaviour.Properties.of(Material.STONE).strength(7.6f).requiresCorrectToolForDrops(),
+                    UniformInt.of(3,7)),CreativeModeTab.TAB_BUILDING_BLOCKS);
+    public static final RegistryObject<Block> DEEPSLATE_ICE_CRYSTAL_ORE = registerBlock("deepslate_ice_crystal_ore",
+            ()-> new DropExperienceBlock(
+            BlockBehaviour.Properties.of(Material.STONE).strength(7.6f).requiresCorrectToolForDrops(),
+        UniformInt.of(3,7)),CreativeModeTab.TAB_BUILDING_BLOCKS);
+    public static final RegistryObject<Block> POISON_CRYSTAL_ORE = registerBlock("poison_crystal_ore",
+            ()-> new DropExperienceBlock(
+            BlockBehaviour.Properties.of(Material.STONE).strength(7.6f).requiresCorrectToolForDrops(),
+                    UniformInt.of(3,7)),CreativeModeTab.TAB_BUILDING_BLOCKS);
+    public static final RegistryObject<Block> DEEPSLATE_POISON_CRYSTAL_ORE = registerBlock("deepslate_poison_crystal_ore",
+            ()-> new DropExperienceBlock(
+            BlockBehaviour.Properties.of(Material.STONE).strength(7.6f).requiresCorrectToolForDrops(),
+        UniformInt.of(3,7)),CreativeModeTab.TAB_BUILDING_BLOCKS);
 
     private static <T extends Block>RegistryObject<Item> registerBlockItem(String name, RegistryObject<T> block, CreativeModeTab tab){
         return ModItems.ITEM_DEFERRED_REGISTER.register(name, () -> new BlockItem(block.get(), new Item.Properties().tab(tab)));

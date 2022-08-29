@@ -9,5 +9,9 @@
     "item.rpgmod.ice_crystal": "Cristal de glace",
     "item.rpgmod.poison_crystal": "Cristal de poison",
     "block.rpgmod.fire_crystal_ore": "Minerai de cristal de feu",
-    "block.rpgmod.deepslate_fire_crystal_ore": "Minerai de cristal de feu de profondoise"
+    "block.rpgmod.deepslate_fire_crystal_ore": "Minerai de cristal de feu de profondoise",
+    "block.rpgmod.ice_crystal_ore": "Minerai de cristal de glace",
+    "block.rpgmod.deepslate_ice_crystal_ore": "Minerai de cristal de glace de profondoise",
+    "block.rpgmod.poison_crystal_ore": "Minerai de cristal de poison",
+    "block.rpgmod.deepslate_poison_crystal_ore": "Minerai de cristal de poison de profondoise"
 }
