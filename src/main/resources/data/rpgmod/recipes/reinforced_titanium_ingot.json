@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "#": {
+      "item": "rpgmod:steel_ingot"
+    },
+    "X": {
+      "item": "rpgmod:titanium_ingot"
+    }
+  },
+  "pattern": [
+    "X#"
+  ],
+  "result": {
+    "item": "rpgmod:reinforced_titanium_ingot"
+  }
+}

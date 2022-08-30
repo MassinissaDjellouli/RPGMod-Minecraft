@@ -15,5 +15,7 @@
     "block.rpgmod.poison_crystal_ore": "Minerai de cristal de poison",
     "block.rpgmod.deepslate_poison_crystal_ore": "Minerai de cristal de poison de profondoise",
     "block.rpgmod.multi_crystal_ore": "Minerai de cristal",
-    "block.rpgmod.deepslate_multi_crystal_ore": "Minerai de cristal de profondoise"
+    "block.rpgmod.deepslate_multi_crystal_ore": "Minerai de cristal de profondoise",
+    "item.rpgmod.titanium_ingot": "Lingot de titane",
+    "item.rpgmod.reinforced_titanium_ingot": "Lingot de titane renforcé"
 }

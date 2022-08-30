@@ -47,6 +47,11 @@ public class ModItems {
     public static final RegistryObject<Item> POISON_CRYSTAL = ITEM_DEFERRED_REGISTER.register("poison_crystal",
             ()-> new Item(new Item.Properties().tab(CreativeModeTab.TAB_MISC)));
 
+    //Titanium
+    public static final RegistryObject<Item> TITANIUM_INGOT = ITEM_DEFERRED_REGISTER.register("titanium_ingot",
+            ()-> new Item(new Item.Properties().tab(CreativeModeTab.TAB_MISC)));
+    public static final RegistryObject<Item> REINFORCED_TITANIUM_INGOT = ITEM_DEFERRED_REGISTER.register("reinforced_titanium_ingot",
+            ()-> new Item(new Item.Properties().tab(CreativeModeTab.TAB_MISC)));
 
     public static void registerItems(IEventBus eventBus){
         ITEM_DEFERRED_REGISTER.register(eventBus);
