@@ -48,6 +48,17 @@ public class ModBlocks {
             ()-> new DropExperienceBlock(
             BlockBehaviour.Properties.of(Material.STONE).strength(14f).requiresCorrectToolForDrops(),
         UniformInt.of(3,7)),CreativeModeTab.TAB_BUILDING_BLOCKS);
+    public static final RegistryObject<Block> DEEPSLATE_MULTI_CRYSTAL_ORE = registerBlock("deepslate_multi_crystal_ore",
+            ()-> new DropExperienceBlock(
+            BlockBehaviour.Properties.of(Material.STONE).strength(14f).requiresCorrectToolForDrops(),
+        UniformInt.of(3,7)),CreativeModeTab.TAB_BUILDING_BLOCKS);
+    public static final RegistryObject<Block> MULTI_CRYSTAL_ORE = registerBlock("multi_crystal_ore",
+            ()-> new DropExperienceBlock(
+            BlockBehaviour.Properties.of(Material.STONE).strength(14f).requiresCorrectToolForDrops(),
+        UniformInt.of(3,7)),CreativeModeTab.TAB_BUILDING_BLOCKS);
+
+
+
 
     private static <T extends Block>RegistryObject<Item> registerBlockItem(String name, RegistryObject<T> block, CreativeModeTab tab){
         return ModItems.ITEM_DEFERRED_REGISTER.register(name, () -> new BlockItem(block.get(), new Item.Properties().tab(tab)));
