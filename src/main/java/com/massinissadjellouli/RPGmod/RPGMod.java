@@ -5,6 +5,7 @@ import com.massinissadjellouli.RPGmod.block.entities.ModBlockEntities;
 import com.massinissadjellouli.RPGmod.item.ModItems;
 import com.massinissadjellouli.RPGmod.menus.ModMenuTypes;
 import com.massinissadjellouli.RPGmod.world.features.ModConfiguredFeatures;
+import com.massinissadjellouli.RPGmod.world.features.ModPlacedFeatures;
 import com.mojang.logging.LogUtils;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.eventbus.api.IEventBus;
@@ -35,5 +36,6 @@ public class RPGMod
         ModBlockEntities.registerBlockEntities(modEventBus);
         ModMenuTypes.registerMenus(modEventBus);
         ModConfiguredFeatures.registerConfiguredFeatures(modEventBus);
+        ModPlacedFeatures.registerPlacedFeatures(modEventBus);
     }
 }
