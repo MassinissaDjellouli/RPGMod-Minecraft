@@ -4,20 +4,42 @@
     "item.rpgmod.copper_shovel": "Pelle en cuivre",
     "item.rpgmod.copper_hoe": "Houe en cuivre",
     "item.rpgmod.copper_sword": "Épée en cuivre",
+
+    "item.rpgmod.steel_pickaxe": "Pioche en acier",
+    "item.rpgmod.steel_axe": "Hache en acier",
+    "item.rpgmod.steel_shovel": "Pelle en acier",
+    "item.rpgmod.steel_hoe": "Houe en acier",
+    "item.rpgmod.steel_sword": "Épée en acier",
+
+    "item.rpgmod.titanium_pickaxe": "Pioche en titane",
+    "item.rpgmod.titanium_axe": "Hache en titane",
+    "item.rpgmod.titanium_shovel": "Pelle en titane",
+    "item.rpgmod.titanium_hoe": "Houe en titane",
+    "item.rpgmod.titanium_sword": "Épée en titane",
+
+    "item.rpgmod.reinforced_titanium_pickaxe": "Pioche en titane renforcé",
+    "item.rpgmod.reinforced_titanium_axe": "Hache en titane renforcé",
+    "item.rpgmod.reinforced_titanium_shovel": "Pelle en titane renforcé",
+    "item.rpgmod.reinforced_titanium_hoe": "Houe en titane renforcé",
+    "item.rpgmod.reinforced_titanium_sword": "Épée en titane renforcé",
+
     "item.rpgmod.steel_ingot": "Lingot d'acier",
+    "item.rpgmod.titanium_ingot": "Lingot de titane",
+    "item.rpgmod.reinforced_titanium_ingot": "Lingot de titane renforcé",
+
     "item.rpgmod.fire_crystal": "Cristal de feu",
     "item.rpgmod.ice_crystal": "Cristal de glace",
     "item.rpgmod.poison_crystal": "Cristal de poison",
+
     "block.rpgmod.fire_crystal_ore": "Minerai de cristal de feu",
-    "block.rpgmod.deepslate_fire_crystal_ore": "Minerai de cristal de feu de profondoise",
     "block.rpgmod.ice_crystal_ore": "Minerai de cristal de glace",
-    "block.rpgmod.deepslate_ice_crystal_ore": "Minerai de cristal de glace de profondoise",
     "block.rpgmod.poison_crystal_ore": "Minerai de cristal de poison",
-    "block.rpgmod.deepslate_poison_crystal_ore": "Minerai de cristal de poison de profondoise",
     "block.rpgmod.multi_crystal_ore": "Minerai de cristal",
-    "block.rpgmod.deepslate_multi_crystal_ore": "Minerai de cristal de profondoise",
-    "item.rpgmod.titanium_ingot": "Lingot de titane",
-    "item.rpgmod.reinforced_titanium_ingot": "Lingot de titane renforcé",
     "block.rpgmod.titanium_ore": "Minerai de titane",
+    
+    "block.rpgmod.deepslate_fire_crystal_ore": "Minerai de cristal de feu de profondoise",
+    "block.rpgmod.deepslate_ice_crystal_ore": "Minerai de cristal de glace de profondoise",
+    "block.rpgmod.deepslate_poison_crystal_ore": "Minerai de cristal de poison de profondoise",
+    "block.rpgmod.deepslate_multi_crystal_ore": "Minerai de cristal de profondoise",
     "block.rpgmod.deepslate_titanium_ore": "Minerai de titane de profondoise"
 }
