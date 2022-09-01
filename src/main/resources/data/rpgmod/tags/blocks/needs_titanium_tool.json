@@ -1,4 +1,5 @@
 {
+  "replace": false,
   "values": [
     "rpgmod:fire_crystal_ore",
     "rpgmod:ice_crystal_ore",
