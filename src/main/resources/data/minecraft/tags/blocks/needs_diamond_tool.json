@@ -1,13 +1,7 @@
 {
   "replace": false,
   "values": [
-    "rpgmod:fire_crystal_ore",
-    "rpgmod:ice_crystal_ore",
-    "rpgmod:poison_crystal_ore",
-    "rpgmod:multi_crystal_ore",
-    "rpgmod:deepslate_fire_crystal_ore",
-    "rpgmod:deepslate_ice_crystal_ore",
-    "rpgmod:deepslate_poison_crystal_ore",
-    "rpgmod:deepslate_multi_crystal_ore"
+    "rpgmod:titanium_ore",
+    "rpgmod:deepslate_titanium_ore"
   ]
 }
