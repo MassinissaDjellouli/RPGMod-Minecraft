@@ -7,10 +7,9 @@ import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.DropExperienceBlock;
+import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
-import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.Material;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.registries.DeferredRegister;
@@ -30,7 +29,7 @@ public class ModBlocks {
                     UniformInt.of(7,13)),CreativeModeTab.TAB_BUILDING_BLOCKS);
     public static final RegistryObject<Block> DEEPSLATE_FIRE_CRYSTAL_ORE = registerBlock("deepslate_fire_crystal_ore",
             ()-> new DropExperienceBlock(
-            BlockBehaviour.Properties.of(Material.STONE).strength(14f,10f).requiresCorrectToolForDrops(),
+            BlockBehaviour.Properties.of(Material.STONE).strength(14f,10f).requiresCorrectToolForDrops().sound(SoundType.DEEPSLATE),
         UniformInt.of(7,13)),CreativeModeTab.TAB_BUILDING_BLOCKS);
     public static final RegistryObject<Block> ICE_CRYSTAL_ORE = registerBlock("ice_crystal_ore",
             ()-> new DropExperienceBlock(
@@ -38,7 +37,7 @@ public class ModBlocks {
                     UniformInt.of(7,13)),CreativeModeTab.TAB_BUILDING_BLOCKS);
     public static final RegistryObject<Block> DEEPSLATE_ICE_CRYSTAL_ORE = registerBlock("deepslate_ice_crystal_ore",
             ()-> new DropExperienceBlock(
-            BlockBehaviour.Properties.of(Material.STONE).strength(14f,10f).requiresCorrectToolForDrops(),
+            BlockBehaviour.Properties.of(Material.STONE).strength(14f,10f).requiresCorrectToolForDrops().sound(SoundType.DEEPSLATE),
         UniformInt.of(7,13)),CreativeModeTab.TAB_BUILDING_BLOCKS);
     public static final RegistryObject<Block> POISON_CRYSTAL_ORE = registerBlock("poison_crystal_ore",
             ()-> new DropExperienceBlock(
@@ -46,11 +45,11 @@ public class ModBlocks {
                     UniformInt.of(7,13)),CreativeModeTab.TAB_BUILDING_BLOCKS);
     public static final RegistryObject<Block> DEEPSLATE_POISON_CRYSTAL_ORE = registerBlock("deepslate_poison_crystal_ore",
             ()-> new DropExperienceBlock(
-            BlockBehaviour.Properties.of(Material.STONE).strength(14f,10f).requiresCorrectToolForDrops(),
+            BlockBehaviour.Properties.of(Material.STONE).strength(14f,10f).requiresCorrectToolForDrops().sound(SoundType.DEEPSLATE),
         UniformInt.of(7,13)),CreativeModeTab.TAB_BUILDING_BLOCKS);
     public static final RegistryObject<Block> DEEPSLATE_MULTI_CRYSTAL_ORE = registerBlock("deepslate_multi_crystal_ore",
             ()-> new DropExperienceBlock(
-            BlockBehaviour.Properties.of(Material.STONE).strength(14f,10f).requiresCorrectToolForDrops(),
+            BlockBehaviour.Properties.of(Material.STONE).strength(14f,10f).requiresCorrectToolForDrops().sound(SoundType.DEEPSLATE),
         UniformInt.of(7,13)),CreativeModeTab.TAB_BUILDING_BLOCKS);
     public static final RegistryObject<Block> MULTI_CRYSTAL_ORE = registerBlock("multi_crystal_ore",
             ()-> new DropExperienceBlock(
@@ -64,12 +63,12 @@ public class ModBlocks {
             ,CreativeModeTab.TAB_BUILDING_BLOCKS);
     public static final RegistryObject<Block> DEEPSLATE_TITANIUM_ORE = registerBlock("deepslate_titanium_ore",
             ()-> new Block(
-                    BlockBehaviour.Properties.of(Material.STONE).strength(4f,4f).requiresCorrectToolForDrops())
+                    BlockBehaviour.Properties.of(Material.STONE).strength(4f,4f).requiresCorrectToolForDrops().sound(SoundType.DEEPSLATE))
             ,CreativeModeTab.TAB_BUILDING_BLOCKS);
 
 
-    private static <T extends Block>RegistryObject<Item> registerBlockItem(String name, RegistryObject<T> block, CreativeModeTab tab){
-        return ModItems.ITEM_DEFERRED_REGISTER.register(name, () -> new BlockItem(block.get(), new Item.Properties().tab(tab)));
+    private static <T extends Block> void registerBlockItem(String name, RegistryObject<T> block, CreativeModeTab tab){
+        ModItems.ITEM_DEFERRED_REGISTER.register(name, () -> new BlockItem(block.get(), new Item.Properties().tab(tab)));
     }
 
     private static <T extends  Block> RegistryObject<T> registerBlock(String name, Supplier<T> block, CreativeModeTab tab){
