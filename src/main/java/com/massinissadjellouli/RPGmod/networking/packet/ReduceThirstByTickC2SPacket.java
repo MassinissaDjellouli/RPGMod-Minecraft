@@ -1,5 +1,7 @@
 package com.massinissadjellouli.RPGmod.networking.packet;
 
+import com.massinissadjellouli.RPGmod.networking.ModPackets;
+import com.massinissadjellouli.RPGmod.thirst.PlayerThirst;
 import com.massinissadjellouli.RPGmod.thirst.PlayerThirstProvider;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.server.level.ServerPlayer;
@@ -27,6 +29,14 @@ public class ReduceThirstByTickC2SPacket {
                                     playerThirst ->{
                                     if(playerThirst.getThirstLevel() > 0){
                                     playerThirst.reduceTicks();
+                                    ModPackets.sendToPlayer(new ThirstDataSyncS2CPacket(playerThirst.getThirstLevel()),player);
+
+                                        if(PlayerThirst.getTicksSinceLastJump() >= PlayerThirst.DELAY_JUMP){
+                                            PlayerThirst.setReduceByTick(1);
+                                            PlayerThirst.addTickSinceLastJump(-PlayerThirst.getTicksSinceLastJump());
+                                        }else {
+                                            PlayerThirst.addTickSinceLastJump(1);
+                                        }
                                     }
                                 }
                             );

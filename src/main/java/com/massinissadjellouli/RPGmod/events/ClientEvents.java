@@ -1,26 +1,24 @@
 package com.massinissadjellouli.RPGmod.events;
 
 import com.massinissadjellouli.RPGmod.RPGMod;
+import com.massinissadjellouli.RPGmod.client.ClientGamemodeData;
+import com.massinissadjellouli.RPGmod.client.ClientThirstData;
 import com.massinissadjellouli.RPGmod.client.ThirstHudOverlay;
 import com.massinissadjellouli.RPGmod.networking.ModPackets;
 import com.massinissadjellouli.RPGmod.networking.packet.DrankC2SPacket;
+import com.massinissadjellouli.RPGmod.networking.packet.GamemodeDataSyncC2SPacket;
 import com.massinissadjellouli.RPGmod.networking.packet.JumpReduceThirstC2SPacket;
 import com.massinissadjellouli.RPGmod.networking.packet.ReduceThirstByTickC2SPacket;
+import com.massinissadjellouli.RPGmod.thirst.PlayerThirst;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.player.LocalPlayer;
-import net.minecraft.network.chat.Component;
-import net.minecraft.world.entity.vehicle.MinecartTNT;
 import net.minecraft.world.item.Items;
-import net.minecraft.world.item.PotionItem;
-import net.minecraft.world.item.alchemy.Potion;
-import net.minecraft.world.level.Level;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.RegisterGuiOverlaysEvent;
 import net.minecraftforge.event.TickEvent;
-import net.minecraftforge.event.entity.item.ItemTossEvent;
 import net.minecraftforge.event.entity.living.LivingEntityUseItemEvent;
 import net.minecraftforge.event.entity.living.LivingEvent;
+import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
@@ -43,8 +41,17 @@ public class ClientEvents {
     @SubscribeEvent
     public static void onPlayerTick(TickEvent.PlayerTickEvent event){
         if(event.side.isClient()){
+            if(event.player.isSprinting()){
+                PlayerThirst.setReduceByTick(PlayerThirst.getReduceByTick() + 0.4f);
+            }
             ModPackets.sendToServer(new ReduceThirstByTickC2SPacket());
+            ModPackets.sendToServer(new GamemodeDataSyncC2SPacket());
         }
+    }
+
+    @SubscribeEvent
+    public static void onGMChange(PlayerEvent.PlayerChangeGameModeEvent event){
+        ClientGamemodeData.setIsSurvival(event.getCurrentGameMode().isSurvival());
     }
     @Mod.EventBusSubscriber(modid = RPGMod.MODID,value = Dist.CLIENT,bus = Mod.EventBusSubscriber.Bus.MOD)
     public static class ClientModBusEvents{

@@ -1,9 +1,7 @@
 package com.massinissadjellouli.RPGmod.networking;
 
 import com.massinissadjellouli.RPGmod.RPGMod;
-import com.massinissadjellouli.RPGmod.networking.packet.DrankC2SPacket;
-import com.massinissadjellouli.RPGmod.networking.packet.JumpReduceThirstC2SPacket;
-import com.massinissadjellouli.RPGmod.networking.packet.ReduceThirstByTickC2SPacket;
+import com.massinissadjellouli.RPGmod.networking.packet.*;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraftforge.network.NetworkDirection;
@@ -42,6 +40,16 @@ public class ModPackets {
                 .decoder(ReduceThirstByTickC2SPacket::new)
                 .encoder(ReduceThirstByTickC2SPacket::toBytes)
                 .consumerMainThread(ReduceThirstByTickC2SPacket::handle)
+                .add();
+        net.messageBuilder(ThirstDataSyncS2CPacket.class,id(), NetworkDirection.PLAY_TO_CLIENT)
+                .decoder(ThirstDataSyncS2CPacket::new)
+                .encoder(ThirstDataSyncS2CPacket::toBytes)
+                .consumerMainThread(ThirstDataSyncS2CPacket::handle)
+                .add();
+        net.messageBuilder(GamemodeDataSyncC2SPacket.class,id(), NetworkDirection.PLAY_TO_SERVER)
+                .decoder(GamemodeDataSyncC2SPacket::new)
+                .encoder(GamemodeDataSyncC2SPacket::toBytes)
+                .consumerMainThread(GamemodeDataSyncC2SPacket::handle)
                 .add();
     }
 

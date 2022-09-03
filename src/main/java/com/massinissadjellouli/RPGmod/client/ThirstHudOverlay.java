@@ -15,20 +15,35 @@ public class ThirstHudOverlay {
 
 
     public static final IGuiOverlay HUD_THIRST = (((gui, poseStack, partialTick, screenWidth, screenHeight) -> {
+        if(!ClientGamemodeData.isSurvival() ){
+            return;
+        }
         final int AMOUNT_OF_BOTTLES = 10;
+
         int x = screenWidth / 2;
         int y = screenHeight;
 
         RenderSystem.setShader(GameRenderer::getPositionTexShader);
         RenderSystem.setShaderColor(1.0f,1.0f,1.0f,1.0f);
         RenderSystem.setShaderTexture(0,EMPTY_THIRST);
-        for(int i = 0; i < AMOUNT_OF_BOTTLES; i++){
+        for(int i = 1; i <= AMOUNT_OF_BOTTLES; i++){
             GuiComponent.blit(poseStack,x - 45 + (i * 9),y - 54, 0, 0, 12, 12, 12, 12);
         }
 
         RenderSystem.setShaderTexture(0,FILLED_THIRST);
-        for (int i = 0; i < AMOUNT_OF_BOTTLES; i++){
-            //Todo
+        for (int i = 1; i <= AMOUNT_OF_BOTTLES; i++){
+            int clientThirst = ClientThirstData.get();
+            if(clientThirst > 0 && clientThirst >= i * 2){
+
+                GuiComponent.blit(poseStack,x - 45 + (i * 9),y - 54, 0, 0, 12, 12, 12, 12);
+            }else {
+                if(clientThirst % 2  == 1 ){
+                    RenderSystem.setShaderTexture(0,HALF_THIRST);
+                    GuiComponent.blit(poseStack,x - 45 + (i * 9),y - 54, 0, 0, 12, 12, 12, 12);
+                }
+                break;
+
+            }
         }
     }));
 

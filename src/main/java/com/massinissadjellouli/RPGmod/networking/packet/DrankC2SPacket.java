@@ -1,5 +1,6 @@
 package com.massinissadjellouli.RPGmod.networking.packet;
 
+import com.massinissadjellouli.RPGmod.networking.ModPackets;
 import com.massinissadjellouli.RPGmod.thirst.PlayerThirstProvider;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.server.level.ServerLevel;
@@ -31,7 +32,8 @@ public class DrankC2SPacket {
                     }
                     player.getCapability(PlayerThirstProvider.PLAYER_THIRST).ifPresent(
                             playerThirst -> {
-                                playerThirst.addThirst(3);
+                                playerThirst.addThirst(7);
+                                ModPackets.sendToPlayer(new ThirstDataSyncS2CPacket(playerThirst.getThirstLevel()),player);
                             }
                     );
                 }
