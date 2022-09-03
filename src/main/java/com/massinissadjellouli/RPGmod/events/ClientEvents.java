@@ -5,10 +5,7 @@ import com.massinissadjellouli.RPGmod.client.ClientGamemodeData;
 import com.massinissadjellouli.RPGmod.client.ClientThirstData;
 import com.massinissadjellouli.RPGmod.client.ThirstHudOverlay;
 import com.massinissadjellouli.RPGmod.networking.ModPackets;
-import com.massinissadjellouli.RPGmod.networking.packet.DrankC2SPacket;
-import com.massinissadjellouli.RPGmod.networking.packet.GamemodeDataSyncC2SPacket;
-import com.massinissadjellouli.RPGmod.networking.packet.JumpReduceThirstC2SPacket;
-import com.massinissadjellouli.RPGmod.networking.packet.ReduceThirstByTickC2SPacket;
+import com.massinissadjellouli.RPGmod.networking.packet.*;
 import com.massinissadjellouli.RPGmod.thirst.PlayerThirst;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.LocalPlayer;
@@ -46,6 +43,8 @@ public class ClientEvents {
             }
             ModPackets.sendToServer(new ReduceThirstByTickC2SPacket());
             ModPackets.sendToServer(new GamemodeDataSyncC2SPacket());
+            ModPackets.sendToServer(new ThirstEffectC2SPacket());
+
         }
     }
 
