@@ -1,0 +1,9 @@
+{
+  "replace": false,
+  "values": [
+    "minecraft:netherite_sword",
+    "rpgmod:steel_sword",
+    "rpgmod:titanium_sword",
+    "rpgmod:reinforced_titanium_sword"
+  ]
+}
