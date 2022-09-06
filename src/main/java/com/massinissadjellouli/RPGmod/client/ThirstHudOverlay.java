@@ -27,22 +27,19 @@ public class ThirstHudOverlay {
         RenderSystem.setShaderColor(1.0f,1.0f,1.0f,1.0f);
         RenderSystem.setShaderTexture(0,EMPTY_THIRST);
         for(int i = 1; i <= AMOUNT_OF_BOTTLES; i++){
-            GuiComponent.blit(poseStack,x - 45 + (i * 9),y - 54, 0, 0, 12, 12, 12, 12);
+            GuiComponent.blit(poseStack,x + 2
+                    + (i * 8),y - 49, 0, 0, 9, 9, 9, 9);
         }
 
-        RenderSystem.setShaderTexture(0,FILLED_THIRST);
+        int clientThirst = ClientThirstData.get();
         for (int i = 1; i <= AMOUNT_OF_BOTTLES; i++){
-            int clientThirst = ClientThirstData.get();
-            if(clientThirst > 0 && clientThirst >= i * 2){
-
-                GuiComponent.blit(poseStack,x - 45 + (i * 9),y - 54, 0, 0, 12, 12, 12, 12);
-            }else {
-                if(clientThirst % 2  == 1 ){
+        RenderSystem.setShaderTexture(0,FILLED_THIRST);
+            if(clientThirst > 0 && clientThirst > PlayerThirst.MAX_THIRST - (i * 2)){
+                if(clientThirst % 2  == 1 && clientThirst < PlayerThirst.MAX_THIRST - ((i - 1) * 2)){
                     RenderSystem.setShaderTexture(0,HALF_THIRST);
-                    GuiComponent.blit(poseStack,x - 45 + (i * 9),y - 54, 0, 0, 12, 12, 12, 12);
                 }
-                break;
-
+                GuiComponent.blit(poseStack,x + 2
+                        + (i * 8),y - 49, 0, 0, 9, 9, 9, 9);
             }
         }
     }));
