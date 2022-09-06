@@ -20,24 +20,27 @@ public class ModTags {
     public static class Items{
 
         public enum RarityTags {
-            COMMON(ModTags.Items.COMMON,"Commun"),
-            UNCOMMON(ModTags.Items.UNCOMMON,"Peu commun",ChatFormatting.GREEN),
-            RARE(ModTags.Items.RARE,"Rare",ChatFormatting.BLUE),
-            VERY_RARE(ModTags.Items.VERY_RARE,"Très rare",ChatFormatting.DARK_PURPLE),
-            LEGENDARY(ModTags.Items.LEGENDARY,"Légendaire",ChatFormatting.GOLD),
-            MYTHICAL(ModTags.Items.MYTHICAL,"Mythique",ChatFormatting.RED);
+            COMMON(ModTags.Items.COMMON,"Commun",0),
+            UNCOMMON(ModTags.Items.UNCOMMON,"Peu commun",ChatFormatting.GREEN,1),
+            RARE(ModTags.Items.RARE,"Rare",ChatFormatting.BLUE,2),
+            VERY_RARE(ModTags.Items.VERY_RARE,"Très rare",ChatFormatting.DARK_PURPLE,3),
+            LEGENDARY(ModTags.Items.LEGENDARY,"Légendaire",ChatFormatting.GOLD,4),
+            MYTHICAL(ModTags.Items.MYTHICAL,"Mythique",ChatFormatting.RED,5);
 
             public final TagKey<Item> tagKey;
             public final String name;
+            public final int level;
             public ChatFormatting style = ChatFormatting.WHITE;
-            RarityTags(TagKey<Item> rarity,String name,ChatFormatting style) {
+            RarityTags(TagKey<Item> rarity,String name,ChatFormatting style,int level) {
                 tagKey = rarity;
                 this.name = name;
+                this.level = level;
                 this.style = style;
             }
-            RarityTags(TagKey<Item> rarity,String name) {
+            RarityTags(TagKey<Item> rarity,String name,int level) {
                 tagKey = rarity;
                 this.name = name;
+                this.level = level;
             }
         }
 

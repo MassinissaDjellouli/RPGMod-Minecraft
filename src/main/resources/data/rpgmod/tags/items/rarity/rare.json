@@ -1,5 +1,10 @@
 {
   "replace": false,
   "values": [
+    "minecraft:trident",
+    "minecraft:chainmail_helmet",
+    "minecraft:chainmail_chestplate",
+    "minecraft:chainmail_leggings",
+    "minecraft:chainmail_boots"
   ]
 }

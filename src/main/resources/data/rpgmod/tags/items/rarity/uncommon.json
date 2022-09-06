@@ -2,8 +2,11 @@
   "replace": false,
   "values": [
     "minecraft:netherite_sword",
+    "minecraft:netherite_helmet",
+    "minecraft:netherite_chestplate",
+    "minecraft:netherite_leggings",
+    "minecraft:netherite_boots",
     "rpgmod:steel_sword",
-    "rpgmod:titanium_sword",
     "rpgmod:reinforced_titanium_sword"
   ]
 }
