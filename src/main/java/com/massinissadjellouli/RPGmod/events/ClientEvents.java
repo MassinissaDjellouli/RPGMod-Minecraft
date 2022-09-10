@@ -167,15 +167,17 @@ public class ClientEvents {
             ItemStack item = event.getItemStack();
             TagKey<Item> tag = tagKey.tagKey;
             if (tagManager.getTag(tag).contains(item.getItem())) {
-                if (!Screen.hasAltDown()) {
+                if (!Screen.hasAltDown() || tagKey.level == 0) {
                     if(oldItemTooltips.containsKey(item.getDisplayName().getString())){
                         resetTooltips(event);
                         List<Component> oldTooltips = oldItemTooltips.get(item.getDisplayName().getString());
                         event.getToolTip().addAll(oldTooltips);
                     }
-                    event.getToolTip().add(Component.literal(
-                            "Appuyer sur Alt pour plus de détails").withStyle(ChatFormatting.AQUA)
-                    );
+                        if(tagKey.level > 0){
+                        event.getToolTip().add(Component.literal(
+                                "Appuyer sur Alt pour plus de détails").withStyle(ChatFormatting.AQUA)
+                        );
+                    }
                     event.getToolTip().add(Component.literal(tagKey.name).withStyle(tagKey.style));
                 } else {
                     setTooltip(event, tagKey);
@@ -214,7 +216,12 @@ public class ClientEvents {
         if (item instanceof SwordItem) {
             setSwordTooltips(tagKey, event);
         } else if (item instanceof ArmorItem) {
-            setArmorTooltips(tagKey, event);
+            List<String> netheriteArmorAttrOrEmpty = new ArrayList<>();
+            if(item.getDefaultInstance().getHoverName()
+                    .getString().contains("netherite")){
+                netheriteArmorAttrOrEmpty.add("+1 de résistance au knockback");
+            }else netheriteArmorAttrOrEmpty = Collections.EMPTY_LIST;
+            setArmorTooltips(tagKey, event, netheriteArmorAttrOrEmpty,Collections.EMPTY_LIST);
         }
     }
 
@@ -241,7 +248,8 @@ public class ClientEvents {
         event.getToolTip().clear();
     }
 
-    private static void setArmorTooltips(RarityTags tagKey, ItemTooltipEvent event) {
+    private static void setArmorTooltips(RarityTags tagKey, ItemTooltipEvent event
+    ,List<String> additionnalAttr, List<String> bonuses) {
         ITagManager<Item> tagManager = ForgeRegistries.ITEMS.tags();
         Item item = event.getItemStack().getItem();
         ArmorItem armorItem = (ArmorItem) event.getItemStack().getItem();
@@ -253,7 +261,6 @@ public class ClientEvents {
             case FEET -> bodypart = "Aux pieds";
 
         }
-
 
             event.getToolTip().add(Component.literal(""));
         event.getToolTip().add(Component.literal(bodypart + " :").withStyle(ChatFormatting.GRAY));
@@ -281,6 +288,13 @@ public class ClientEvents {
                         " % de vitesse"
                 ).withStyle(ChatFormatting.BLUE));
             }
+            if(additionnalAttr.size() > 0){
+                for (String attr : additionnalAttr){
+                    event.getToolTip().add(
+                            Component.literal(attr).withStyle(ChatFormatting.BLUE)
+                    );
+                }
+            }
             if (TOUGHNESS_INCREASE_PERCENT * tagKey.level > 0) {
                 event.getToolTip().add(
                         Component.literal(
@@ -292,10 +306,17 @@ public class ClientEvents {
             if (speedIncrease > 0) {
                 event.getToolTip().add(
                         Component.literal(
-                                speedIncrease * 100
+                                DECIMAL_FORMATER.format(speedIncrease * 100)
                                         + "% de vitesse en plus"
                         ).withStyle(ChatFormatting.RED)
                 );
+            }
+            if(bonuses.size() > 0){
+                for (String bonus : bonuses){
+                    event.getToolTip().add(
+                            Component.literal(bonus).withStyle(ChatFormatting.RED)
+                    );
+                }
             }
         }
     }
