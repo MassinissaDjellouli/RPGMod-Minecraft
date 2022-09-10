@@ -161,7 +161,7 @@ public class ClientEvents {
 
     @SubscribeEvent
     public static void itemTooltip(ItemTooltipEvent event) {
-        if(event.getEntity().level.isClientSide){
+        if(event.getEntity() != null && event.getEntity().level.isClientSide){
         for (RarityTags tagKey : RarityTags.values()) {
             ITagManager<Item> tagManager = ForgeRegistries.ITEMS.tags();
             ItemStack item = event.getItemStack();
