@@ -5,11 +5,11 @@ import com.massinissadjellouli.RPGmod.client.ClientGamemodeData;
 import com.massinissadjellouli.RPGmod.client.ThirstHudOverlay;
 import com.massinissadjellouli.RPGmod.networking.ModPackets;
 import com.massinissadjellouli.RPGmod.networking.packet.*;
-import com.massinissadjellouli.RPGmod.tags.ModTags;
 import com.massinissadjellouli.RPGmod.tags.ModTags.Items.RarityTags;
 import com.massinissadjellouli.RPGmod.thirst.PlayerThirst;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.network.chat.Component;
 import net.minecraft.tags.TagKey;
@@ -34,18 +34,18 @@ import net.minecraftforge.registries.tags.ITagManager;
 import java.math.RoundingMode;
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 @Mod.EventBusSubscriber(modid = RPGMod.MODID, value = Dist.CLIENT)
 public class ClientEvents {
-    private static final int DEFENSE_INCREASE_PERCENT = 10;
+    private static final int TOUGHNESS_INCREASE_PERCENT = 30;
     private static final int PLAYER_SPEED_INCREASE_PERCENT = 2;
     private static final int ATTACK_DAMAGE_INCREASE_PERCENT = 10;
-    private static final int ATTACK_SPEED_INCREASE_PERCENT = 10;
+    private static final int ATTACK_SPEED_INCREASE_PERCENT = 15;
     private static final DecimalFormat DECIMAL_FORMATER = getDecimalFormater();
     private static final String TOOLTIPS_TAB = " ";
 
+    private static final Map<String, List<Component>> oldItemTooltips = new HashMap<>();
     @SubscribeEvent
     public static void onLivingEntityUseItem(LivingEntityUseItemEvent.Finish event) {
         if (event.getEntity().level.isClientSide && event.getItem().is(Items.POTION) && event.getDuration() == 0) {
@@ -55,12 +55,12 @@ public class ClientEvents {
 
     @SubscribeEvent
     public static void onEntityHurt(LivingHurtEvent event) {
-            event.getEntity().setCustomName(Component.literal(
-                            DECIMAL_FORMATER.format(
-                                    Math.max(event.getEntity().getHealth() - event.getAmount(),0)) + "/" +
-                            DECIMAL_FORMATER.format(event.getEntity().getMaxHealth()))
-                    .withStyle(ChatFormatting.RED));
-     }
+        event.getEntity().setCustomName(Component.literal(
+                        DECIMAL_FORMATER.format(
+                                Math.max(event.getEntity().getHealth() - event.getAmount(), 0)) + "/" +
+                                DECIMAL_FORMATER.format(event.getEntity().getMaxHealth()))
+                .withStyle(ChatFormatting.RED));
+    }
 
     @SubscribeEvent
     public static void onGMChange(PlayerEvent.PlayerChangeGameModeEvent event) {
@@ -88,29 +88,25 @@ public class ClientEvents {
         }
     }
 
-    private static void setWeaponAttributes(ItemTooltipEvent event) {
+    private static void setWeaponAttributes(ItemTooltipEvent event, RarityTags tagKey) {
         ItemStack weapon = event.getItemStack();
         ITagManager<Item> tagManager = ForgeRegistries.ITEMS.tags();
-        for (RarityTags tagKey : RarityTags.values()) {
-
-            if (tagManager.getTag(tagKey.tagKey).contains(weapon.getItem())
-                    && tagManager.getTag(Tags.Items.TOOLS_SWORDS).contains(weapon.getItem())) {
-                float damage = ((SwordItem) weapon.getItem()).getDamage();
-                float speed = ((SwordItem) weapon.getItem()).getTier().getSpeed();
-                float damageIncrease = damage * (1f + ((float) tagKey.level * ATTACK_DAMAGE_INCREASE_PERCENT) / 100);
-                float speedIncrease = speed * (1f + ((float) tagKey.level * ATTACK_SPEED_INCREASE_PERCENT) / 100) - speed;
-                final AttributeModifier ATTACK_MODIFIER =
-                        new AttributeModifier(UUID.fromString("f83fdd4d-7c5f-4433-92b3-0cc5592ef67c"), "ATTACK_MODIFIER",
-                                damageIncrease, AttributeModifier.Operation.ADDITION);
-                final AttributeModifier SPEED_MODIFIER =
-                        new AttributeModifier(UUID.fromString("bfa50c88-ca13-4224-b73f-0a500d6889e3"), "SPEED_MODIFIER",
-                                speedIncrease, AttributeModifier.Operation.ADDITION);
-                if (attributeNotPresent(weapon.getItem(), ATTACK_MODIFIER) && attributeNotPresent(weapon.getItem(), SPEED_MODIFIER) && damageIncrease > 0) {
-                    weapon.addAttributeModifier(Attributes.ATTACK_DAMAGE, ATTACK_MODIFIER, EquipmentSlot.MAINHAND);
-                    weapon.addAttributeModifier(Attributes.ATTACK_SPEED, SPEED_MODIFIER, EquipmentSlot.MAINHAND);
-                    weapon.hideTooltipPart(ItemStack.TooltipPart.MODIFIERS);
-                }
-                break;
+        if (tagManager.getTag(tagKey.tagKey).contains(weapon.getItem())
+                && tagManager.getTag(Tags.Items.TOOLS_SWORDS).contains(weapon.getItem())) {
+            float damage = ((SwordItem) weapon.getItem()).getDamage();
+            float speed = ((SwordItem) weapon.getItem()).getTier().getSpeed();
+            float damageIncrease = damage * (1f + ((float) tagKey.level * ATTACK_DAMAGE_INCREASE_PERCENT) / 100);
+            float speedIncrease = speed * (1f + ((float) tagKey.level * ATTACK_SPEED_INCREASE_PERCENT) / 100) - speed;
+            final AttributeModifier ATTACK_MODIFIER =
+                    new AttributeModifier(UUID.fromString("f83fdd4d-7c5f-4433-92b3-0cc5592ef67c"), "ATTACK_MODIFIER",
+                            damageIncrease, AttributeModifier.Operation.ADDITION);
+            final AttributeModifier SPEED_MODIFIER =
+                    new AttributeModifier(UUID.fromString("bfa50c88-ca13-4224-b73f-0a500d6889e3"), "SPEED_MODIFIER",
+                            speedIncrease, AttributeModifier.Operation.ADDITION);
+            if (attributeNotPresent(weapon.getItem(), ATTACK_MODIFIER) && attributeNotPresent(weapon.getItem(), SPEED_MODIFIER) && damageIncrease > 0) {
+                weapon.addAttributeModifier(Attributes.ATTACK_DAMAGE, ATTACK_MODIFIER, EquipmentSlot.MAINHAND);
+                weapon.addAttributeModifier(Attributes.ATTACK_SPEED, SPEED_MODIFIER, EquipmentSlot.MAINHAND);
+                weapon.hideTooltipPart(ItemStack.TooltipPart.MODIFIERS);
             }
         }
     }
@@ -152,22 +148,45 @@ public class ClientEvents {
         decimalFormat.setDecimalFormatSymbols(decimalFormatSymbols);
         return decimalFormat;
     }
+    private static DecimalFormat getDecimalFormater(int nb) {
+        StringBuilder amountAfterDot = new StringBuilder();
+        amountAfterDot.append("#".repeat(Math.max(0, nb)));
+        DecimalFormat decimalFormat = new DecimalFormat("##." + amountAfterDot);
+        decimalFormat.setRoundingMode(RoundingMode.DOWN);
+        DecimalFormatSymbols decimalFormatSymbols = new DecimalFormatSymbols();
+        decimalFormatSymbols.setDecimalSeparator('.');
+        decimalFormat.setDecimalFormatSymbols(decimalFormatSymbols);
+        return decimalFormat;
+    }
 
     @SubscribeEvent
     public static void itemTooltip(ItemTooltipEvent event) {
-        ITagManager<Item> tagManager = ForgeRegistries.ITEMS.tags();
-        Item item = event.getItemStack().getItem();
+        if(event.getEntity().level.isClientSide){
         for (RarityTags tagKey : RarityTags.values()) {
+            ITagManager<Item> tagManager = ForgeRegistries.ITEMS.tags();
+            ItemStack item = event.getItemStack();
             TagKey<Item> tag = tagKey.tagKey;
-            if (tagManager.getTag(tag).contains(item)) {
-                setTooltip(event,tagKey);
-                break;
+            if (tagManager.getTag(tag).contains(item.getItem())) {
+                if (!Screen.hasAltDown()) {
+                    if(oldItemTooltips.containsKey(item.getDisplayName().getString())){
+                        resetTooltips(event);
+                        List<Component> oldTooltips = oldItemTooltips.get(item.getDisplayName().getString());
+                        event.getToolTip().addAll(oldTooltips);
+                    }
+                    event.getToolTip().add(Component.literal(
+                            "Appuyer sur Alt pour plus de détails").withStyle(ChatFormatting.AQUA)
+                    );
+                    event.getToolTip().add(Component.literal(tagKey.name).withStyle(tagKey.style));
+                } else {
+                    setTooltip(event, tagKey);
+                    setAttributes(event, tagKey);
+                    break;
+                }
             }
         }
 
-        setWeaponAttributes(event);
-        //setArmorAttributes(event);
 
+        }
     }
 
     private static void setAttributes(ItemTooltipEvent event, RarityTags tagKey) {
@@ -181,23 +200,25 @@ public class ClientEvents {
 
     private static void setTooltip(ItemTooltipEvent event, RarityTags tagKey) {
         ChatFormatting style = tagKey.style;
-        List<Component> oldToolTips = List.copyOf(event.getToolTip());
-        resetTooltips(event,oldToolTips,style);
-        setTooltipBody(tagKey,event);
-        addTooltipFooter(tagKey,oldToolTips,event);
+        resetTooltips(event);
+        setTooltipBody(tagKey, event, style);
+        List<Component> oldToolTips = oldItemTooltips.get(event.getItemStack().getDisplayName().getString());
+        addTooltipFooter(tagKey, oldToolTips, event);
 
     }
 
-    private static void setTooltipBody(RarityTags tagKey, ItemTooltipEvent event) {
+    private static void setTooltipBody(RarityTags tagKey, ItemTooltipEvent event,ChatFormatting titleStyle) {
+        Component title = oldItemTooltips.get(event.getItemStack().getDisplayName().getString()).get(0);
+        event.getToolTip().add(0, Component.literal(title.getString()).withStyle(titleStyle));
         Item item = event.getItemStack().getItem();
-        if(item instanceof SwordItem){
+        if (item instanceof SwordItem) {
             setSwordTooltips(tagKey, event);
-        }else if (item instanceof ArmorItem){
+        } else if (item instanceof ArmorItem) {
             setArmorTooltips(tagKey, event);
         }
     }
 
-    private static void addTooltipFooter(RarityTags tagKey,List<Component> oldToolTips, ItemTooltipEvent event) {
+    private static void addTooltipFooter(RarityTags tagKey, List<Component> oldToolTips, ItemTooltipEvent event) {
         ChatFormatting style = tagKey.style;
         String rarity = tagKey.name;
         String nbt = getNBTTooltip(oldToolTips);
@@ -211,10 +232,13 @@ public class ClientEvents {
         }
     }
 
-    private static void resetTooltips(ItemTooltipEvent event, List<Component> oldToolTips, ChatFormatting style) {
+    private static void resetTooltips(ItemTooltipEvent event) {
+        if(!oldItemTooltips.containsKey(event.getItemStack().getDisplayName().getString())){
+            oldItemTooltips.put(
+                    event.getItemStack().getDisplayName().getString(),
+                    List.copyOf(event.getToolTip()));
+        }
         event.getToolTip().clear();
-        String title = oldToolTips.get(0).getString();
-        event.getToolTip().add(0, Component.literal(title).withStyle(style));
     }
 
     private static void setArmorTooltips(RarityTags tagKey, ItemTooltipEvent event) {
@@ -277,23 +301,33 @@ public class ClientEvents {
     }
 
 
-
     private static void setSwordTooltips(RarityTags tagKey, ItemTooltipEvent event) {
         ITagManager<Item> tagManager = ForgeRegistries.ITEMS.tags();
-        Item item = event.getItemStack().getItem();
+        SwordItem item = (SwordItem)event.getItemStack().getItem();
         if (tagManager.getTag(Tags.Items.TOOLS_SWORDS).contains(item)) {
             float dmgIncrease = tagKey.level * ATTACK_DAMAGE_INCREASE_PERCENT;
-            float dmg = ((SwordItem) item).getDamage();
-
+            float dmg = item.getDamage() + 1;
 
             event.getToolTip().add(Component.literal(""));
             event.getToolTip().add(Component.literal("Dans la main principale :").withStyle(ChatFormatting.GRAY));
             event.getToolTip().add(Component.literal(TOOLTIPS_TAB +
                     DECIMAL_FORMATER.format(dmg) + " de dégâts d'attaque").withStyle(ChatFormatting.DARK_GREEN));
-            String bonusDmg = getBonusDmg(dmg, dmgIncrease, DECIMAL_FORMATER);
-            if (dmgIncrease > 0) {
+            event.getToolTip().add(Component.literal(TOOLTIPS_TAB +
+                    DECIMAL_FORMATER.format((float)Math.round(
+
+                                    (Attributes.ATTACK_SPEED.getDefaultValue() +
+                                    item.getDefaultAttributeModifiers(EquipmentSlot.MAINHAND)
+                                            .get(Attributes.ATTACK_SPEED).stream().toList().get(0).getAmount())
+                                            * 10) /10
+                            )
+                    + " de vitesse d'attaque").withStyle(ChatFormatting.DARK_GREEN));
+            String bonusDmg = getBonusDmg(dmg, dmgIncrease);
+            String bonusSpeed = getBonusSpeed(item, tagKey.level);
+            if (tagKey.level > 0) {
                 event.getToolTip().add(Component.literal(bonusDmg)
-                        .withStyle(ChatFormatting.DARK_GREEN));
+                        .withStyle(ChatFormatting.BLUE));
+                event.getToolTip().add(Component.literal(bonusSpeed)
+                        .withStyle(ChatFormatting.BLUE));
                 if (event.getItemStack().getDamageValue() > 0) {
 
                     event.getToolTip().add(Component.literal(
@@ -307,7 +341,7 @@ public class ClientEvents {
                 event.getToolTip().add(Component.literal(damageIncreasePercent)
                         .withStyle(ChatFormatting.RED));
                 String attackSpeedIncreasePercent = DECIMAL_FORMATER.format(
-                        ATTACK_SPEED_INCREASE_PERCENT * tagKey.level) + "% plus rapide";
+                        (long) ATTACK_SPEED_INCREASE_PERCENT * tagKey.level) + "% plus rapide";
                 event.getToolTip().add(Component.literal(attackSpeedIncreasePercent)
                         .withStyle(ChatFormatting.RED));
             }
@@ -333,22 +367,37 @@ public class ClientEvents {
         }
         return "";
     }
-    private static String getBonusDmg(float dmg, float dmgIncrease, DecimalFormat decimalFormat) {
+
+    private static String getBonusDmg(float dmg, float dmgIncrease) {
         String bonusDmg = "";
         if (dmgIncrease > 0) {
             float dmgBonus = dmg * (1 + dmgIncrease / 100) - dmg;
             String isPlural = (dmg * (1 + dmgIncrease / 100) - dmg) > 1 ? "s" : "";
             bonusDmg = TOOLTIPS_TAB + "+" +
-                    decimalFormat.format(dmgBonus) +
+                    DECIMAL_FORMATER.format(dmgBonus) +
                     " dégât" + isPlural + " en plus";
         }
         return bonusDmg;
+    }
+    private static String getBonusSpeed(SwordItem item,int level) {
+        String bonusSpeed = "";
+        float speed = (float) Math.round(
+                (Attributes.ATTACK_SPEED.getDefaultValue() +
+                        item.getDefaultAttributeModifiers(EquipmentSlot.MAINHAND)
+                                .get(Attributes.ATTACK_SPEED).stream().toList().get(0).getAmount())
+                        * 10) / 10;
+        if (level > 0) {
+            float speedBonus = speed * ((float)(level * ATTACK_SPEED_INCREASE_PERCENT))/100f;
+            bonusSpeed = TOOLTIPS_TAB + "+" +
+                    getDecimalFormater(2).format(speedBonus) +
+                    " de vitesse en plus";
+        }
+        return bonusSpeed;
     }
 
     private static boolean attributeNotPresent(Item weapon, AttributeModifier attribute) {
         return !weapon.getDefaultInstance().getAttributeModifiers(EquipmentSlot.MAINHAND).containsValue(attribute);
     }
-
 
 
     @Mod.EventBusSubscriber(modid = RPGMod.MODID, value = Dist.CLIENT, bus = Mod.EventBusSubscriber.Bus.MOD)
