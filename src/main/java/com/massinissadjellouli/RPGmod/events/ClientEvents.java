@@ -115,29 +115,31 @@ public class ClientEvents {
         }
     }
 
-    private static void setArmorAttributes(ItemTooltipEvent event) {
+    private static void setArmorAttributes(ItemTooltipEvent event, RarityTags tagKey) {
         ItemStack armor = event.getItemStack();
         ITagManager<Item> tagManager = ForgeRegistries.ITEMS.tags();
-        for (RarityTags tagKey : RarityTags.values()) {
-
-            if (tagManager.getTag(tagKey.tagKey).contains(armor.getItem())
-                    && tagManager.getTag(Tags.Items.ARMORS).contains(armor.getItem())) {
-                ArmorItem armorItem = (ArmorItem) armor.getItem();
-                int defense = (armorItem).getDefense();
-                float defenseIncrease = defense * (1f + ((float) tagKey.level * DEFENSE_INCREASE_PERCENT) / 100);
-                float speedIncrease = (((float) tagKey.level * PLAYER_SPEED_INCREASE_PERCENT) / 100);
-                final AttributeModifier DEFENSE_MODIFIER =
-                        new AttributeModifier(UUID.fromString("f83fdd4d-7c5f-4433-92b3-0cc5592ef67c"), "DEFENSE_MODIFIER",
-                                defenseIncrease, AttributeModifier.Operation.ADDITION);
-                final AttributeModifier SPEED_MODIFIER =
-                        new AttributeModifier(UUID.fromString("bfa50c88-ca13-4224-b73f-0a500d6889e3"), "SPEED_MODIFIER",
-                                speedIncrease, AttributeModifier.Operation.MULTIPLY_TOTAL);
-                if (attributeNotPresent(armor.getItem(), DEFENSE_MODIFIER)
-                        && attributeNotPresent(armor.getItem(), SPEED_MODIFIER) && defenseIncrease > 0) {
-                    armor.addAttributeModifier(Attributes.ARMOR_TOUGHNESS, DEFENSE_MODIFIER, armorItem.getSlot());
-                    armor.addAttributeModifier(Attributes.MOVEMENT_SPEED, SPEED_MODIFIER, armorItem.getSlot());
-                }
-                break;
+        if (tagManager.getTag(tagKey.tagKey).contains(armor.getItem())
+                && tagManager.getTag(Tags.Items.ARMORS).contains(armor.getItem())) {
+            ArmorItem armorItem = (ArmorItem) armor.getItem();
+            float toughness = armorItem.getToughness();
+            float toughnessIncrease = (1 + toughness) * (1f + ((float) tagKey.level * TOUGHNESS_INCREASE_PERCENT) / 100);
+            float speedIncrease = (((float) tagKey.level * PLAYER_SPEED_INCREASE_PERCENT) / 100);
+            final AttributeModifier DEFENSE_MODIFIER =
+                    new AttributeModifier(UUID.fromString("f83fdd4d-7c5f-4433-92b3-0cc5592ef67c"), "DEFENSE_MODIFIER",
+                            armorItem.getDefense(), AttributeModifier.Operation.ADDITION);
+            final AttributeModifier TOUGHNESS_MODIFIER =
+                    new AttributeModifier(UUID.fromString("f83fdd4d-7c5f-4433-92b3-0cc5592ef67c"), "TOUGHNESS_MODIFIER",
+                            toughnessIncrease, AttributeModifier.Operation.ADDITION);
+            final AttributeModifier SPEED_MODIFIER =
+                    new AttributeModifier(UUID.fromString("bfa50c88-ca13-4224-b73f-0a500d6889e3"), "SPEED_MODIFIER",
+                            speedIncrease, AttributeModifier.Operation.MULTIPLY_TOTAL);
+            if (attributeNotPresent(armor.getItem(), TOUGHNESS_MODIFIER)
+                    && attributeNotPresent(armor.getItem(), SPEED_MODIFIER)
+                    && attributeNotPresent(armor.getItem(), DEFENSE_MODIFIER)
+                    && toughnessIncrease > 0) {
+                armor.addAttributeModifier(Attributes.ARMOR_TOUGHNESS, TOUGHNESS_MODIFIER, armorItem.getSlot());
+                armor.addAttributeModifier(Attributes.MOVEMENT_SPEED, SPEED_MODIFIER, armorItem.getSlot());
+                armor.addAttributeModifier(Attributes.ARMOR, DEFENSE_MODIFIER, armorItem.getSlot());
             }
         }
     }
@@ -166,6 +168,15 @@ public class ClientEvents {
         setWeaponAttributes(event);
         //setArmorAttributes(event);
 
+    }
+
+    private static void setAttributes(ItemTooltipEvent event, RarityTags tagKey) {
+        Item item = event.getItemStack().getItem();
+        if (item instanceof SwordItem) {
+            setWeaponAttributes(event, tagKey);
+        } else if (item instanceof ArmorItem) {
+            setArmorAttributes(event, tagKey);
+        }
     }
 
     private static void setTooltip(ItemTooltipEvent event, RarityTags tagKey) {
@@ -209,8 +220,59 @@ public class ClientEvents {
     private static void setArmorTooltips(RarityTags tagKey, ItemTooltipEvent event) {
         ITagManager<Item> tagManager = ForgeRegistries.ITEMS.tags();
         Item item = event.getItemStack().getItem();
-        if (tagManager.getTag(Tags.Items.ARMORS).contains(item)) {
+        ArmorItem armorItem = (ArmorItem) event.getItemStack().getItem();
+        String bodypart = "";
+        switch (armorItem.getSlot()) {
+            case HEAD -> bodypart = "Sur la tête";
+            case CHEST -> bodypart = "Sur le corps";
+            case LEGS -> bodypart = "Aux jambes";
+            case FEET -> bodypart = "Aux pieds";
 
+        }
+
+
+            event.getToolTip().add(Component.literal(""));
+        event.getToolTip().add(Component.literal(bodypart + " :").withStyle(ChatFormatting.GRAY));
+        if (tagManager.getTag(Tags.Items.ARMORS).contains(item)) {
+            event.getToolTip().add(Component.literal("+" +
+                    armorItem.getDefense() +
+                    " de points d'armure"
+            ).withStyle(ChatFormatting.BLUE));
+
+            float toughness = armorItem.getToughness();
+            float toughnessIncrease = (1 + toughness) * (1f + ((float) tagKey.level * TOUGHNESS_INCREASE_PERCENT) / 100);
+            if (toughnessIncrease > 0) {
+
+                event.getToolTip().add(Component.literal("+" +
+                        DECIMAL_FORMATER.format(toughnessIncrease) +
+                        " de robustesse"
+                ).withStyle(ChatFormatting.BLUE));
+            }
+
+            float speedIncrease = (((float) tagKey.level * PLAYER_SPEED_INCREASE_PERCENT) / 100);
+            if (speedIncrease > 0) {
+
+                event.getToolTip().add(Component.literal("+" +
+                        DECIMAL_FORMATER.format(speedIncrease * 100) +
+                        " % de vitesse"
+                ).withStyle(ChatFormatting.BLUE));
+            }
+            if (TOUGHNESS_INCREASE_PERCENT * tagKey.level > 0) {
+                event.getToolTip().add(
+                        Component.literal(
+                                TOUGHNESS_INCREASE_PERCENT * tagKey.level
+                                        + "% de robustesse en plus"
+                        ).withStyle(ChatFormatting.RED)
+                );
+            }
+            if (speedIncrease > 0) {
+                event.getToolTip().add(
+                        Component.literal(
+                                speedIncrease * 100
+                                        + "% de vitesse en plus"
+                        ).withStyle(ChatFormatting.RED)
+                );
+            }
         }
     }
 
