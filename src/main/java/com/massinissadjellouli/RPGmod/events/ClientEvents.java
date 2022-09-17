@@ -3,6 +3,8 @@ package com.massinissadjellouli.RPGmod.events;
 import com.massinissadjellouli.RPGmod.RPGMod;
 import com.massinissadjellouli.RPGmod.client.ClientGamemodeData;
 import com.massinissadjellouli.RPGmod.client.ThirstHudOverlay;
+import com.massinissadjellouli.RPGmod.damageIndicator.ActiveDamageIndicators;
+import com.massinissadjellouli.RPGmod.damageIndicator.DamageIndicatorData;
 import com.massinissadjellouli.RPGmod.networking.ModPackets;
 import com.massinissadjellouli.RPGmod.networking.packet.*;
 import com.massinissadjellouli.RPGmod.tags.ModTags.Items.RarityTags;
@@ -62,7 +64,6 @@ public class ClientEvents {
     public static void onEntityHurt(LivingHurtEvent event) {
 
         if(!event.getEntity().level.isClientSide && event.getSource().getEntity() instanceof ServerPlayer){
-
             ServerPlayer player = (ServerPlayer) event.getSource().getEntity();
             ServerLevel level = player.getLevel();
             ArmorStand damageIndicator = EntityType.ARMOR_STAND.spawn(
@@ -85,7 +86,7 @@ public class ClientEvents {
                 .withStyle(ChatFormatting.RED));
             damageIndicator.setNoGravity(true);
 
-
+            ActiveDamageIndicators.addDamageIndicator(new DamageIndicatorData(damageIndicator));
         }
     }
 
@@ -112,6 +113,14 @@ public class ClientEvents {
             ModPackets.sendToServer(new ReduceThirstByTickC2SPacket());
             ModPackets.sendToServer(new GamemodeDataSyncC2SPacket());
             ModPackets.sendToServer(new ThirstEffectC2SPacket());
+        }
+    }
+
+
+    @SubscribeEvent
+    public static void onServerTick(TickEvent.ServerTickEvent event) {
+        if(event.side.isServer()){
+            ActiveDamageIndicators.updateCurrentDamageIndicators();
         }
     }
 
