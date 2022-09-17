@@ -12,10 +12,15 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.network.chat.Component;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.tags.TagKey;
+import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.MobSpawnType;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.decoration.ArmorStand;
 import net.minecraft.world.item.*;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.RegisterGuiOverlaysEvent;
@@ -55,11 +60,33 @@ public class ClientEvents {
 
     @SubscribeEvent
     public static void onEntityHurt(LivingHurtEvent event) {
-        event.getEntity().setCustomName(Component.literal(
+
+        if(!event.getEntity().level.isClientSide && event.getSource().getEntity() instanceof ServerPlayer){
+
+            ServerPlayer player = (ServerPlayer) event.getSource().getEntity();
+            ServerLevel level = player.getLevel();
+            ArmorStand damageIndicator = EntityType.ARMOR_STAND.spawn(
+                    level,
+                    null,
+                    null,
+                    null,
+                    event.getEntity().blockPosition(),
+                    MobSpawnType.COMMAND,
+                    true,
+                    false
+                    );
+            damageIndicator.setInvisible(true);
+            damageIndicator.setInvulnerable(true);
+            damageIndicator.setCustomNameVisible(true);
+            damageIndicator.setCustomName(Component.literal(
                         DECIMAL_FORMATER.format(
                                 Math.max(event.getEntity().getHealth() - event.getAmount(), 0)) + "/" +
                                 DECIMAL_FORMATER.format(event.getEntity().getMaxHealth()))
                 .withStyle(ChatFormatting.RED));
+            damageIndicator.setNoGravity(true);
+
+
+        }
     }
 
     @SubscribeEvent
