@@ -67,6 +67,13 @@ public class ModBlocks {
             ,CreativeModeTab.TAB_BUILDING_BLOCKS);
 
 
+    public static final RegistryObject<Block> STEEL_BLOCK = registerBlock("steel_block",
+            ()-> new Block(
+                    BlockBehaviour.Properties.of(Material.METAL)
+                            .strength(4f,4f).requiresCorrectToolForDrops().sound(SoundType.METAL))
+            ,CreativeModeTab.TAB_BUILDING_BLOCKS);
+
+
     private static <T extends Block> void registerBlockItem(String name, RegistryObject<T> block, CreativeModeTab tab){
         ModItems.ITEM_DEFERRED_REGISTER.register(name, () -> new BlockItem(block.get(), new Item.Properties().tab(tab)));
     }

@@ -41,5 +41,7 @@
     "block.rpgmod.deepslate_ice_crystal_ore": "Minerai de cristal de glace de profondoise",
     "block.rpgmod.deepslate_poison_crystal_ore": "Minerai de cristal de poison de profondoise",
     "block.rpgmod.deepslate_multi_crystal_ore": "Minerai de cristal de profondoise",
-    "block.rpgmod.deepslate_titanium_ore": "Minerai de titane de profondoise"
+    "block.rpgmod.deepslate_titanium_ore": "Minerai de titane de profondoise",
+
+    "block.rpgmod.steel_block": "Bloc d'acier"
 }
