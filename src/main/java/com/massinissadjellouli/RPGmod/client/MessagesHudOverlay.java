@@ -18,11 +18,8 @@ public class MessagesHudOverlay {
         if(!ClientGamemodeData.isSurvival() ){
             return;
         }
-
-
-
         Font font = Minecraft.getInstance().font;
-        font.draw(poseStack, Component.literal("test").withStyle(ChatFormatting.GOLD),10,10,10);
+        font.draw(poseStack, Component.literal(ClientLastMessageReceived.get()).withStyle(ChatFormatting.GOLD),10,10,10);
 
     }));
 
