@@ -2,6 +2,8 @@ package com.massinissadjellouli.RPGmod.events;
 
 import com.massinissadjellouli.RPGmod.RPGMod;
 import com.massinissadjellouli.RPGmod.client.ClientGamemodeData;
+import com.massinissadjellouli.RPGmod.client.ClientLastMessageReceived;
+import com.massinissadjellouli.RPGmod.client.MessagesHudOverlay;
 import com.massinissadjellouli.RPGmod.client.ThirstHudOverlay;
 import com.massinissadjellouli.RPGmod.damageIndicator.ActiveDamageIndicators;
 import com.massinissadjellouli.RPGmod.damageIndicator.DamageIndicatorData;
@@ -164,6 +166,7 @@ public class ClientEvents {
             if (event.player.isSprinting()) {
                 PlayerThirst.setReduceByTick(PlayerThirst.getReduceByTick() + 0.4f);
             }
+            ClientLastMessageReceived.incrementTick();
             ModPackets.sendToServer(new ReduceThirstByTickC2SPacket());
             ModPackets.sendToServer(new GamemodeDataSyncC2SPacket());
             ModPackets.sendToServer(new ThirstEffectC2SPacket());
@@ -517,7 +520,8 @@ public class ClientEvents {
     public static class ClientModBusEvents {
         @SubscribeEvent
         public static void registerGuiOverlays(RegisterGuiOverlaysEvent event) {
-            event.registerAboveAll("thirst", ThirstHudOverlay.HUD_THIRST);
+            event.registerAboveAll("thirst_hud", ThirstHudOverlay.HUD_THIRST);
+            event.registerAboveAll("message_hud", MessagesHudOverlay.HUD_MESSAGE);
         }
     }
 
