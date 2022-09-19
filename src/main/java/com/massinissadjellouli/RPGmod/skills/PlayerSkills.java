@@ -23,7 +23,7 @@ public class PlayerSkills {
     private int getXpNeededForNextLevel(int level){
         float xpNeededPerLevel = 150f;
         for (int i = 0; i < level; i++) {
-            float XP_PERCENT_INCREASE_PER_LEVEL = 60f;
+            float XP_PERCENT_INCREASE_PER_LEVEL = 25f;
             xpNeededPerLevel += xpNeededPerLevel * (XP_PERCENT_INCREASE_PER_LEVEL / 100f);
         }
         return Math.round(xpNeededPerLevel);
