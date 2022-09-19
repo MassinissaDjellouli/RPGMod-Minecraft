@@ -1,0 +1,9 @@
+{
+  "replace": false,
+  "values": [
+    "rpgmod:copper_hoe",
+    "rpgmod:titanium_hoe",
+    "rpgmod:steel_hoe",
+    "rpgmod:reinforced_titanium_hoe"
+  ]
+}

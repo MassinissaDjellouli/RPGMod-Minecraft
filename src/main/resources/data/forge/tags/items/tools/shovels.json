@@ -1,0 +1,9 @@
+{
+  "replace": false,
+  "values": [
+    "rpgmod:copper_shovel",
+    "rpgmod:titanium_shovel",
+    "rpgmod:steel_shovel",
+    "rpgmod:reinforced_titanium_shovel"
+  ]
+}

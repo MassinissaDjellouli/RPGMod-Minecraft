@@ -1,0 +1,9 @@
+{
+  "replace": false,
+  "values": [
+    "rpgmod:copper_pickaxe",
+    "rpgmod:titanium_pickaxe",
+    "rpgmod:steel_pickaxe",
+    "rpgmod:reinforced_titanium_pickaxe"
+  ]
+}

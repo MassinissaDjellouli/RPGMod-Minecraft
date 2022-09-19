@@ -1,0 +1,9 @@
+{
+  "replace": false,
+  "values": [
+    "rpgmod:copper_axe",
+    "rpgmod:titanium_axe",
+    "rpgmod:steel_axe",
+    "rpgmod:reinforced_titanium_axe"
+  ]
+}
