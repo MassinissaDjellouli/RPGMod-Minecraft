@@ -85,6 +85,15 @@ public class ClientEvents {
                         capability.blockMined();
                     }
                 }
+                if (blockTagHas(BlockTags.MINEABLE_WITH_AXE, event.getState().getBlock())) {
+                    if (itemTagHas(Tags.Items.TOOLS_AXES,
+                            event.getPlayer().getMainHandItem().getItem())) {
+                        capability.addXP(getXpFromBreakingBlock(
+                                        event.getState().getBlock()),
+                                PlayerSkillData.PlayerSkillEnum.FORAGING);
+                        capability.woodCut();
+                    }
+                }
             });
         }
     }
@@ -116,6 +125,8 @@ public class ClientEvents {
         if (blockTagHas(Tags.Blocks.OBSIDIAN, block)) return 80;
         if (blockTagHas(ModTags.Blocks.ORES_CRYSTAL, block)) return 275;
         if (blockTagHas(Tags.Blocks.ORES_NETHERITE_SCRAP, block)) return 300;
+        if (blockTagHas(BlockTags.PLANKS, block)) return 10;
+        if (blockTagHas(BlockTags.LOGS, block)) return 30;
         return 3;
     }
 
