@@ -71,48 +71,51 @@ public class ClientEvents {
 
     @SubscribeEvent
     public static void onBlockMined(BlockEvent.BreakEvent event) {
-        event.getPlayer().getCapability(PlayerSkillProvider.PLAYER_SKILLS).ifPresent(capability -> {
-            if(blockTagHas(BlockTags.MINEABLE_WITH_PICKAXE,event.getState().getBlock())){
-                if (itemTagHas(Tags.Items.TOOLS_PICKAXES,
-                        event.getPlayer().getMainHandItem().getItem())) {
-                    System.out.println(getXpFromBreakingBlock(
-                            event.getState().getBlock()));
+        if (!event.getPlayer().level.isClientSide) {
+            event.getPlayer().getCapability(PlayerSkillProvider.PLAYER_SKILLS).ifPresent(capability -> {
+                if (blockTagHas(BlockTags.MINEABLE_WITH_PICKAXE, event.getState().getBlock())) {
+                    if (itemTagHas(Tags.Items.TOOLS_PICKAXES,
+                            event.getPlayer().getMainHandItem().getItem())) {
+                        System.out.println(getXpFromBreakingBlock(
+                                event.getState().getBlock()));
 
-                    capability.addXP(getXpFromBreakingBlock(
-                                    event.getState().getBlock()),
-                            PlayerSkillData.PlayerSkillEnum.Mining);
-                    capability.blockMined();
+                        capability.addXP(getXpFromBreakingBlock(
+                                        event.getState().getBlock()),
+                                PlayerSkillData.PlayerSkillEnum.MINING);
+                        capability.blockMined();
+                    }
                 }
-            }
-        });
+            });
+        }
     }
 
-    private static boolean blockTagHas(TagKey<Block> tag,Block block){
+    private static boolean blockTagHas(TagKey<Block> tag, Block block) {
         return ForgeRegistries.BLOCKS.tags().getTag(tag).contains(block);
-    }   
-    private static boolean itemTagHas(TagKey<Item> tag,Item item){
+    }
+
+    private static boolean itemTagHas(TagKey<Item> tag, Item item) {
         return ForgeRegistries.ITEMS.tags().getTag(tag).contains(item);
     }
 
     private static int getXpFromBreakingBlock(Block block) {
-        if(blockTagHas(Tags.Blocks.STONE,block)
-                || blockTagHas(Tags.Blocks.COBBLESTONE,block)) return 3;
-        if(blockTagHas(BlockTags.STONE_BRICKS,block)) return 4;
-        if(blockTagHas(BlockTags.ICE,block)) return 6;
-        if(blockTagHas(Tags.Blocks.ORES_COAL,block)) return 10;
-        if(blockTagHas(Tags.Blocks.ORES_IRON,block)) return 12;
-        if(blockTagHas(Tags.Blocks.ORES_COPPER,block)) return 15;
-        if(blockTagHas(Tags.Blocks.ORES_LAPIS,block)
-                || blockTagHas(Tags.Blocks.ORES_REDSTONE,block)) return 16;
-        if(blockTagHas(Tags.Blocks.ORES_GOLD,block)) return 18;
-        if(blockTagHas(Tags.Blocks.ORES_DIAMOND,block)) return 25;
-        if(blockTagHas(Tags.Blocks.ORES_QUARTZ,block)) return 27;
-        if(blockTagHas(Tags.Blocks.ORES_EMERALD,block)) return 30;
-        if(blockTagHas(Tags.Blocks.END_STONES,block)) return 40;
-        if(blockTagHas(ModTags.Blocks.ORES_TITANIUM,block)) return 50;
-        if(blockTagHas(Tags.Blocks.OBSIDIAN,block)) return 80;
-        if(blockTagHas(ModTags.Blocks.ORES_CRYSTAL,block)) return 275;
-        if(blockTagHas(Tags.Blocks.ORES_NETHERITE_SCRAP,block)) return 300;
+        if (blockTagHas(Tags.Blocks.STONE, block)
+                || blockTagHas(Tags.Blocks.COBBLESTONE, block)) return 3;
+        if (blockTagHas(BlockTags.STONE_BRICKS, block)) return 4;
+        if (blockTagHas(BlockTags.ICE, block)) return 6;
+        if (blockTagHas(Tags.Blocks.ORES_COAL, block)) return 10;
+        if (blockTagHas(Tags.Blocks.ORES_IRON, block)) return 12;
+        if (blockTagHas(Tags.Blocks.ORES_COPPER, block)) return 15;
+        if (blockTagHas(Tags.Blocks.ORES_LAPIS, block)
+                || blockTagHas(Tags.Blocks.ORES_REDSTONE, block)) return 16;
+        if (blockTagHas(Tags.Blocks.ORES_GOLD, block)) return 18;
+        if (blockTagHas(Tags.Blocks.ORES_DIAMOND, block)) return 25;
+        if (blockTagHas(Tags.Blocks.ORES_QUARTZ, block)) return 27;
+        if (blockTagHas(Tags.Blocks.ORES_EMERALD, block)) return 30;
+        if (blockTagHas(Tags.Blocks.END_STONES, block)) return 40;
+        if (blockTagHas(ModTags.Blocks.ORES_TITANIUM, block)) return 50;
+        if (blockTagHas(Tags.Blocks.OBSIDIAN, block)) return 80;
+        if (blockTagHas(ModTags.Blocks.ORES_CRYSTAL, block)) return 275;
+        if (blockTagHas(Tags.Blocks.ORES_NETHERITE_SCRAP, block)) return 300;
         return 3;
     }
 

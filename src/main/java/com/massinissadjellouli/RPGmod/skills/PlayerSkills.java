@@ -1,5 +1,6 @@
 package com.massinissadjellouli.RPGmod.skills;
 
+import com.massinissadjellouli.RPGmod.client.ClientLastMessageReceived;
 import com.massinissadjellouli.RPGmod.skills.PlayerSkillData.PlayerSkillEnum;
 import com.massinissadjellouli.RPGmod.skills.PlayerSkillsData.SkillData;
 import net.minecraft.nbt.CompoundTag;
@@ -30,21 +31,41 @@ public class PlayerSkills {
 
     public void addXP(int xp, PlayerSkillEnum skill){
         switch (skill){
-            case Mining -> increaseXp(xp, playerSkillData.playerMiningSkillData);
-            case Foraging -> increaseXp(xp, playerSkillData.playerForagingSkillData);
-            case Attacking -> increaseXp(xp, playerSkillData.playerAttackSkillData);
+            case MINING -> increaseXp(xp, playerSkillData.playerMiningSkillData);
+            case FORAGING -> increaseXp(xp, playerSkillData.playerForagingSkillData);
+            case ATTACKING -> increaseXp(xp, playerSkillData.playerAttackSkillData);
         }
+
+    }
+
+    private String getTranslatedEnum(PlayerSkillEnum skill) {
+        switch (skill){
+            case MINING -> {
+                return "de minage";
+            }
+            case FORAGING -> {
+                return "de bûchage";
+            }
+            case ATTACKING -> {
+                return "d'attaque";
+            }
+        }
+        return "";
     }
 
     private void increaseXp(int xp, SkillData dataToIncrease){
         dataToIncrease.currentXp += xp;
         dataToIncrease.totalXp += xp;
+        ClientLastMessageReceived.set("+" + xp + "XP " + getTranslatedEnum(dataToIncrease.skill) +
+                " (" + dataToIncrease.currentXp + "XP / " + getXpNeededForNextLevel(dataToIncrease.level) + "XP)!");
         if(dataToIncrease.currentXp >=
                 getXpNeededForNextLevel(dataToIncrease.level)){
             dataToIncrease.currentXp = 0;
             dataToIncrease.level++;
-            System.out.println("LEVEL UP! lvl:" + dataToIncrease.level);
+            ClientLastMessageReceived.set("Vous avez atteint le niveau " + dataToIncrease.level + " de " +
+                    getTranslatedEnum(dataToIncrease.skill) + "! (XP total: " + dataToIncrease.totalXp + " XP)");
         }
+
     }
     public void copyFrom(PlayerSkills playerSkills){
         playerSkillData = playerSkills.playerSkillData;
