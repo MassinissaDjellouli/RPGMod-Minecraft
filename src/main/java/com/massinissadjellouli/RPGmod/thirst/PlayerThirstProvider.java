@@ -13,7 +13,7 @@ import org.jetbrains.annotations.Nullable;
 
 public class PlayerThirstProvider implements ICapabilityProvider, INBTSerializable<CompoundTag> {
     public static Capability<PlayerThirst> PLAYER_THIRST = CapabilityManager.get(
-            new CapabilityToken<PlayerThirst>() {}
+            new CapabilityToken<>() {}
     );
 
     private PlayerThirst thirst;

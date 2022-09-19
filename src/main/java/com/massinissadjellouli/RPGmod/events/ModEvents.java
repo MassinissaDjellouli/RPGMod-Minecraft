@@ -1,6 +1,7 @@
 package com.massinissadjellouli.RPGmod.events;
 
 import com.massinissadjellouli.RPGmod.RPGMod;
+import com.massinissadjellouli.RPGmod.skills.PlayerSkillProvider;
 import com.massinissadjellouli.RPGmod.thirst.PlayerThirst;
 import com.massinissadjellouli.RPGmod.thirst.PlayerThirstProvider;
 
@@ -28,6 +29,11 @@ public class ModEvents {
      if(event.isWasDeath()) {
          event.getOriginal().getCapability(PlayerThirstProvider.PLAYER_THIRST).ifPresent(oldStore -> {
              event.getOriginal().getCapability(PlayerThirstProvider.PLAYER_THIRST).ifPresent(newStore -> {
+                 newStore.copyFrom(oldStore);
+             });
+         });
+         event.getOriginal().getCapability(PlayerSkillProvider.PLAYER_SKILLS).ifPresent(oldStore ->{
+             event.getOriginal().getCapability(PlayerSkillProvider.PLAYER_SKILLS).ifPresent(newStore -> {
                  newStore.copyFrom(oldStore);
              });
          });
