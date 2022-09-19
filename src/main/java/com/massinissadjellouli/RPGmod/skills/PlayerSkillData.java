@@ -12,9 +12,9 @@ public class PlayerSkillData {
     public PlayerForagingSkillData playerForagingSkillData;
 
     public enum PlayerSkillEnum{
-        Mining,
-        Attacking,
-        Foraging
+        MINING,
+        ATTACKING,
+        FORAGING
     }
     public void fillNbtTag(CompoundTag nbt) {
         playerAttackSkillData.fillNbtTag(nbt);

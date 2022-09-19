@@ -2,11 +2,13 @@ package com.massinissadjellouli.RPGmod.skills.PlayerSkillsData;
 
 import net.minecraft.nbt.CompoundTag;
 
+import static com.massinissadjellouli.RPGmod.skills.PlayerSkillData.PlayerSkillEnum;
+
 public class PlayerMiningSkillData extends SkillData{
     public int blocksMined;
 
     public PlayerMiningSkillData(int level, int currentXp, int totalXp, int blocksMined) {
-        super(level, currentXp, totalXp);
+        super(PlayerSkillEnum.MINING,level, currentXp, totalXp);
         this.blocksMined = blocksMined;
     }
 

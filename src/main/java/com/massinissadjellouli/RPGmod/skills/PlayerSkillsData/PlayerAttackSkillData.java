@@ -1,12 +1,13 @@
 package com.massinissadjellouli.RPGmod.skills.PlayerSkillsData;
 
+import com.massinissadjellouli.RPGmod.skills.PlayerSkillData.PlayerSkillEnum;
 import net.minecraft.nbt.CompoundTag;
 
 public class PlayerAttackSkillData extends SkillData{
     public int entitiesKilled;
 
     public PlayerAttackSkillData(int level, int currentXp, int totalXp, int entitiesKilled) {
-        super(level, currentXp, totalXp);
+        super(PlayerSkillEnum.ATTACKING,level, currentXp, totalXp);
         this.entitiesKilled = entitiesKilled;
     }
 
