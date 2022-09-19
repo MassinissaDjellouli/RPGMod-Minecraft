@@ -2,6 +2,7 @@ package com.massinissadjellouli.RPGmod.events;
 
 import com.massinissadjellouli.RPGmod.RPGMod;
 import com.massinissadjellouli.RPGmod.skills.PlayerSkillProvider;
+import com.massinissadjellouli.RPGmod.skills.PlayerSkills;
 import com.massinissadjellouli.RPGmod.thirst.PlayerThirst;
 import com.massinissadjellouli.RPGmod.thirst.PlayerThirstProvider;
 
@@ -20,7 +21,10 @@ public class ModEvents {
     public static void onAttachCapabilitiesPlayer(AttachCapabilitiesEvent event){
      if(event.getObject() instanceof Player){
          if(!((Player) event.getObject()).getCapability(PlayerThirstProvider.PLAYER_THIRST).isPresent()){
-             event.addCapability(new ResourceLocation(RPGMod.MODID,"properties"), new PlayerThirstProvider());
+             event.addCapability(new ResourceLocation(RPGMod.MODID,"thirst"), new PlayerThirstProvider());
+         }
+         if(!((Player) event.getObject()).getCapability(PlayerSkillProvider.PLAYER_SKILLS).isPresent()){
+             event.addCapability(new ResourceLocation(RPGMod.MODID,"skills"), new PlayerSkillProvider());
          }
      }
  }
@@ -43,6 +47,7 @@ public class ModEvents {
  @SubscribeEvent
     public static void onRegisterCapabilities(RegisterCapabilitiesEvent event){
     event.register(PlayerThirst.class);
+    event.register(PlayerSkills.class);
  }
 
 
