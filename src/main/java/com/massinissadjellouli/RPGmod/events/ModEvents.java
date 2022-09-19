@@ -30,14 +30,10 @@ public class ModEvents {
  }
  @SubscribeEvent
     public static void onPlayerCloned(PlayerEvent.Clone event){
+     event.getOriginal().reviveCaps();
      if(event.isWasDeath()) {
-         event.getOriginal().getCapability(PlayerThirstProvider.PLAYER_THIRST).ifPresent(oldStore -> {
-             event.getOriginal().getCapability(PlayerThirstProvider.PLAYER_THIRST).ifPresent(newStore -> {
-                 newStore.copyFrom(oldStore);
-             });
-         });
          event.getOriginal().getCapability(PlayerSkillProvider.PLAYER_SKILLS).ifPresent(oldStore ->{
-             event.getOriginal().getCapability(PlayerSkillProvider.PLAYER_SKILLS).ifPresent(newStore -> {
+             event.getEntity().getCapability(PlayerSkillProvider.PLAYER_SKILLS).ifPresent(newStore -> {
                  newStore.copyFrom(oldStore);
              });
          });
