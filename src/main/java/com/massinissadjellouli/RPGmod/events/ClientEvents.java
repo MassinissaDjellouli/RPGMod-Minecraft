@@ -7,6 +7,9 @@ import com.massinissadjellouli.RPGmod.damageIndicator.ActiveDamageIndicators;
 import com.massinissadjellouli.RPGmod.damageIndicator.DamageIndicatorData;
 import com.massinissadjellouli.RPGmod.networking.ModPackets;
 import com.massinissadjellouli.RPGmod.networking.packet.*;
+import com.massinissadjellouli.RPGmod.skills.PlayerSkillData;
+import com.massinissadjellouli.RPGmod.skills.PlayerSkillProvider;
+import com.massinissadjellouli.RPGmod.tags.ModTags;
 import com.massinissadjellouli.RPGmod.tags.ModTags.Items.RarityTags;
 import com.massinissadjellouli.RPGmod.thirst.PlayerThirst;
 import net.minecraft.ChatFormatting;
@@ -16,6 +19,7 @@ import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.EquipmentSlot;
@@ -24,6 +28,7 @@ import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.decoration.ArmorStand;
 import net.minecraft.world.item.*;
+import net.minecraft.world.level.block.Block;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.RegisterGuiOverlaysEvent;
 import net.minecraftforge.common.Tags;
@@ -33,6 +38,7 @@ import net.minecraftforge.event.entity.living.LivingEvent;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import net.minecraftforge.event.entity.player.ItemTooltipEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
+import net.minecraftforge.event.level.BlockEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.registries.ForgeRegistries;
@@ -53,6 +59,7 @@ public class ClientEvents {
     private static final String TOOLTIPS_TAB = " ";
 
     private static final Map<String, List<Component>> oldItemTooltips = new HashMap<>();
+
     @SubscribeEvent
     public static void onLivingEntityUseItem(LivingEntityUseItemEvent.Finish event) {
         if (event.getEntity().level.isClientSide && event.getItem().is(Items.POTION) && event.getDuration() == 0) {
@@ -61,9 +68,56 @@ public class ClientEvents {
     }
 
     @SubscribeEvent
+    public static void onBlockMined(BlockEvent.BreakEvent event) {
+        event.getPlayer().getCapability(PlayerSkillProvider.PLAYER_SKILLS).ifPresent(capability -> {
+            if(blockTagHas(BlockTags.MINEABLE_WITH_PICKAXE,event.getState().getBlock())){
+                if (itemTagHas(Tags.Items.TOOLS_PICKAXES,
+                        event.getPlayer().getMainHandItem().getItem())) {
+                    System.out.println(getXpFromBreakingBlock(
+                            event.getState().getBlock()));
+
+                    capability.addXP(getXpFromBreakingBlock(
+                                    event.getState().getBlock()),
+                            PlayerSkillData.PlayerSkillEnum.Mining);
+                    capability.blockMined();
+                }
+            }
+        });
+    }
+
+    private static boolean blockTagHas(TagKey<Block> tag,Block block){
+        return ForgeRegistries.BLOCKS.tags().getTag(tag).contains(block);
+    }   
+    private static boolean itemTagHas(TagKey<Item> tag,Item item){
+        return ForgeRegistries.ITEMS.tags().getTag(tag).contains(item);
+    }
+
+    private static int getXpFromBreakingBlock(Block block) {
+        if(blockTagHas(Tags.Blocks.STONE,block)
+                || blockTagHas(Tags.Blocks.COBBLESTONE,block)) return 3;
+        if(blockTagHas(BlockTags.STONE_BRICKS,block)) return 4;
+        if(blockTagHas(BlockTags.ICE,block)) return 6;
+        if(blockTagHas(Tags.Blocks.ORES_COAL,block)) return 10;
+        if(blockTagHas(Tags.Blocks.ORES_IRON,block)) return 12;
+        if(blockTagHas(Tags.Blocks.ORES_COPPER,block)) return 15;
+        if(blockTagHas(Tags.Blocks.ORES_LAPIS,block)
+                || blockTagHas(Tags.Blocks.ORES_REDSTONE,block)) return 16;
+        if(blockTagHas(Tags.Blocks.ORES_GOLD,block)) return 18;
+        if(blockTagHas(Tags.Blocks.ORES_DIAMOND,block)) return 25;
+        if(blockTagHas(Tags.Blocks.ORES_QUARTZ,block)) return 27;
+        if(blockTagHas(Tags.Blocks.ORES_EMERALD,block)) return 30;
+        if(blockTagHas(Tags.Blocks.END_STONES,block)) return 40;
+        if(blockTagHas(ModTags.Blocks.ORES_TITANIUM,block)) return 50;
+        if(blockTagHas(Tags.Blocks.OBSIDIAN,block)) return 80;
+        if(blockTagHas(ModTags.Blocks.ORES_CRYSTAL,block)) return 275;
+        if(blockTagHas(Tags.Blocks.ORES_NETHERITE_SCRAP,block)) return 300;
+        return 3;
+    }
+
+    @SubscribeEvent
     public static void onEntityHurt(LivingHurtEvent event) {
 
-        if(!event.getEntity().level.isClientSide && event.getSource().getEntity() instanceof ServerPlayer){
+        if (!event.getEntity().level.isClientSide && event.getSource().getEntity() instanceof ServerPlayer) {
             ServerPlayer player = (ServerPlayer) event.getSource().getEntity();
             ServerLevel level = player.getLevel();
             ArmorStand damageIndicator = EntityType.ARMOR_STAND.spawn(
@@ -75,15 +129,15 @@ public class ClientEvents {
                     MobSpawnType.COMMAND,
                     true,
                     false
-                    );
+            );
             damageIndicator.setInvisible(true);
             damageIndicator.setInvulnerable(true);
             damageIndicator.setCustomNameVisible(true);
             damageIndicator.setCustomName(Component.literal(
-                        DECIMAL_FORMATER.format(
-                                Math.max(event.getEntity().getHealth() - event.getAmount(), 0)) + "/" +
-                                DECIMAL_FORMATER.format(event.getEntity().getMaxHealth()))
-                .withStyle(ChatFormatting.RED));
+                            DECIMAL_FORMATER.format(
+                                    Math.max(event.getEntity().getHealth() - event.getAmount(), 0)) + "/" +
+                                    DECIMAL_FORMATER.format(event.getEntity().getMaxHealth()))
+                    .withStyle(ChatFormatting.RED));
             damageIndicator.setNoGravity(true);
 
             ActiveDamageIndicators.addDamageIndicator(new DamageIndicatorData(damageIndicator));
@@ -119,7 +173,7 @@ public class ClientEvents {
 
     @SubscribeEvent
     public static void onServerTick(TickEvent.ServerTickEvent event) {
-        if(event.side.isServer()){
+        if (event.side.isServer()) {
             ActiveDamageIndicators.updateCurrentDamageIndicators();
         }
     }
@@ -184,6 +238,7 @@ public class ClientEvents {
         decimalFormat.setDecimalFormatSymbols(decimalFormatSymbols);
         return decimalFormat;
     }
+
     private static DecimalFormat getDecimalFormater(int nb) {
         StringBuilder amountAfterDot = new StringBuilder();
         amountAfterDot.append("#".repeat(Math.max(0, nb)));
@@ -197,31 +252,31 @@ public class ClientEvents {
 
     @SubscribeEvent
     public static void itemTooltip(ItemTooltipEvent event) {
-        if(event.getEntity() != null && event.getEntity().level.isClientSide){
-        for (RarityTags tagKey : RarityTags.values()) {
-            ITagManager<Item> tagManager = ForgeRegistries.ITEMS.tags();
-            ItemStack item = event.getItemStack();
-            TagKey<Item> tag = tagKey.tagKey;
-            if (tagManager.getTag(tag).contains(item.getItem())) {
-                if (!Screen.hasAltDown() || tagKey.level == 0) {
-                    if(oldItemTooltips.containsKey(item.getDisplayName().getString())){
-                        resetTooltips(event);
-                        List<Component> oldTooltips = oldItemTooltips.get(item.getDisplayName().getString());
-                        event.getToolTip().addAll(oldTooltips);
+        if (event.getEntity() != null && event.getEntity().level.isClientSide) {
+            for (RarityTags tagKey : RarityTags.values()) {
+                ITagManager<Item> tagManager = ForgeRegistries.ITEMS.tags();
+                ItemStack item = event.getItemStack();
+                TagKey<Item> tag = tagKey.tagKey;
+                if (tagManager.getTag(tag).contains(item.getItem())) {
+                    if (!Screen.hasAltDown() || tagKey.level == 0) {
+                        if (oldItemTooltips.containsKey(item.getDisplayName().getString())) {
+                            resetTooltips(event);
+                            List<Component> oldTooltips = oldItemTooltips.get(item.getDisplayName().getString());
+                            event.getToolTip().addAll(oldTooltips);
+                        }
+                        if (tagKey.level > 0) {
+                            event.getToolTip().add(Component.literal(
+                                    "Appuyer sur Alt pour plus de détails").withStyle(ChatFormatting.AQUA)
+                            );
+                        }
+                        event.getToolTip().add(Component.literal(tagKey.name).withStyle(tagKey.style));
+                    } else {
+                        setTooltip(event, tagKey);
+                        setAttributes(event, tagKey);
+                        break;
                     }
-                        if(tagKey.level > 0){
-                        event.getToolTip().add(Component.literal(
-                                "Appuyer sur Alt pour plus de détails").withStyle(ChatFormatting.AQUA)
-                        );
-                    }
-                    event.getToolTip().add(Component.literal(tagKey.name).withStyle(tagKey.style));
-                } else {
-                    setTooltip(event, tagKey);
-                    setAttributes(event, tagKey);
-                    break;
                 }
             }
-        }
 
 
         }
@@ -245,7 +300,7 @@ public class ClientEvents {
 
     }
 
-    private static void setTooltipBody(RarityTags tagKey, ItemTooltipEvent event,ChatFormatting titleStyle) {
+    private static void setTooltipBody(RarityTags tagKey, ItemTooltipEvent event, ChatFormatting titleStyle) {
         Component title = oldItemTooltips.get(event.getItemStack().getDisplayName().getString()).get(0);
         event.getToolTip().add(0, Component.literal(title.getString()).withStyle(titleStyle));
         Item item = event.getItemStack().getItem();
@@ -253,11 +308,11 @@ public class ClientEvents {
             setSwordTooltips(tagKey, event);
         } else if (item instanceof ArmorItem) {
             List<String> netheriteArmorAttrOrEmpty = new ArrayList<>();
-            if(item.getDefaultInstance().getHoverName()
-                    .getString().contains("netherite")){
+            if (item.getDefaultInstance().getHoverName()
+                    .getString().contains("netherite")) {
                 netheriteArmorAttrOrEmpty.add("+1 de résistance au knockback");
-            }else netheriteArmorAttrOrEmpty = Collections.EMPTY_LIST;
-            setArmorTooltips(tagKey, event, netheriteArmorAttrOrEmpty,Collections.EMPTY_LIST);
+            } else netheriteArmorAttrOrEmpty = Collections.EMPTY_LIST;
+            setArmorTooltips(tagKey, event, netheriteArmorAttrOrEmpty, Collections.EMPTY_LIST);
         }
     }
 
@@ -276,7 +331,7 @@ public class ClientEvents {
     }
 
     private static void resetTooltips(ItemTooltipEvent event) {
-        if(!oldItemTooltips.containsKey(event.getItemStack().getDisplayName().getString())){
+        if (!oldItemTooltips.containsKey(event.getItemStack().getDisplayName().getString())) {
             oldItemTooltips.put(
                     event.getItemStack().getDisplayName().getString(),
                     List.copyOf(event.getToolTip()));
@@ -285,7 +340,7 @@ public class ClientEvents {
     }
 
     private static void setArmorTooltips(RarityTags tagKey, ItemTooltipEvent event
-    ,List<String> additionnalAttr, List<String> bonuses) {
+            , List<String> additionnalAttr, List<String> bonuses) {
         ITagManager<Item> tagManager = ForgeRegistries.ITEMS.tags();
         Item item = event.getItemStack().getItem();
         ArmorItem armorItem = (ArmorItem) event.getItemStack().getItem();
@@ -298,7 +353,7 @@ public class ClientEvents {
 
         }
 
-            event.getToolTip().add(Component.literal(""));
+        event.getToolTip().add(Component.literal(""));
         event.getToolTip().add(Component.literal(bodypart + " :").withStyle(ChatFormatting.GRAY));
         if (tagManager.getTag(Tags.Items.ARMORS).contains(item)) {
             event.getToolTip().add(Component.literal("+" +
@@ -324,8 +379,8 @@ public class ClientEvents {
                         " % de vitesse"
                 ).withStyle(ChatFormatting.BLUE));
             }
-            if(additionnalAttr.size() > 0){
-                for (String attr : additionnalAttr){
+            if (additionnalAttr.size() > 0) {
+                for (String attr : additionnalAttr) {
                     event.getToolTip().add(
                             Component.literal(attr).withStyle(ChatFormatting.BLUE)
                     );
@@ -347,8 +402,8 @@ public class ClientEvents {
                         ).withStyle(ChatFormatting.RED)
                 );
             }
-            if(bonuses.size() > 0){
-                for (String bonus : bonuses){
+            if (bonuses.size() > 0) {
+                for (String bonus : bonuses) {
                     event.getToolTip().add(
                             Component.literal(bonus).withStyle(ChatFormatting.RED)
                     );
@@ -360,7 +415,7 @@ public class ClientEvents {
 
     private static void setSwordTooltips(RarityTags tagKey, ItemTooltipEvent event) {
         ITagManager<Item> tagManager = ForgeRegistries.ITEMS.tags();
-        SwordItem item = (SwordItem)event.getItemStack().getItem();
+        SwordItem item = (SwordItem) event.getItemStack().getItem();
         if (tagManager.getTag(Tags.Items.TOOLS_SWORDS).contains(item)) {
             float dmgIncrease = tagKey.level * ATTACK_DAMAGE_INCREASE_PERCENT;
             float dmg = item.getDamage() + 1;
@@ -370,13 +425,13 @@ public class ClientEvents {
             event.getToolTip().add(Component.literal(TOOLTIPS_TAB +
                     DECIMAL_FORMATER.format(dmg) + " de dégâts d'attaque").withStyle(ChatFormatting.DARK_GREEN));
             event.getToolTip().add(Component.literal(TOOLTIPS_TAB +
-                    DECIMAL_FORMATER.format((float)Math.round(
+                    DECIMAL_FORMATER.format((float) Math.round(
 
-                                    (Attributes.ATTACK_SPEED.getDefaultValue() +
+                            (Attributes.ATTACK_SPEED.getDefaultValue() +
                                     item.getDefaultAttributeModifiers(EquipmentSlot.MAINHAND)
                                             .get(Attributes.ATTACK_SPEED).stream().toList().get(0).getAmount())
-                                            * 10) /10
-                            )
+                                    * 10) / 10
+                    )
                     + " de vitesse d'attaque").withStyle(ChatFormatting.DARK_GREEN));
             String bonusDmg = getBonusDmg(dmg, dmgIncrease);
             String bonusSpeed = getBonusSpeed(item, tagKey.level);
@@ -436,7 +491,8 @@ public class ClientEvents {
         }
         return bonusDmg;
     }
-    private static String getBonusSpeed(SwordItem item,int level) {
+
+    private static String getBonusSpeed(SwordItem item, int level) {
         String bonusSpeed = "";
         float speed = (float) Math.round(
                 (Attributes.ATTACK_SPEED.getDefaultValue() +
@@ -444,7 +500,7 @@ public class ClientEvents {
                                 .get(Attributes.ATTACK_SPEED).stream().toList().get(0).getAmount())
                         * 10) / 10;
         if (level > 0) {
-            float speedBonus = speed * ((float)(level * ATTACK_SPEED_INCREASE_PERCENT))/100f;
+            float speedBonus = speed * ((float) (level * ATTACK_SPEED_INCREASE_PERCENT)) / 100f;
             bonusSpeed = TOOLTIPS_TAB + "+" +
                     getDecimalFormater(2).format(speedBonus) +
                     " de vitesse en plus";

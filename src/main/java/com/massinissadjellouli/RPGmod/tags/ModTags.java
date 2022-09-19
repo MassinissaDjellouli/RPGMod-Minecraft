@@ -12,6 +12,9 @@ import net.minecraft.world.level.block.Block;
 public class ModTags {
     public static class Blocks{
         public static final TagKey<Block> NEEDS_TITANIUM_TOOLS = createTag("needs_titanium_tool");
+        public static final TagKey<Block> ORES_TITANIUM = createTag("ores/titanium");
+        public static final TagKey<Block> ORES_CRYSTAL = createTag("ores/crystal");
+
         private static TagKey<Block> createTag(String ressourceLocation){
             return BlockTags.create(new ResourceLocation(RPGMod.MODID,ressourceLocation));
         }
@@ -50,6 +53,7 @@ public class ModTags {
         public static final TagKey<Item> VERY_RARE = createTag("rarity/very_rare");
         public static final TagKey<Item> LEGENDARY = createTag("rarity/legendary");
         public static final TagKey<Item> MYTHICAL = createTag("rarity/mythical");
+
         private static TagKey<Item> createTag(String ressourceLocation){
             return ItemTags.create(new ResourceLocation(RPGMod.MODID,ressourceLocation));
         }
