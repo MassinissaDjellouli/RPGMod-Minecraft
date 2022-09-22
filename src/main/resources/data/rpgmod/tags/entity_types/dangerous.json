@@ -1,0 +1,13 @@
+{
+  "replace": false,
+  "values": [
+    "minecraft:stray",
+    "minecraft:elder_guardian",
+    "minecraft:creeper",
+    "minecraft:enderman",
+    "minecraft:cave_spider",
+    "minecraft:magma_cube",
+    "minecraft:drowned",
+    "minecraft:witch"
+  ]
+}

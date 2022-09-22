@@ -1,0 +1,21 @@
+{
+  "replace": false,
+  "values": [
+    "minecraft:polar_bear",
+    "minecraft:villager_golem",
+    "minecraft:snowman",
+    "minecraft:wolf",
+    "minecraft:shulker",
+    "minecraft:guardian",
+    "minecraft:endermite",
+    "minecraft:slime",
+    "minecraft:silverfish",
+    "minecraft:zombie",
+    "minecraft:zombie_villager",
+    "minecraft:skeleton",
+    "minecraft:spider",
+    "minecraft:husk",
+    "minecraft:vex",
+    "minecraft:bee"
+  ]
+}
