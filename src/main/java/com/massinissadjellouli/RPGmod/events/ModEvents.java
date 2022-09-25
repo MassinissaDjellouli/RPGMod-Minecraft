@@ -57,9 +57,14 @@ public class ModEvents {
             if(capability.getSkill(ATTACKING).isEmpty()) return;
             if(capability.getSkill(FORAGING).isEmpty()) return;
             SkillData mining =  capability.getSkill(MINING).get();
+            SkillData foraging =  capability.getSkill(FORAGING).get();
+            SkillData attacking =  capability.getSkill(ATTACKING).get();
             if(!player.level.isClientSide){
-                int hasteLevel = mining.level/3;
+                int hasteLevel = mining.level/10;
+                int foragingLevel = foraging.level/10;
+                MobEffect foragingEffect = foragingLevel < 4 ? MobEffects.DAMAGE_RESISTANCE : MobEffects.DAMAGE_BOOST;
                 player.addEffect(new MobEffectInstance(MobEffects.DIG_SPEED,100000, hasteLevel));
+                player.addEffect(new MobEffectInstance(foragingEffect,100000, foragingLevel));
             }
      });
     }
