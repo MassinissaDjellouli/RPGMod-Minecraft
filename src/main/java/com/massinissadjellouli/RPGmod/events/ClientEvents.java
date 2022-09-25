@@ -23,6 +23,9 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.TagKey;
+import net.minecraft.world.effect.MobEffect;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
@@ -30,6 +33,7 @@ import net.minecraft.world.entity.MobSpawnType;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.decoration.ArmorStand;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.*;
 import net.minecraft.world.level.block.Block;
 import net.minecraftforge.api.distmarker.Dist;
@@ -51,6 +55,9 @@ import java.math.RoundingMode;
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 import java.util.*;
+
+import static com.massinissadjellouli.RPGmod.skills.PlayerSkillData.PlayerSkillEnum.ATTACKING;
+import static com.massinissadjellouli.RPGmod.tags.ModTags.EntityTypes.EntityTags.*;
 
 @Mod.EventBusSubscriber(modid = RPGMod.MODID, value = Dist.CLIENT)
 public class ClientEvents {
@@ -79,7 +86,8 @@ public class ClientEvents {
                             event.getPlayer().getMainHandItem().getItem())) {
                         capability.addXP(getXpFromBreakingBlock(
                                         event.getState().getBlock()),
-                                PlayerSkillData.PlayerSkillEnum.MINING);
+                                PlayerSkillData.PlayerSkillEnum.MINING
+                        , event.getPlayer());
                         capability.blockMined();
                     }
                 }
@@ -88,20 +96,60 @@ public class ClientEvents {
                             event.getPlayer().getMainHandItem().getItem())) {
                         capability.addXP(getXpFromBreakingBlock(
                                         event.getState().getBlock()),
-                                PlayerSkillData.PlayerSkillEnum.FORAGING);
+                                PlayerSkillData.PlayerSkillEnum.FORAGING
+                                , event.getPlayer());
                         capability.woodCut();
                     }
                 }
             });
         }
     }
+    @SubscribeEvent
+    public static void onLevelUp(LevelUpEvent event){
+        switch (event.getSkill()){
+            case ATTACKING -> setPlayerAttackingBonus(event);
+            case MINING -> setPlayerMiningBonus(event);
+            case FORAGING -> setPlayerForagingBonus(event);
+        }
+    }
+    private static void setPlayerMiningBonus (LevelUpEvent event){
+        Player player = event.getEntity();
+        if(event.getSkillLevel() % 2 == 0){
+            int healthLevel = event.getSkillLevel()/2;
 
+            AttributeModifier health_modifier = new AttributeModifier(UUID.fromString("ff3fdd4d-7c5f-4433-92b3-0cc5592ef67c"), "HEALTH_MODIFIER",
+                    healthLevel, AttributeModifier.Operation.ADDITION);
+
+            if(player.getAttribute(Attributes.MAX_HEALTH).hasModifier(health_modifier))
+                player.getAttribute(Attributes.MAX_HEALTH).removePermanentModifier(health_modifier.getId());
+            if(!player.getAttribute(Attributes.MAX_HEALTH).hasModifier(health_modifier))
+                player.getAttribute(Attributes.MAX_HEALTH).addPermanentModifier(health_modifier);
+        }
+        if(event.getSkillLevel() % 3 == 0){
+            int hasteLevel = event.getSkillLevel()/3;
+
+            if(player.hasEffect(MobEffects.DIG_SPEED)){
+                player.removeEffect(MobEffects.DIG_SPEED);
+            }
+            player.addEffect(new MobEffectInstance(MobEffects.DIG_SPEED,100000,hasteLevel));
+        }
+    }
+    private static void setPlayerForagingBonus (LevelUpEvent event){
+
+    }
+    private static void setPlayerAttackingBonus (LevelUpEvent event){
+
+    }
     private static boolean blockTagHas(TagKey<Block> tag, Block block) {
         return ForgeRegistries.BLOCKS.tags().getTag(tag).contains(block);
     }
 
     private static boolean itemTagHas(TagKey<Item> tag, Item item) {
         return ForgeRegistries.ITEMS.tags().getTag(tag).contains(item);
+    }
+
+    private static boolean entityTagHas(ModTags.EntityTypes.EntityTags tag, EntityType<?> entity) {
+        return entity.is(tag.tagKey);
     }
 
     private static int getXpFromBreakingBlock(Block block) {
@@ -158,7 +206,8 @@ public class ClientEvents {
             player.getCapability(PlayerSkillProvider.PLAYER_SKILLS).ifPresent(capability -> {
                 if (event.getEntity().getHealth() - event.getAmount() <= 0) {
                     capability.addXP(getXpFromKilling(event.getEntity()),
-                            PlayerSkillData.PlayerSkillEnum.ATTACKING);
+                            ATTACKING,
+                            player);
                     capability.entityKilled();
                 }
             });
@@ -536,7 +585,12 @@ public class ClientEvents {
         }
 
         private static int getXpFromKilling(LivingEntity entity) {
-            return 10;
+            if(entityTagHas(HARMLESS,entity.getType())) return 10;
+            if(entityTagHas(HARMFUL,entity.getType())) return 30;
+            if(entityTagHas(DANGEROUS,entity.getType())) return 70;
+            if(entityTagHas(VERY_DANGEROUS,entity.getType())) return 150;
+            if(entityTagHas(BOSS,entity.getType())) return 1000;
+            return 0;
         }
 
         @Mod.EventBusSubscriber(modid = RPGMod.MODID, value = Dist.CLIENT, bus = Mod.EventBusSubscriber.Bus.MOD)
