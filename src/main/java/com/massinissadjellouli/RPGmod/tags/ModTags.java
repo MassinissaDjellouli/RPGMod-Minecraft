@@ -85,6 +85,7 @@ public class ModTags {
         public static final TagKey<Item> VERY_RARE = createTag("rarity/very_rare");
         public static final TagKey<Item> LEGENDARY = createTag("rarity/legendary");
         public static final TagKey<Item> MYTHICAL = createTag("rarity/mythical");
+        public static final TagKey<Item> ACCEPTED_ITEMS_IN_COMPRESSOR_SLOTS = createTag("accepted_items_in_compressor_slots");
 
         private static TagKey<Item> createTag(String ressourceLocation) {
             return ItemTags.create(new ResourceLocation(RPGMod.MODID, ressourceLocation));
