@@ -8,6 +8,7 @@ import com.massinissadjellouli.RPGmod.thirst.PlayerThirst;
 import com.massinissadjellouli.RPGmod.thirst.PlayerThirstProvider;
 
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.player.Player;
@@ -17,6 +18,7 @@ import net.minecraftforge.event.AttachCapabilitiesEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
+import org.checkerframework.checker.units.qual.A;
 
 import static com.massinissadjellouli.RPGmod.skills.PlayerSkillData.PlayerSkillEnum.*;
 
@@ -45,6 +47,7 @@ public class ModEvents {
              });
          });
      }
+     event.getEntity().getAttributes().assignValues(event.getOriginal().getAttributes());
      resetBonusesEffects(event.getEntity());
  }
 
