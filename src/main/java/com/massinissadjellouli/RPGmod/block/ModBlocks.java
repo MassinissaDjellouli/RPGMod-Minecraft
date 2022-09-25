@@ -1,6 +1,8 @@
 package com.massinissadjellouli.RPGmod.block;
 
 import com.massinissadjellouli.RPGmod.RPGMod;
+import com.massinissadjellouli.RPGmod.block.custom.ItemCompressorBlock;
+import com.massinissadjellouli.RPGmod.client.ClientLastMessageReceived;
 import com.massinissadjellouli.RPGmod.item.ModItems;
 import net.minecraft.util.valueproviders.UniformInt;
 import net.minecraft.world.item.BlockItem;
@@ -69,9 +71,13 @@ public class ModBlocks {
 
     public static final RegistryObject<Block> STEEL_BLOCK = registerBlock("steel_block",
             ()-> new Block(
-                    BlockBehaviour.Properties.of(Material.METAL)
+                    BlockBehaviour.Properties.of(Material.HEAVY_METAL)
                             .strength(4f,4f).requiresCorrectToolForDrops().sound(SoundType.METAL))
             ,CreativeModeTab.TAB_BUILDING_BLOCKS);
+    public static final RegistryObject<Block> ITEM_COMPRESSOR = registerBlock("item_compressor",
+            () -> new ItemCompressorBlock(
+                    BlockBehaviour.Properties.of(Material.HEAVY_METAL).strength(4f,4f)
+                            .requiresCorrectToolForDrops().sound(SoundType.METAL)),CreativeModeTab.TAB_DECORATIONS);
 
 
     private static <T extends Block> void registerBlockItem(String name, RegistryObject<T> block, CreativeModeTab tab){
