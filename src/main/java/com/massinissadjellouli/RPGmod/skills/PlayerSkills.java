@@ -1,9 +1,13 @@
 package com.massinissadjellouli.RPGmod.skills;
 
 import com.massinissadjellouli.RPGmod.client.ClientLastMessageReceived;
+import com.massinissadjellouli.RPGmod.events.RPGModEventFactory;
 import com.massinissadjellouli.RPGmod.skills.PlayerSkillData.PlayerSkillEnum;
 import com.massinissadjellouli.RPGmod.skills.PlayerSkillsData.SkillData;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.entity.player.Player;
+
+import java.util.Optional;
 
 public class PlayerSkills {
     private PlayerSkillData playerSkillData = new PlayerSkillData();
@@ -20,6 +24,14 @@ public class PlayerSkills {
         playerSkillData.playerAttackSkillData.entitiesKilled++;
     }
 
+    public Optional<SkillData> getSkill(PlayerSkillEnum skill){
+        switch (skill){
+            case MINING -> {return Optional.of(playerSkillData.playerMiningSkillData);}
+            case ATTACKING -> {return Optional.of(playerSkillData.playerAttackSkillData);}
+            case FORAGING -> {return Optional.of(playerSkillData.playerForagingSkillData);}
+        }
+        return Optional.empty();
+    }
     private int getXpNeededForNextLevel(int level){
         float xpNeededPerLevel = 150f;
         for (int i = 0; i < level; i++) {
@@ -29,11 +41,11 @@ public class PlayerSkills {
         return Math.round(xpNeededPerLevel);
     }
 
-    public void addXP(int xp, PlayerSkillEnum skill){
+    public void addXP(int xp, PlayerSkillEnum skill, Player player){
         switch (skill){
-            case MINING -> increaseXp(xp, playerSkillData.playerMiningSkillData);
-            case FORAGING -> increaseXp(xp, playerSkillData.playerForagingSkillData);
-            case ATTACKING -> increaseXp(xp, playerSkillData.playerAttackSkillData);
+            case MINING -> increaseXp(xp, playerSkillData.playerMiningSkillData,player,skill);
+            case FORAGING -> increaseXp(xp, playerSkillData.playerForagingSkillData,player,skill);
+            case ATTACKING -> increaseXp(xp, playerSkillData.playerAttackSkillData,player,skill);
         }
 
     }
@@ -53,7 +65,7 @@ public class PlayerSkills {
         return "";
     }
 
-    private void increaseXp(int xp, SkillData dataToIncrease){
+    private void increaseXp(int xp, SkillData dataToIncrease,Player player,PlayerSkillEnum skill){
         dataToIncrease.currentXp += xp;
         dataToIncrease.totalXp += xp;
         ClientLastMessageReceived.set("+" + xp + "XP " + getTranslatedEnum(dataToIncrease.skill) +
@@ -62,6 +74,7 @@ public class PlayerSkills {
                 getXpNeededForNextLevel(dataToIncrease.level)){
             dataToIncrease.currentXp = 0;
             dataToIncrease.level++;
+            RPGModEventFactory.onLevelUp(player,skill,dataToIncrease.level);
             ClientLastMessageReceived.set("Vous avez atteint le niveau " + dataToIncrease.level + " de " +
                     getTranslatedEnum(dataToIncrease.skill) + "! (XP total: " + dataToIncrease.totalXp + " XP)");
         }
