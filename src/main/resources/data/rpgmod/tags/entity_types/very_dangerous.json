@@ -2,9 +2,10 @@
   "replace": false,
   "values": [
     "minecraft:wither_skeleton",
-    "minecraft:evocation_illager",
-    "minecraft:vindication_illager",
-    "minecraft:illusion_illager",
+    "minecraft:evoker",
+    "minecraft:vindicator",
+    "minecraft:pillager",
+    "minecraft:illusioner",
     "minecraft:ghast",
     "minecraft:phantom",
     "minecraft:piglin",
@@ -12,7 +13,7 @@
     "minecraft:zoglin",
     "minecraft:piglin_brute",
     "minecraft:ravager",
-    "minecraft:zombie_pigman",
+    "minecraft:zombified_piglin",
     "minecraft:blaze"
   ]
 }

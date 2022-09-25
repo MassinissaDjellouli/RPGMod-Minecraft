@@ -2,8 +2,8 @@
   "replace": false,
   "values": [
     "minecraft:polar_bear",
-    "minecraft:villager_golem",
-    "minecraft:snowman",
+    "minecraft:iron_golem",
+    "minecraft:snow_golem",
     "minecraft:wolf",
     "minecraft:shulker",
     "minecraft:guardian",

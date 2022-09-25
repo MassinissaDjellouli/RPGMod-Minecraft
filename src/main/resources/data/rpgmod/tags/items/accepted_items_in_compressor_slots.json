@@ -1,6 +1,7 @@
 {
   "replace": false,
   "values": [
-    "rpgmod:copper_axe"
+    "minecraft:coal",
+    "minecraft:emerald"
   ]
 }
