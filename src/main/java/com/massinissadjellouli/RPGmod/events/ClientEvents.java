@@ -149,10 +149,10 @@ public class ClientEvents {
         if (!player.getAttribute(Attributes.ATTACK_DAMAGE).hasModifier(ATTACK_MODIFIER))
             player.getAttribute(Attributes.ATTACK_DAMAGE).addPermanentModifier(ATTACK_MODIFIER);
 
-        if (event.getSkillLevel() % 10 == 0) {
+        if (event.getSkillLevel() % 8 == 0) {
             int resistanceLevel = event.getSkillLevel() / 10;
 
-            MobEffect effect = resistanceLevel < 4 ? MobEffects.DAMAGE_RESISTANCE : MobEffects.DAMAGE_BOOST;
+            MobEffect effect = resistanceLevel < 4 ? MobEffects.DAMAGE_RESISTANCE : MobEffects.JUMP;
             if (player.hasEffect(effect)) {
                 player.removeEffect(effect);
             }
@@ -161,7 +161,41 @@ public class ClientEvents {
     }
 
     private static void setPlayerAttackingBonus(LevelUpEvent event) {
+        Player player = event.getEntity();
+        int kbRes = event.getSkillLevel()/3;
 
+        final AttributeModifier ATTACK_MODIFIER =
+                new AttributeModifier(UUID.fromString("75a87111-8a82-4517-b68c-ff95ecc5be6b"), "MULTIPLY_MODIFIER",
+                        kbRes, AttributeModifier.Operation.ADDITION);
+        if (player.getAttribute(Attributes.KNOCKBACK_RESISTANCE).hasModifier(ATTACK_MODIFIER))
+            player.getAttribute(Attributes.KNOCKBACK_RESISTANCE).removeModifier(ATTACK_MODIFIER);
+        if (!player.getAttribute(Attributes.KNOCKBACK_RESISTANCE).hasModifier(ATTACK_MODIFIER))
+            player.getAttribute(Attributes.KNOCKBACK_RESISTANCE).addPermanentModifier(ATTACK_MODIFIER);
+
+        if (event.getSkillLevel() % 10 == 0) {
+            int regenerationLvl = event.getSkillLevel() / 15;
+
+            MobEffect effect = regenerationLvl > 2 ? MobEffects.DAMAGE_BOOST : MobEffects.REGENERATION;
+
+            if (player.hasEffect(effect)) {
+                player.removeEffect(effect);
+            }
+            player.addEffect(new MobEffectInstance(effect, 100000, regenerationLvl));
+        }
+        if (event.getSkillLevel() == 30) {
+            MobEffect effect = MobEffects.FIRE_RESISTANCE;
+            if (player.hasEffect(effect)) {
+                player.removeEffect(effect);
+            }
+            player.addEffect(new MobEffectInstance(effect, 100000, 1));
+        }
+        if (event.getSkillLevel() == 35) {
+            MobEffect effect = MobEffects.NIGHT_VISION;
+            if (player.hasEffect(effect)) {
+                player.removeEffect(effect);
+            }
+            player.addEffect(new MobEffectInstance(effect, 100000, 1));
+        }
     }
 
     private static boolean blockTagHas(TagKey<Block> tag, Block block) {
