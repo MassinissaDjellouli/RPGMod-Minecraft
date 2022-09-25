@@ -3,10 +3,13 @@ package com.massinissadjellouli.RPGmod.events;
 import com.massinissadjellouli.RPGmod.RPGMod;
 import com.massinissadjellouli.RPGmod.skills.PlayerSkillProvider;
 import com.massinissadjellouli.RPGmod.skills.PlayerSkills;
+import com.massinissadjellouli.RPGmod.skills.PlayerSkillsData.SkillData;
 import com.massinissadjellouli.RPGmod.thirst.PlayerThirst;
 import com.massinissadjellouli.RPGmod.thirst.PlayerThirstProvider;
 
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.common.capabilities.RegisterCapabilitiesEvent;
@@ -14,6 +17,8 @@ import net.minecraftforge.event.AttachCapabilitiesEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
+
+import static com.massinissadjellouli.RPGmod.skills.PlayerSkillData.PlayerSkillEnum.*;
 
 @Mod.EventBusSubscriber(modid = RPGMod.MODID,value = Dist.CLIENT)
 public class ModEvents {
@@ -28,6 +33,8 @@ public class ModEvents {
          }
      }
  }
+
+
  @SubscribeEvent
     public static void onPlayerCloned(PlayerEvent.Clone event){
      event.getOriginal().reviveCaps();
@@ -38,9 +45,23 @@ public class ModEvents {
              });
          });
      }
+     resetBonusesEffects(event.getEntity());
  }
 
- @SubscribeEvent
+    private static void resetBonusesEffects(Player player) {
+     player.getCapability(PlayerSkillProvider.PLAYER_SKILLS).ifPresent((capability)->{
+            if(capability.getSkill(MINING).isEmpty()) return;
+            if(capability.getSkill(ATTACKING).isEmpty()) return;
+            if(capability.getSkill(FORAGING).isEmpty()) return;
+            SkillData mining =  capability.getSkill(MINING).get();
+            if(!player.level.isClientSide){
+                int hasteLevel = mining.level/3;
+                player.addEffect(new MobEffectInstance(MobEffects.DIG_SPEED,100000, hasteLevel));
+            }
+     });
+    }
+
+    @SubscribeEvent
     public static void onRegisterCapabilities(RegisterCapabilitiesEvent event){
     event.register(PlayerThirst.class);
     event.register(PlayerSkills.class);
