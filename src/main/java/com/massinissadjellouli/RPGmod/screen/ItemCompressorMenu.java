@@ -39,7 +39,7 @@ public class ItemCompressorMenu extends AbstractContainerMenu {
                             25 + i * 18,18 + y * 18));
                 }
             }
-            this.addSlot(new SlotItemHandler(handler,POSITION_OF_RESULT_SLOT - 1,115,36){
+            this.addSlot(new SlotItemHandler(handler,POSITION_OF_RESULT_SLOT,115,36){
 
                 @Override
                 public boolean mayPlace(ItemStack stack) {
@@ -126,7 +126,7 @@ public class ItemCompressorMenu extends AbstractContainerMenu {
     public int getScaledProgress(){
         int progress = this.data.get(0);
         int maxProgress = this.data.get(1);
-        int progressBarSize = 100;
+        int progressBarSize = 53;
 
         return maxProgress != 0 && progress != 0? progress * progressBarSize / maxProgress : 0;
 

@@ -35,7 +35,7 @@ public class ItemCompressorScreen extends AbstractContainerScreen<ItemCompressor
     private void renderProgressBar(PoseStack stack, int x, int y) {
         if(menu.isCrafting()){
             RenderSystem.setShaderTexture(0, PROGRESS_BAR_TEXTURE);
-            blit(stack,x + 148,y + 17, 176,0,4,menu.getScaledProgress());
+            blit(stack,x + 148,y + 18, 176,0,4,menu.getScaledProgress());
         }
     }
 

@@ -14,6 +14,7 @@ import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.ContainerData;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
@@ -32,7 +33,7 @@ public class ItemCompressorBlockEntity extends BlockEntity implements MenuProvid
     public static final int AMOUNT_OF_SLOTS_TO_COMPRESS_ROWS = 3;
     public static final int AMOUNT_OF_SLOTS_TO_COMPRESS_COLS = 3;
     public static final int AMOUNT_OF_SLOTS_TO_COMPRESS = AMOUNT_OF_SLOTS_TO_COMPRESS_ROWS * AMOUNT_OF_SLOTS_TO_COMPRESS_COLS;
-    public static final int POSITION_OF_RESULT_SLOT = 10;
+    public static final int POSITION_OF_RESULT_SLOT = 9;
     public static final int AMOUNT_OF_SLOTS = 10;
     private int progress;
     protected final ContainerData data;
@@ -108,6 +109,7 @@ public class ItemCompressorBlockEntity extends BlockEntity implements MenuProvid
     @Override
     protected void saveAdditional(CompoundTag nbt) {
         nbt.put("inventory",itemStackHandler.serializeNBT());
+        nbt.putInt("item_compressor_progress",this.progress);
         super.saveAdditional(nbt);
     }
 
@@ -115,6 +117,7 @@ public class ItemCompressorBlockEntity extends BlockEntity implements MenuProvid
     public void load(CompoundTag nbt) {
         super.load(nbt);
         itemStackHandler.deserializeNBT(nbt.getCompound("inventory"));
+        this.progress = nbt.getInt("item_compressor_progress");
     }
 
     public void drops(){
@@ -134,9 +137,6 @@ public class ItemCompressorBlockEntity extends BlockEntity implements MenuProvid
             setChanged(level,blockPos,state);
             if(itemCompressor.progress >= itemCompressor.maxProgress){
                 craftItem(itemCompressor);
-            }{
-                itemCompressor.resetProgress();
-                setChanged(level,blockPos,state);
             }
         }
     }
@@ -148,12 +148,15 @@ public class ItemCompressorBlockEntity extends BlockEntity implements MenuProvid
         }
 
         boolean isAcceptedItemInCompressorSlots = true;
+        Item oldItem = null;
         for (int i = 0; i < AMOUNT_OF_SLOTS_TO_COMPRESS; i++) {
             isAcceptedItemInCompressorSlots =
                     isAcceptedItemInCompressorSlots &&
                     ForgeRegistries.ITEMS.tags().getTag(
                         ModTags.Items.ACCEPTED_ITEMS_IN_COMPRESSOR_SLOTS).contains(
-                                itemCompressor.itemStackHandler.getStackInSlot(i).getItem());
+                                itemCompressor.itemStackHandler.getStackInSlot(i).getItem()) &&
+                            (oldItem == null || itemCompressor.itemStackHandler.getStackInSlot(i).is(oldItem));
+            oldItem = itemCompressor.itemStackHandler.getStackInSlot(i).getItem();
         }
 
         return isAcceptedItemInCompressorSlots && canInsertAmountIntoResultSlot(inventory) && canInsertItemIntoOutputSlot(inventory,new ItemStack(ModItems.COPPER_AXE.get(),1));
@@ -173,8 +176,10 @@ public class ItemCompressorBlockEntity extends BlockEntity implements MenuProvid
 
     private static void craftItem(ItemCompressorBlockEntity itemCompressor) {
         if(hasRecipe(itemCompressor)){
-            //TODO: cheeck with 9 slots
-            itemCompressor.itemStackHandler.extractItem(1,1,false);
+            //TODO: craft right item
+            for (int i = 0; i < AMOUNT_OF_SLOTS_TO_COMPRESS; i++) {
+                itemCompressor.itemStackHandler.extractItem(i,1,false);
+            }
             itemCompressor.itemStackHandler.setStackInSlot(POSITION_OF_RESULT_SLOT,new ItemStack(ModItems.COPPER_AXE.get(),
                     itemCompressor.itemStackHandler.getStackInSlot(POSITION_OF_RESULT_SLOT).getCount() + 1));
             itemCompressor.resetProgress();
