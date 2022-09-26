@@ -8,13 +8,16 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.*;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.Block;
+
+import static net.minecraft.world.item.Items.*;
 
 public class ModTags {
     public static class EntityTypes {
         //TODO: Fix it or smth
         public static final TagKey<EntityType<?>> HARMLESS = createTag("entity_types/harmless");
-        public static final TagKey<EntityType<?>> HARMFUL = createTag("entity_types/harful");
+        public static final TagKey<EntityType<?>> HARMFUL = createTag("entity_types/harmful");
         public static final TagKey<EntityType<?>> DANGEROUS = createTag("entity_types/dangerous");
         public static final TagKey<EntityType<?>> VERY_DANGEROUS = createTag("entity_types/very_dangerous");
         public static final TagKey<EntityType<?>> BOSS = createTag("entity_types/boss");
@@ -85,8 +88,20 @@ public class ModTags {
         public static final TagKey<Item> VERY_RARE = createTag("rarity/very_rare");
         public static final TagKey<Item> LEGENDARY = createTag("rarity/legendary");
         public static final TagKey<Item> MYTHICAL = createTag("rarity/mythical");
-        public static final TagKey<Item> ACCEPTED_ITEMS_IN_COMPRESSOR_SLOTS = createTag("accepted_items_in_compressor_slots");
 
+        public enum CompressorFuels {
+            COAL(net.minecraft.world.item.Items.COAL,10),
+            LAVA(LAVA_BUCKET, 300);
+
+            public final Item item;
+            public final int energy;
+
+
+            CompressorFuels(Item item, int energy) {
+                this.item = item;
+                this.energy = energy;
+            }
+        }
         private static TagKey<Item> createTag(String ressourceLocation) {
             return ItemTags.create(new ResourceLocation(RPGMod.MODID, ressourceLocation));
         }
