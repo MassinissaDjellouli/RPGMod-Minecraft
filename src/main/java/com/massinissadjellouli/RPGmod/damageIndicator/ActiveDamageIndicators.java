@@ -19,4 +19,8 @@ public class ActiveDamageIndicators {
                 .forEach(DamageIndicatorData::kill);
 
     }
+
+    public static void flush(){
+        activeDamageIndicators.forEach(DamageIndicatorData::kill);
+    }
 }
