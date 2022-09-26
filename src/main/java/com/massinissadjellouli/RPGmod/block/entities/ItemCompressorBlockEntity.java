@@ -39,7 +39,7 @@ public class ItemCompressorBlockEntity extends BlockEntity implements MenuProvid
     public static final int POSITION_OF_RESULT_SLOT = 9;
     public static final int AMOUNT_OF_SLOTS = 10;
     private int progress;
-    private final ModEnergyStorage ENERGY_STORAGE = new ModEnergyStorage(10000,300) {
+    private final ModEnergyStorage ENERGY_STORAGE = new ModEnergyStorage(60000,300) {
         @Override
         public void onEnergyChanged() {
 
@@ -96,6 +96,7 @@ public class ItemCompressorBlockEntity extends BlockEntity implements MenuProvid
     @Nullable
     @Override
     public AbstractContainerMenu createMenu(int id, Inventory inventory, Player player) {
+        ModPackets.sendToClients(new EnergySyncS2CPacket(ENERGY_STORAGE.getEnergyStored(),getBlockPos()));
         return new ItemCompressorMenu(id,inventory,this,this.data);
     }
 
@@ -172,7 +173,7 @@ public class ItemCompressorBlockEntity extends BlockEntity implements MenuProvid
     }
 
     private static boolean hasEnergy(ItemCompressorBlockEntity itemCompressor) {
-        return itemCompressor.ENERGY_STORAGE.getEnergyStored() >= ENERGY_REQUIREMENT * itemCompressor.maxProgress;
+        return itemCompressor.ENERGY_STORAGE.getEnergyStored() >= ENERGY_REQUIREMENT * (itemCompressor.maxProgress - itemCompressor.progress);
     }
 
     private static Optional<ItemCompressorRecipe> getRecipe(ItemCompressorBlockEntity itemCompressor) {
