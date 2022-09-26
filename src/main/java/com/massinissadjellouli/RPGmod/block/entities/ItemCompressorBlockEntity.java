@@ -1,5 +1,6 @@
 package com.massinissadjellouli.RPGmod.block.entities;
 
+import com.massinissadjellouli.RPGmod.client.ClientLastMessageReceived;
 import com.massinissadjellouli.RPGmod.energy.ModEnergyStorage;
 import com.massinissadjellouli.RPGmod.networking.ModPackets;
 import com.massinissadjellouli.RPGmod.networking.packet.EnergySyncS2CPacket;
@@ -228,6 +229,7 @@ public class ItemCompressorBlockEntity extends BlockEntity implements MenuProvid
 
     public void addEnergy(ItemCompressorBlockEntity entity, int energy) {
         entity.ENERGY_STORAGE.receiveEnergy(energy,false);
+        ClientLastMessageReceived.set("Vous avez ajouté " + energy + "FE d'énergie.");
     }
 
     public IEnergyStorage getEnergyStorage() {
