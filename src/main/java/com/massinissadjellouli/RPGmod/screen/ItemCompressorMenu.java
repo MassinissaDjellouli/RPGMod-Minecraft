@@ -9,7 +9,7 @@ import net.minecraft.world.inventory.*;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
-import net.minecraftforge.items.CapabilityItemHandler;
+import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.items.SlotItemHandler;
 
 import static com.massinissadjellouli.RPGmod.block.entities.ItemCompressorBlockEntity.*;
@@ -32,7 +32,7 @@ public class ItemCompressorMenu extends AbstractContainerMenu {
 
         addPlayerInventory(inventory);
         addPlayerHotbar(inventory);
-        this.blockEntity.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY).ifPresent(handler -> {
+        this.blockEntity.getCapability(ForgeCapabilities.ITEM_HANDLER).ifPresent(handler -> {
             for (int i = 0; i < AMOUNT_OF_SLOTS_TO_COMPRESS_ROWS; i++) {
                 for (int y = 0; y < AMOUNT_OF_SLOTS_TO_COMPRESS_COLS; y++) {
                     this.addSlot(new SlotItemHandler(handler,i * AMOUNT_OF_SLOTS_TO_COMPRESS_ROWS + y,
