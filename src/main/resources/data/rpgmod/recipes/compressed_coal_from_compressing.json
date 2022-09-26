@@ -1,0 +1,20 @@
+{
+  "type": "rpgmod:item_compressing",
+  "ingredients": [
+    {"item": "minecraft:coal"},
+    {"item": "minecraft:coal"},
+    {"item": "minecraft:coal"},
+
+    {"item": "minecraft:coal"},
+    {"item": "minecraft:coal"},
+    {"item": "minecraft:coal"},
+
+    {"item": "minecraft:coal"},
+    {"item": "minecraft:coal"},
+    {"item": "minecraft:coal"}
+  ],
+  "output": {
+    "item": "minecraft:copper_ingot"
+  },
+  "count": 5
+}

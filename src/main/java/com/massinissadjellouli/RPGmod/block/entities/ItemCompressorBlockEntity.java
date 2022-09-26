@@ -1,8 +1,7 @@
 package com.massinissadjellouli.RPGmod.block.entities;
 
-import com.massinissadjellouli.RPGmod.item.ModItems;
+import com.massinissadjellouli.RPGmod.recipe.ItemCompressorRecipe;
 import com.massinissadjellouli.RPGmod.screen.ItemCompressorMenu;
-import com.massinissadjellouli.RPGmod.tags.ModTags;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
@@ -14,7 +13,6 @@ import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.ContainerData;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
@@ -24,9 +22,10 @@ import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
-import net.minecraftforge.registries.ForgeRegistries;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+
+import java.util.Optional;
 
 public class ItemCompressorBlockEntity extends BlockEntity implements MenuProvider {
 
@@ -138,6 +137,8 @@ public class ItemCompressorBlockEntity extends BlockEntity implements MenuProvid
             if(itemCompressor.progress >= itemCompressor.maxProgress){
                 craftItem(itemCompressor);
             }
+        }else{
+            itemCompressor.resetProgress();
         }
     }
 
@@ -147,26 +148,19 @@ public class ItemCompressorBlockEntity extends BlockEntity implements MenuProvid
             inventory.setItem(i,itemCompressor.itemStackHandler.getStackInSlot(i));
         }
 
-        boolean isAcceptedItemInCompressorSlots = true;
-        Item oldItem = null;
-        for (int i = 0; i < AMOUNT_OF_SLOTS_TO_COMPRESS; i++) {
-            isAcceptedItemInCompressorSlots =
-                    isAcceptedItemInCompressorSlots &&
-                    ForgeRegistries.ITEMS.tags().getTag(
-                        ModTags.Items.ACCEPTED_ITEMS_IN_COMPRESSOR_SLOTS).contains(
-                                itemCompressor.itemStackHandler.getStackInSlot(i).getItem()) &&
-                            (oldItem == null || itemCompressor.itemStackHandler.getStackInSlot(i).is(oldItem));
-            oldItem = itemCompressor.itemStackHandler.getStackInSlot(i).getItem();
-        }
+        Level level = itemCompressor.level;
 
-        return isAcceptedItemInCompressorSlots && canInsertAmountIntoResultSlot(inventory) && canInsertItemIntoOutputSlot(inventory,new ItemStack(ModItems.COPPER_AXE.get(),1));
+        Optional<ItemCompressorRecipe> recipe = level.getRecipeManager().getRecipeFor(ItemCompressorRecipe.Type.INSTANCE,inventory,level);
+
+        return recipe.isPresent()  && canInsertAmountIntoResultSlot(inventory)
+                && canInsertItemIntoResultSlot(inventory, recipe.get().getResultItem());
     }
 
     private static boolean canInsertAmountIntoResultSlot(SimpleContainer inventory) {
         return inventory.getItem(POSITION_OF_RESULT_SLOT).getMaxStackSize() > inventory.getItem(POSITION_OF_RESULT_SLOT).getCount();
     }
 
-    private static boolean canInsertItemIntoOutputSlot(SimpleContainer inventory, ItemStack itemStack) {
+    private static boolean canInsertItemIntoResultSlot(SimpleContainer inventory, ItemStack itemStack) {
         return inventory.getItem(POSITION_OF_RESULT_SLOT).getItem() == itemStack.getItem() || inventory.getItem(POSITION_OF_RESULT_SLOT).isEmpty();
     }
 
@@ -175,13 +169,20 @@ public class ItemCompressorBlockEntity extends BlockEntity implements MenuProvid
     }
 
     private static void craftItem(ItemCompressorBlockEntity itemCompressor) {
+        Level level = itemCompressor.level;
+        SimpleContainer inventory = new SimpleContainer(itemCompressor.itemStackHandler.getSlots());
+        for (int i = 0; i < itemCompressor.itemStackHandler.getSlots(); i++) {
+            inventory.setItem(i,itemCompressor.itemStackHandler.getStackInSlot(i));
+        }
+        Optional<ItemCompressorRecipe> recipe = level.getRecipeManager().getRecipeFor(ItemCompressorRecipe.Type.INSTANCE,inventory,level);
         if(hasRecipe(itemCompressor)){
             //TODO: craft right item
             for (int i = 0; i < AMOUNT_OF_SLOTS_TO_COMPRESS; i++) {
-                itemCompressor.itemStackHandler.extractItem(i,1,false);
+                itemCompressor.itemStackHandler.extractItem(i,recipe.get().getCount(),false);
             }
-            itemCompressor.itemStackHandler.setStackInSlot(POSITION_OF_RESULT_SLOT,new ItemStack(ModItems.COPPER_AXE.get(),
-                    itemCompressor.itemStackHandler.getStackInSlot(POSITION_OF_RESULT_SLOT).getCount() + 1));
+            itemCompressor.itemStackHandler.setStackInSlot(POSITION_OF_RESULT_SLOT,new ItemStack(recipe.get().getResultItem().getItem(),
+                    itemCompressor.itemStackHandler.getStackInSlot(POSITION_OF_RESULT_SLOT).getCount()
+                            + recipe.get().getResultItem().getCount()));
             itemCompressor.resetProgress();
         }
     }
