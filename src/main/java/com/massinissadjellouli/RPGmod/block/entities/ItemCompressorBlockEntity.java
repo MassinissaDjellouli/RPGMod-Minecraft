@@ -216,7 +216,6 @@ public class ItemCompressorBlockEntity extends BlockEntity implements MenuProvid
 
         Optional<ItemCompressorRecipe> recipe = getRecipe(itemCompressor);
         if(hasRecipe(itemCompressor)  && hasEnergy(itemCompressor)){
-            //TODO: craft right item
             for (int i = 0; i < AMOUNT_OF_SLOTS_TO_COMPRESS; i++) {
                 itemCompressor.itemStackHandler.extractItem(i,recipe.get().getCount(),false);
             }

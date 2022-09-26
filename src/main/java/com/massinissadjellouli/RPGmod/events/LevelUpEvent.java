@@ -1,6 +1,5 @@
 package com.massinissadjellouli.RPGmod.events;
 
-import com.massinissadjellouli.RPGmod.skills.PlayerSkillData;
 import com.massinissadjellouli.RPGmod.skills.PlayerSkillData.PlayerSkillEnum;
 import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.event.entity.player.PlayerEvent;
