@@ -1,5 +1,8 @@
 package com.massinissadjellouli.RPGmod.block.entities;
 
+import com.massinissadjellouli.RPGmod.energy.ModEnergyStorage;
+import com.massinissadjellouli.RPGmod.networking.ModPackets;
+import com.massinissadjellouli.RPGmod.networking.packet.EnergySyncS2CPacket;
 import com.massinissadjellouli.RPGmod.recipe.ItemCompressorRecipe;
 import com.massinissadjellouli.RPGmod.screen.ItemCompressorMenu;
 import net.minecraft.core.BlockPos;
@@ -20,6 +23,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.common.util.LazyOptional;
+import net.minecraftforge.energy.IEnergyStorage;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
 import org.jetbrains.annotations.NotNull;
@@ -35,6 +39,15 @@ public class ItemCompressorBlockEntity extends BlockEntity implements MenuProvid
     public static final int POSITION_OF_RESULT_SLOT = 9;
     public static final int AMOUNT_OF_SLOTS = 10;
     private int progress;
+    private final ModEnergyStorage ENERGY_STORAGE = new ModEnergyStorage(10000,300) {
+        @Override
+        public void onEnergyChanged() {
+
+            setChanged();
+            ModPackets.sendToClients(new EnergySyncS2CPacket(energy,getBlockPos()));
+        }
+    };
+    public static final int ENERGY_REQUIREMENT = 10;
     protected final ContainerData data;
     private int maxProgress = 200;
     public ItemCompressorBlockEntity(BlockPos p_155229_, BlockState p_155230_) {
@@ -72,6 +85,7 @@ public class ItemCompressorBlockEntity extends BlockEntity implements MenuProvid
 
 
     private LazyOptional<IItemHandler> lazyItemHandler = LazyOptional.empty();
+    private LazyOptional<IEnergyStorage> lazyEnergyHandler = LazyOptional.empty();
 
 
     @Override
@@ -87,6 +101,10 @@ public class ItemCompressorBlockEntity extends BlockEntity implements MenuProvid
 
     @Override
     public @NotNull <T> LazyOptional<T> getCapability(@NotNull Capability<T> cap, @NotNull Direction side) {
+        if(cap == ForgeCapabilities.ENERGY){
+            return lazyEnergyHandler.cast();
+
+        }
         if(cap == ForgeCapabilities.ITEM_HANDLER){
             return lazyItemHandler.cast();
         }
@@ -96,6 +114,7 @@ public class ItemCompressorBlockEntity extends BlockEntity implements MenuProvid
     @Override
     public void onLoad() {
         super.onLoad();
+        lazyEnergyHandler = LazyOptional.of(()->ENERGY_STORAGE);
         lazyItemHandler = LazyOptional.of(()->itemStackHandler);
     }
 
@@ -103,11 +122,13 @@ public class ItemCompressorBlockEntity extends BlockEntity implements MenuProvid
     public void invalidateCaps() {
         super.invalidateCaps();
         lazyItemHandler.invalidate();
+        lazyEnergyHandler.invalidate();
     }
 
     @Override
     protected void saveAdditional(CompoundTag nbt) {
         nbt.put("inventory",itemStackHandler.serializeNBT());
+        nbt.putInt("energy",ENERGY_STORAGE.getEnergyStored());
         nbt.putInt("item_compressor_progress",this.progress);
         super.saveAdditional(nbt);
     }
@@ -116,6 +137,7 @@ public class ItemCompressorBlockEntity extends BlockEntity implements MenuProvid
     public void load(CompoundTag nbt) {
         super.load(nbt);
         itemStackHandler.deserializeNBT(nbt.getCompound("inventory"));
+        this.ENERGY_STORAGE.setEnergy(nbt.getInt("energy"));
         this.progress = nbt.getInt("item_compressor_progress");
     }
 
@@ -127,12 +149,15 @@ public class ItemCompressorBlockEntity extends BlockEntity implements MenuProvid
         Containers.dropContents(this.level,this.worldPosition,inventory);
     }
 
-    public static <E extends BlockEntity> void tick(Level level, BlockPos blockPos,
+    public static void tick(Level level, BlockPos blockPos,
                                                     BlockState state, ItemCompressorBlockEntity itemCompressor) {
 
         if(level.isClientSide()) return;
-        if(hasRecipe(itemCompressor)){
+        if(hasRecipe(itemCompressor) && hasEnergy(itemCompressor)){
+            Optional<ItemCompressorRecipe> recipe = getRecipe(itemCompressor);
+            itemCompressor.maxProgress = recipe.get().getDuration() * 20;
             itemCompressor.progress++;
+            extractEnergy(itemCompressor);
             setChanged(level,blockPos,state);
             if(itemCompressor.progress >= itemCompressor.maxProgress){
                 craftItem(itemCompressor);
@@ -140,6 +165,23 @@ public class ItemCompressorBlockEntity extends BlockEntity implements MenuProvid
         }else{
             itemCompressor.resetProgress();
         }
+    }
+
+    private static void extractEnergy(ItemCompressorBlockEntity itemCompressor) {
+        itemCompressor.ENERGY_STORAGE.extractEnergy(ENERGY_REQUIREMENT,false);
+    }
+
+    private static boolean hasEnergy(ItemCompressorBlockEntity itemCompressor) {
+        return itemCompressor.ENERGY_STORAGE.getEnergyStored() >= ENERGY_REQUIREMENT * itemCompressor.maxProgress;
+    }
+
+    private static Optional<ItemCompressorRecipe> getRecipe(ItemCompressorBlockEntity itemCompressor) {
+        Level level = itemCompressor.level;
+        SimpleContainer inventory = new SimpleContainer(itemCompressor.itemStackHandler.getSlots());
+        for (int i = 0; i < itemCompressor.itemStackHandler.getSlots(); i++) {
+            inventory.setItem(i,itemCompressor.itemStackHandler.getStackInSlot(i));
+        }
+        return level.getRecipeManager().getRecipeFor(ItemCompressorRecipe.Type.INSTANCE,inventory,level);
     }
 
     private static boolean hasRecipe(ItemCompressorBlockEntity itemCompressor) {
@@ -170,12 +212,9 @@ public class ItemCompressorBlockEntity extends BlockEntity implements MenuProvid
 
     private static void craftItem(ItemCompressorBlockEntity itemCompressor) {
         Level level = itemCompressor.level;
-        SimpleContainer inventory = new SimpleContainer(itemCompressor.itemStackHandler.getSlots());
-        for (int i = 0; i < itemCompressor.itemStackHandler.getSlots(); i++) {
-            inventory.setItem(i,itemCompressor.itemStackHandler.getStackInSlot(i));
-        }
-        Optional<ItemCompressorRecipe> recipe = level.getRecipeManager().getRecipeFor(ItemCompressorRecipe.Type.INSTANCE,inventory,level);
-        if(hasRecipe(itemCompressor)){
+
+        Optional<ItemCompressorRecipe> recipe = getRecipe(itemCompressor);
+        if(hasRecipe(itemCompressor)  && hasEnergy(itemCompressor)){
             //TODO: craft right item
             for (int i = 0; i < AMOUNT_OF_SLOTS_TO_COMPRESS; i++) {
                 itemCompressor.itemStackHandler.extractItem(i,recipe.get().getCount(),false);
@@ -185,5 +224,17 @@ public class ItemCompressorBlockEntity extends BlockEntity implements MenuProvid
                             + recipe.get().getResultItem().getCount()));
             itemCompressor.resetProgress();
         }
+    }
+
+    public void addEnergy(ItemCompressorBlockEntity entity, int energy) {
+        entity.ENERGY_STORAGE.receiveEnergy(energy,false);
+    }
+
+    public IEnergyStorage getEnergyStorage() {
+        return ENERGY_STORAGE;
+    }
+
+    public void setEnergyLvl(int energy) {
+        ENERGY_STORAGE.setEnergy(energy);
     }
 }
