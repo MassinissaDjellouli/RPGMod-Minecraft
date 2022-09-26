@@ -23,12 +23,14 @@ import static com.massinissadjellouli.RPGmod.block.entities.ItemCompressorBlockE
 public class ItemCompressorRecipe implements Recipe<SimpleContainer> {
     private final ResourceLocation id;
     private  int count;
+    private  int duration;
     private final ItemStack output;
     private final NonNullList<Ingredient> recipeItem;
 
-    public ItemCompressorRecipe(ResourceLocation id, ItemStack output, NonNullList<Ingredient> recipeItem,int count) {
+    public ItemCompressorRecipe(ResourceLocation id, ItemStack output, NonNullList<Ingredient> recipeItem,int count,int duration) {
         this.id = id;
         this.count = count;
+        this.duration = duration;
         this.output = output;
         this.recipeItem = recipeItem;
     }
@@ -38,6 +40,9 @@ public class ItemCompressorRecipe implements Recipe<SimpleContainer> {
         super.finalize();
     }
 
+    public int getDuration(){
+        return duration;
+    }
     @Override
     public boolean matches(SimpleContainer pContainer, Level pLevel) {
         if(pLevel.isClientSide()){
@@ -101,6 +106,7 @@ public class ItemCompressorRecipe implements Recipe<SimpleContainer> {
             ItemStack output = ShapedRecipe.itemStackFromJson(GsonHelper.getAsJsonObject(pSerializedRecipe,"output"));
 
             int count = GsonHelper.getAsInt(pSerializedRecipe,"count");
+            int duration = GsonHelper.getAsInt(pSerializedRecipe,"duration");
 
             JsonArray ingredients = GsonHelper.getAsJsonArray(pSerializedRecipe,"ingredients");
             NonNullList<Ingredient> inputs = NonNullList.withSize(AMOUNT_OF_SLOTS_TO_COMPRESS,Ingredient.EMPTY);
@@ -110,7 +116,7 @@ public class ItemCompressorRecipe implements Recipe<SimpleContainer> {
                 ingredient.getItems()[0].setCount(count);
                 inputs.set(i,ingredient);
             }
-            return new ItemCompressorRecipe(pRecipeId,output,inputs,count);
+            return new ItemCompressorRecipe(pRecipeId,output,inputs,count,duration);
         }
 
         @Override
@@ -123,7 +129,8 @@ public class ItemCompressorRecipe implements Recipe<SimpleContainer> {
 
             ItemStack output = pBuffer.readItem();
             int count = pBuffer.readInt();
-            return new ItemCompressorRecipe(pRecipeId,output,inputs,count);
+            int duration = pBuffer.readInt();
+            return new ItemCompressorRecipe(pRecipeId,output,inputs,count,duration);
         }
 
         @Override
@@ -135,6 +142,7 @@ public class ItemCompressorRecipe implements Recipe<SimpleContainer> {
             }
             pBuffer.writeItemStack(pRecipe.getResultItem(),false);
             pBuffer.writeInt(pRecipe.count);
+            pBuffer.writeInt(pRecipe.duration);
         }
     }
 }
