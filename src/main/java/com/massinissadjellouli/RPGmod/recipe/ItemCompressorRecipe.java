@@ -45,13 +45,9 @@ public class ItemCompressorRecipe implements Recipe<SimpleContainer> {
         }
 
         boolean isValid = true;
-//        Item oldItem = null;
         for (int i = 0; i < AMOUNT_OF_SLOTS_TO_COMPRESS; i++) {
                     isValid = isValid && recipeItem.get(i).test(pContainer.getItem(i)) &&
-                            recipeItem.get(i).getItems()[0].getCount() <= pContainer.getItem(i).getCount()
-//                            && (oldItem == null || pContainer.getItem(i).is(oldItem))
-                    ;
-//            oldItem = pContainer.getItem(i).getItem();
+                            recipeItem.get(i).getItems()[0].getCount() <= pContainer.getItem(i).getCount();
         }
         return isValid;
     }
