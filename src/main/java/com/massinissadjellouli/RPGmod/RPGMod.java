@@ -5,6 +5,7 @@ import com.massinissadjellouli.RPGmod.block.entities.ModBlockEntities;
 import com.massinissadjellouli.RPGmod.item.ModItems;
 import com.massinissadjellouli.RPGmod.item.ToolTiers;
 import com.massinissadjellouli.RPGmod.networking.ModPackets;
+import com.massinissadjellouli.RPGmod.recipe.ModRecipes;
 import com.massinissadjellouli.RPGmod.screen.ItemCompressorScreen;
 import com.massinissadjellouli.RPGmod.screen.ModMenuTypes;
 import com.massinissadjellouli.RPGmod.world.features.ModConfiguredFeatures;
@@ -42,6 +43,7 @@ public class RPGMod
         ModMenuTypes.registerMenus(modEventBus);
         ModConfiguredFeatures.registerConfiguredFeatures(modEventBus);
         ModPlacedFeatures.registerPlacedFeatures(modEventBus);
+        ModRecipes.register(modEventBus);
     }
 
     @Mod.EventBusSubscriber(modid = MODID,bus = Mod.EventBusSubscriber.Bus.MOD)
