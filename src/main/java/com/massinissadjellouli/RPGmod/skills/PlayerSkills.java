@@ -1,5 +1,6 @@
 package com.massinissadjellouli.RPGmod.skills;
 
+import com.massinissadjellouli.RPGmod.client.ClientGamemodeData;
 import com.massinissadjellouli.RPGmod.client.ClientLastMessageReceived;
 import com.massinissadjellouli.RPGmod.events.RPGModEventFactory;
 import com.massinissadjellouli.RPGmod.skills.PlayerSkillData.PlayerSkillEnum;
@@ -42,6 +43,9 @@ public class PlayerSkills {
     }
 
     public void addXP(int xp, PlayerSkillEnum skill, Player player){
+        if(!ClientGamemodeData.isSurvival()){
+            return;
+        }
         switch (skill){
             case MINING -> increaseXp(xp, playerSkillData.playerMiningSkillData,player,skill);
             case FORAGING -> increaseXp(xp, playerSkillData.playerForagingSkillData,player,skill);
