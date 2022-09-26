@@ -1,0 +1,8 @@
+{
+  "parent": "block/orientable",
+  "textures": {
+    "top": "rpgmod:blocks/item_compressor_top",
+    "front": "rpgmod:blocks/item_compressor_front",
+    "side": "rpgmod:blocks/item_compressor_side"
+  }
+}

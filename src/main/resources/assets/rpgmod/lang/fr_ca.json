@@ -43,5 +43,8 @@
     "block.rpgmod.deepslate_multi_crystal_ore": "Minerai de cristal de profondoise",
     "block.rpgmod.deepslate_titanium_ore": "Minerai de titane de profondoise",
 
-    "block.rpgmod.steel_block": "Bloc d'acier"
+    "block.rpgmod.steel_block": "Bloc d'acier",
+
+    "block.rpgmod.item_compressor": "Compresseur à item"
+
 }
