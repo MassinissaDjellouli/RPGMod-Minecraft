@@ -11,6 +11,8 @@
     "rpgmod:deepslate_multi_crystal_ore",
     "rpgmod:titanium_ore",
     "rpgmod:deepslate_titanium_ore",
-    "rpgmod:steel_block"
+    "rpgmod:steel_block",
+    "rpgmod:reinforced_titanium_block",
+    "rpgmod:item_compressor"
   ]
 }
