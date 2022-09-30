@@ -1,0 +1,28 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "#": {
+      "item": "rpgmod:steel_block"
+    },
+    "X": {
+      "item": "rpgmod:reinforced_titanium_block"
+    } ,
+    "?": {
+      "item": "minecraft:diamond"
+    },
+    "0": {
+      "item": "minecraft:piston"
+    },
+    "-": {
+      "item": "minecraft:copper_block"
+    }
+  },
+  "pattern": [
+    "X0X",
+    "?#-",
+    "XXX"
+  ],
+  "result": {
+    "item": "rpgmod:item_compressor"
+  }
+}
