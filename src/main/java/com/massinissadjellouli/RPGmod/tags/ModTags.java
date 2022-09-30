@@ -1,6 +1,7 @@
 package com.massinissadjellouli.RPGmod.tags;
 
 import com.massinissadjellouli.RPGmod.RPGMod;
+import com.massinissadjellouli.RPGmod.item.ModItems;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.Registry;
 import net.minecraft.data.tags.EntityTypeTagsProvider;
@@ -10,6 +11,7 @@ import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
 
 import static net.minecraft.world.item.Items.*;
 
@@ -91,6 +93,9 @@ public class ModTags {
 
         public enum CompressorFuels {
             COAL(net.minecraft.world.item.Items.COAL,10),
+            CHARCOAL(net.minecraft.world.item.Items.CHARCOAL, 15),
+            COAL_BLOC(COAL_BLOCK,95),
+            COMPRESSED_COAL(ModItems.COMPRESSED_COAL.get(),2000),
             LAVA(LAVA_BUCKET, 300);
 
             public final Item item;
