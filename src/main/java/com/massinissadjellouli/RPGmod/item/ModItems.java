@@ -1,6 +1,7 @@
 package com.massinissadjellouli.RPGmod.item;
 
 import com.massinissadjellouli.RPGmod.RPGMod;
+import com.massinissadjellouli.RPGmod.item.custom.CompressedCoalItem;
 import net.minecraft.world.item.*;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.registries.DeferredRegister;
@@ -109,6 +110,11 @@ public class ModItems {
                 ()-> new Item(new Item.Properties().tab(CreativeModeTab.TAB_MISC)));
     }
 
+    public static final RegistryObject<CompressedCoalItem> COMPRESSED_COAL = ITEM_DEFERRED_REGISTER.register(
+            "compressed_coal",() -> new CompressedCoalItem(
+                    new Item.Properties().tab(CreativeModeTab.TAB_MISC)
+            )
+    );
 
     public static void registerItems(IEventBus eventBus){
         ITEM_DEFERRED_REGISTER.register(eventBus);
