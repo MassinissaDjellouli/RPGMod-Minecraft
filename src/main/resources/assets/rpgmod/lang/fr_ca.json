@@ -31,6 +31,9 @@
     "item.rpgmod.ice_crystal": "Cristal de glace",
     "item.rpgmod.poison_crystal": "Cristal de poison",
 
+    "item.rpgmod.compressed_diamond": "Diamant compréssé",
+    "item.rpgmod.compressed_coal": "Charbon compréssé",
+
     "block.rpgmod.fire_crystal_ore": "Minerai de cristal de feu",
     "block.rpgmod.ice_crystal_ore": "Minerai de cristal de glace",
     "block.rpgmod.poison_crystal_ore": "Minerai de cristal de poison",

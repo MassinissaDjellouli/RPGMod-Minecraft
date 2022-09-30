@@ -115,6 +115,7 @@ public class ModItems {
                     new Item.Properties().tab(CreativeModeTab.TAB_MISC)
             )
     );
+    public static final RegistryObject<Item> COMPRESSED_DIAMOND = createMiscItem("compressed_diamond");
 
     public static void registerItems(IEventBus eventBus){
         ITEM_DEFERRED_REGISTER.register(eventBus);
