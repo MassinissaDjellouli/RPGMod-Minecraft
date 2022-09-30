@@ -3,19 +3,14 @@ package com.massinissadjellouli.RPGmod.recipe;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.massinissadjellouli.RPGmod.RPGMod;
-import com.massinissadjellouli.RPGmod.block.entities.ItemCompressorBlockEntity;
-import com.massinissadjellouli.RPGmod.tags.ModTags;
 import net.minecraft.core.NonNullList;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.GsonHelper;
 import net.minecraft.world.SimpleContainer;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.*;
 import net.minecraft.world.level.Level;
-import net.minecraftforge.registries.ForgeRegistries;
 import org.jetbrains.annotations.Nullable;
 
 import static com.massinissadjellouli.RPGmod.block.entities.ItemCompressorBlockEntity.AMOUNT_OF_SLOTS_TO_COMPRESS;
@@ -50,10 +45,22 @@ public class ItemCompressorRecipe implements Recipe<SimpleContainer> {
         }
 
         boolean isValid = true;
-        for (int i = 0; i < AMOUNT_OF_SLOTS_TO_COMPRESS; i++) {
+        switch (recipeItem.size()){
+            case 1 -> {
+                isValid = false;
+                for (int i = 0; i < AMOUNT_OF_SLOTS_TO_COMPRESS; i++) {
+                    isValid = isValid || recipeItem.get(0).test(pContainer.getItem(i)) &&
+                            recipeItem.get(0).getItems()[0].getCount() <= pContainer.getItem(i).getCount();
+                }
+            }
+            case AMOUNT_OF_SLOTS_TO_COMPRESS -> {
+                for (int i = 0; i < AMOUNT_OF_SLOTS_TO_COMPRESS; i++) {
                     isValid = isValid && recipeItem.get(i).test(pContainer.getItem(i)) &&
                             recipeItem.get(i).getItems()[0].getCount() <= pContainer.getItem(i).getCount();
+                }
+            }
         }
+
         return isValid;
     }
 
@@ -109,7 +116,7 @@ public class ItemCompressorRecipe implements Recipe<SimpleContainer> {
             int duration = GsonHelper.getAsInt(pSerializedRecipe,"duration");
 
             JsonArray ingredients = GsonHelper.getAsJsonArray(pSerializedRecipe,"ingredients");
-            NonNullList<Ingredient> inputs = NonNullList.withSize(AMOUNT_OF_SLOTS_TO_COMPRESS,Ingredient.EMPTY);
+            NonNullList<Ingredient> inputs = NonNullList.withSize(ingredients.size(),Ingredient.EMPTY);
 
             for (int i = 0; i < inputs.size(); i++) {
                 Ingredient ingredient = Ingredient.fromJson(ingredients.get(i));

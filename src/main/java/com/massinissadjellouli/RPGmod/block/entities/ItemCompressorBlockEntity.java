@@ -32,6 +32,8 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.Optional;
 
+import static com.massinissadjellouli.RPGmod.recipe.ItemCompressorRecipe.Type.INSTANCE;
+
 public class ItemCompressorBlockEntity extends BlockEntity implements MenuProvider {
 
     public static final int AMOUNT_OF_SLOTS_TO_COMPRESS_ROWS = 3;
@@ -39,8 +41,10 @@ public class ItemCompressorBlockEntity extends BlockEntity implements MenuProvid
     public static final int AMOUNT_OF_SLOTS_TO_COMPRESS = AMOUNT_OF_SLOTS_TO_COMPRESS_ROWS * AMOUNT_OF_SLOTS_TO_COMPRESS_COLS;
     public static final int POSITION_OF_RESULT_SLOT = 9;
     public static final int AMOUNT_OF_SLOTS = 10;
+    public static final int CAPACITY = 60000;
+    public static final int MAX_TRANSFER = CAPACITY;
     private int progress;
-    private final ModEnergyStorage ENERGY_STORAGE = new ModEnergyStorage(60000,300) {
+    private final ModEnergyStorage ENERGY_STORAGE = new ModEnergyStorage(CAPACITY,MAX_TRANSFER) {
         @Override
         public void onEnergyChanged() {
 
@@ -183,7 +187,7 @@ public class ItemCompressorBlockEntity extends BlockEntity implements MenuProvid
         for (int i = 0; i < itemCompressor.itemStackHandler.getSlots(); i++) {
             inventory.setItem(i,itemCompressor.itemStackHandler.getStackInSlot(i));
         }
-        return level.getRecipeManager().getRecipeFor(ItemCompressorRecipe.Type.INSTANCE,inventory,level);
+        return level.getRecipeManager().getRecipeFor(INSTANCE,inventory,level);
     }
 
     private static boolean hasRecipe(ItemCompressorBlockEntity itemCompressor) {
@@ -194,7 +198,7 @@ public class ItemCompressorBlockEntity extends BlockEntity implements MenuProvid
 
         Level level = itemCompressor.level;
 
-        Optional<ItemCompressorRecipe> recipe = level.getRecipeManager().getRecipeFor(ItemCompressorRecipe.Type.INSTANCE,inventory,level);
+        Optional<ItemCompressorRecipe> recipe = level.getRecipeManager().getRecipeFor(INSTANCE,inventory,level);
 
         return recipe.isPresent()  && canInsertAmountIntoResultSlot(inventory)
                 && canInsertItemIntoResultSlot(inventory, recipe.get().getResultItem());

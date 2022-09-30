@@ -30,6 +30,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.Arrays;
 import java.util.List;
 
+import static com.massinissadjellouli.RPGmod.block.entities.ItemCompressorBlockEntity.CAPACITY;
 import static net.minecraft.world.InteractionHand.MAIN_HAND;
 
 public class ItemCompressorBlock extends BaseEntityBlock {
@@ -75,20 +76,31 @@ public class ItemCompressorBlock extends BaseEntityBlock {
                         NetworkHooks.openScreen((ServerPlayer) pPlayer, blockEntity, pPos);
                     }else{
                         int energy = compressorFuelsList.get(0).energy;
-                        int count = 1;
+                        int count = 0;
+                        int itemInHands = itemInHand.getCount();
+                        int currentCapacityLeft = CAPACITY - blockEntity.getEnergyStorage().getEnergyStored();
+
                         if(Screen.hasControlDown()){
-                            count = itemInHand.getCount();
-                            energy *= count;
+                            if (currentCapacityLeft > energy * itemInHands) {
+                                count = itemInHands;
+                            } else if (currentCapacityLeft > 0) {
+                                    count = currentCapacityLeft / energy;
+                            }
+                        }else if(currentCapacityLeft > energy){
+                            count = 1;
                         }
-                        if(itemInHand.is(CompressorFuels.LAVA.item)){
-                            pPlayer.setItemInHand(MAIN_HAND, new ItemStack(Items.BUCKET));
-                        }else if(itemInHand.getCount() > 1){
-                            itemInHand.setCount(itemInHand.getCount() - count);
-                            pPlayer.setItemInHand(MAIN_HAND, itemInHand);
-                        }else{
-                            pPlayer.setItemInHand(MAIN_HAND,ItemStack.EMPTY);
+                        energy *= count;
+                        if(energy != 0) {
+                            if(itemInHand.is(CompressorFuels.LAVA.item)){
+                                pPlayer.setItemInHand(MAIN_HAND, new ItemStack(Items.BUCKET));
+                            }else if(itemInHand.getCount() >= 1){
+                                itemInHand.setCount(itemInHand.getCount() - count);
+                                pPlayer.setItemInHand(MAIN_HAND, itemInHand);
+                            }else{
+                                pPlayer.setItemInHand(MAIN_HAND,ItemStack.EMPTY);
+                            }
+                            blockEntity.addEnergy(blockEntity,energy);
                         }
-                        blockEntity.addEnergy(((ItemCompressorBlockEntity) entity),energy );
 
                     }
                 }else{
