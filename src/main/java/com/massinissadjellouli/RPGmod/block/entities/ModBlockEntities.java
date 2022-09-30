@@ -17,6 +17,11 @@ public class ModBlockEntities {
                     ()->
                 BlockEntityType.Builder.of(ItemCompressorBlockEntity::new,
                         ModBlocks.ITEM_COMPRESSOR.get()).build(null));
+    public static final RegistryObject<BlockEntityType<RarityTableBlockEntity>> RARITY_TABLE =
+            BLOCK_ENTITY_TYPE_DEFERRED_REGISTER.register("rarity_table",
+                    ()->
+                BlockEntityType.Builder.of(RarityTableBlockEntity::new,
+                        ModBlocks.RARITY_TABLE.get()).build(null));
     public static void registerBlockEntities(IEventBus eventBus){
         BLOCK_ENTITY_TYPE_DEFERRED_REGISTER.register(eventBus);
     }

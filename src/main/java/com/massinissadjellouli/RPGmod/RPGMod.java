@@ -8,6 +8,7 @@ import com.massinissadjellouli.RPGmod.networking.ModPackets;
 import com.massinissadjellouli.RPGmod.recipe.ModRecipes;
 import com.massinissadjellouli.RPGmod.screen.ItemCompressorScreen;
 import com.massinissadjellouli.RPGmod.screen.ModMenuTypes;
+import com.massinissadjellouli.RPGmod.screen.RarityTableScreen;
 import com.massinissadjellouli.RPGmod.world.features.ModConfiguredFeatures;
 import com.massinissadjellouli.RPGmod.world.features.ModPlacedFeatures;
 import net.minecraft.client.gui.screens.MenuScreens;
@@ -51,6 +52,7 @@ public class RPGMod
         @SubscribeEvent
         public static void onClientSetup(FMLCommonSetupEvent event){
             MenuScreens.register(ModMenuTypes.ITEM_COMPRESSOR_MENU.get(), ItemCompressorScreen::new);
+            MenuScreens.register(ModMenuTypes.RATITY_TABLE_MENU.get(), RarityTableScreen::new);
         }
     }
 }

@@ -2,6 +2,7 @@ package com.massinissadjellouli.RPGmod.block;
 
 import com.massinissadjellouli.RPGmod.RPGMod;
 import com.massinissadjellouli.RPGmod.block.custom.ItemCompressorBlock;
+import com.massinissadjellouli.RPGmod.block.custom.RarityTableBlock;
 import com.massinissadjellouli.RPGmod.client.ClientLastMessageReceived;
 import com.massinissadjellouli.RPGmod.item.ModItems;
 import net.minecraft.util.valueproviders.UniformInt;
@@ -81,6 +82,10 @@ public class ModBlocks {
             ,CreativeModeTab.TAB_BUILDING_BLOCKS);
     public static final RegistryObject<Block> ITEM_COMPRESSOR = registerBlock("item_compressor",
             () -> new ItemCompressorBlock(
+                    BlockBehaviour.Properties.of(Material.HEAVY_METAL).strength(4f,4f)
+                            .requiresCorrectToolForDrops().sound(SoundType.METAL)),CreativeModeTab.TAB_DECORATIONS);
+    public static final RegistryObject<Block> RARITY_TABLE = registerBlock("rarity_table",
+            () -> new RarityTableBlock(
                     BlockBehaviour.Properties.of(Material.HEAVY_METAL).strength(4f,4f)
                             .requiresCorrectToolForDrops().sound(SoundType.METAL)),CreativeModeTab.TAB_DECORATIONS);
 

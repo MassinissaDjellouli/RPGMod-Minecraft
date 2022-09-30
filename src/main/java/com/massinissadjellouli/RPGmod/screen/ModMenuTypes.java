@@ -17,6 +17,8 @@ public class ModMenuTypes {
 
     public static final RegistryObject<MenuType<ItemCompressorMenu>> ITEM_COMPRESSOR_MENU =
             registerMenuType(ItemCompressorMenu::new,"item_compressor_menu");
+    public static final RegistryObject<MenuType<RarityTableMenu>> RATITY_TABLE_MENU =
+            registerMenuType(RarityTableMenu::new,"rarity_table_menu");
     private static <T extends AbstractContainerMenu>RegistryObject<MenuType<T>> registerMenuType(
             IContainerFactory<T> factory, String name){
         return MENU_TYPE_DEFERRED_REGISTER.register(name,()-> IForgeMenuType.create(factory));
