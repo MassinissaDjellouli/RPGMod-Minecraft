@@ -58,6 +58,18 @@ import java.util.*;
 
 import static com.massinissadjellouli.RPGmod.skills.PlayerSkillData.PlayerSkillEnum.ATTACKING;
 import static com.massinissadjellouli.RPGmod.tags.ModTags.EntityTypes.EntityTags.*;
+import static com.massinissadjellouli.RPGmod.tags.ModTags.Items.RarityTags.getTag;
+import static java.util.Collections.EMPTY_LIST;
+import static net.minecraft.ChatFormatting.*;
+import static net.minecraft.world.InteractionHand.MAIN_HAND;
+import static net.minecraft.world.entity.EquipmentSlot.MAINHAND;
+import static net.minecraft.world.entity.ai.attributes.AttributeModifier.Operation.ADDITION;
+import static net.minecraft.world.entity.ai.attributes.AttributeModifier.Operation.MULTIPLY_TOTAL;
+import static net.minecraft.world.entity.ai.attributes.Attributes.*;
+import static net.minecraft.world.item.ItemStack.TooltipPart.MODIFIERS;
+import static net.minecraftforge.common.Tags.Items.ARMORS;
+import static net.minecraftforge.common.Tags.Items.TOOLS_SWORDS;
+import static net.minecraftforge.registries.ForgeRegistries.ITEMS;
 
 @Mod.EventBusSubscriber(modid = RPGMod.MODID, value = Dist.CLIENT)
 public class ClientEvents {
@@ -78,9 +90,10 @@ public class ClientEvents {
     }
 
     @SubscribeEvent
-    public static void onClose(PlayerEvent.PlayerLoggedOutEvent event){
-        ActiveDamageIndicators.flush();
+    public static void onClose(PlayerEvent.PlayerLoggedOutEvent event) {
+       ActiveDamageIndicators.flush();
     }
+
     @SubscribeEvent
     public static void onBlockMined(BlockEvent.BreakEvent event) {
         if (!event.getPlayer().level.isClientSide) {
@@ -124,12 +137,12 @@ public class ClientEvents {
             int healthLevel = event.getSkillLevel() / 2;
 
             AttributeModifier health_modifier = new AttributeModifier(UUID.fromString("ff3fdd4d-7c5f-4433-92b3-0cc5592ef67c"), "HEALTH_MODIFIER",
-                    healthLevel, AttributeModifier.Operation.ADDITION);
+                    healthLevel, ADDITION);
 
-            if (player.getAttribute(Attributes.MAX_HEALTH).hasModifier(health_modifier))
-                player.getAttribute(Attributes.MAX_HEALTH).removePermanentModifier(health_modifier.getId());
-            if (!player.getAttribute(Attributes.MAX_HEALTH).hasModifier(health_modifier))
-                player.getAttribute(Attributes.MAX_HEALTH).addPermanentModifier(health_modifier);
+            if (player.getAttribute(MAX_HEALTH).hasModifier(health_modifier))
+                player.getAttribute(MAX_HEALTH).removePermanentModifier(health_modifier.getId());
+            if (!player.getAttribute(MAX_HEALTH).hasModifier(health_modifier))
+                player.getAttribute(MAX_HEALTH).addPermanentModifier(health_modifier);
         }
         if (event.getSkillLevel() % 10 == 0) {
             int hasteLevel = event.getSkillLevel() / 10;
@@ -143,15 +156,15 @@ public class ClientEvents {
 
     private static void setPlayerForagingBonus(LevelUpEvent event) {
         Player player = event.getEntity();
-        int strength = event.getSkillLevel()/3;
+        int strength = event.getSkillLevel() / 3;
 
         final AttributeModifier ATTACK_MODIFIER =
                 new AttributeModifier(UUID.fromString("75a87111-8a82-4517-b68c-ff95ecc5be6b"), "MULTIPLY_MODIFIER",
-                        strength, AttributeModifier.Operation.ADDITION);
-        if (player.getAttribute(Attributes.ATTACK_DAMAGE).hasModifier(ATTACK_MODIFIER))
-            player.getAttribute(Attributes.ATTACK_DAMAGE).removeModifier(ATTACK_MODIFIER);
-        if (!player.getAttribute(Attributes.ATTACK_DAMAGE).hasModifier(ATTACK_MODIFIER))
-            player.getAttribute(Attributes.ATTACK_DAMAGE).addPermanentModifier(ATTACK_MODIFIER);
+                        strength, ADDITION);
+        if (player.getAttribute(ATTACK_DAMAGE).hasModifier(ATTACK_MODIFIER))
+            player.getAttribute(ATTACK_DAMAGE).removeModifier(ATTACK_MODIFIER);
+        if (!player.getAttribute(ATTACK_DAMAGE).hasModifier(ATTACK_MODIFIER))
+            player.getAttribute(ATTACK_DAMAGE).addPermanentModifier(ATTACK_MODIFIER);
 
         if (event.getSkillLevel() % 8 == 0) {
             int resistanceLevel = event.getSkillLevel() / 10;
@@ -166,15 +179,15 @@ public class ClientEvents {
 
     private static void setPlayerAttackingBonus(LevelUpEvent event) {
         Player player = event.getEntity();
-        int kbRes = event.getSkillLevel()/3;
+        int kbRes = event.getSkillLevel() / 3;
 
         final AttributeModifier ATTACK_MODIFIER =
                 new AttributeModifier(UUID.fromString("75a87111-8a82-4517-b68c-ff95ecc5be6b"), "MULTIPLY_MODIFIER",
-                        kbRes, AttributeModifier.Operation.ADDITION);
-        if (player.getAttribute(Attributes.KNOCKBACK_RESISTANCE).hasModifier(ATTACK_MODIFIER))
-            player.getAttribute(Attributes.KNOCKBACK_RESISTANCE).removeModifier(ATTACK_MODIFIER);
-        if (!player.getAttribute(Attributes.KNOCKBACK_RESISTANCE).hasModifier(ATTACK_MODIFIER))
-            player.getAttribute(Attributes.KNOCKBACK_RESISTANCE).addPermanentModifier(ATTACK_MODIFIER);
+                        kbRes, ADDITION);
+        if (player.getAttribute(KNOCKBACK_RESISTANCE).hasModifier(ATTACK_MODIFIER))
+            player.getAttribute(KNOCKBACK_RESISTANCE).removeModifier(ATTACK_MODIFIER);
+        if (!player.getAttribute(KNOCKBACK_RESISTANCE).hasModifier(ATTACK_MODIFIER))
+            player.getAttribute(KNOCKBACK_RESISTANCE).addPermanentModifier(ATTACK_MODIFIER);
 
         if (event.getSkillLevel() % 10 == 0) {
             int regenerationLvl = event.getSkillLevel() / 15;
@@ -207,7 +220,7 @@ public class ClientEvents {
     }
 
     private static boolean itemTagHas(TagKey<Item> tag, Item item) {
-        return ForgeRegistries.ITEMS.tags().getTag(tag).contains(item);
+        return ITEMS.tags().getTag(tag).contains(item);
     }
 
     private static boolean entityTagHas(ModTags.EntityTypes.EntityTags tag, EntityType<?> entity) {
@@ -238,6 +251,7 @@ public class ClientEvents {
         return 3;
     }
 
+
     @SubscribeEvent
     public static void onEntityHurt(LivingHurtEvent event) {
 
@@ -261,7 +275,7 @@ public class ClientEvents {
                             DECIMAL_FORMATER.format(
                                     Math.max(event.getEntity().getHealth() - event.getAmount(), 0)) + "/" +
                                     DECIMAL_FORMATER.format(event.getEntity().getMaxHealth()))
-                    .withStyle(ChatFormatting.RED));
+                    .withStyle(RED));
             damageIndicator.setNoGravity(true);
 
             ActiveDamageIndicators.addDamageIndicator(new DamageIndicatorData(damageIndicator));
@@ -293,6 +307,7 @@ public class ClientEvents {
     @SubscribeEvent
     public static void onPlayerTick(TickEvent.PlayerTickEvent event) {
         if (event.side.isClient()) {
+
             if (event.player.isSprinting()) {
                 PlayerThirst.setReduceByTick(PlayerThirst.getReduceByTick() + 0.4f);
             }
@@ -322,14 +337,16 @@ public class ClientEvents {
             float speedIncrease = speed * (1f + ((float) tagKey.level * ATTACK_SPEED_INCREASE_PERCENT) / 100) - speed;
             final AttributeModifier ATTACK_MODIFIER =
                     new AttributeModifier(UUID.fromString("f83fdd4d-7c5f-4433-92b3-0cc5592ef67c"), "ATTACK_MODIFIER",
-                            damageIncrease, AttributeModifier.Operation.ADDITION);
+                            damageIncrease, ADDITION);
             final AttributeModifier SPEED_MODIFIER =
                     new AttributeModifier(UUID.fromString("bfa50c88-ca13-4224-b73f-0a500d6889e3"), "SPEED_MODIFIER",
-                            speedIncrease, AttributeModifier.Operation.ADDITION);
-            if (attributeNotPresent(weapon.getItem(), ATTACK_MODIFIER) && attributeNotPresent(weapon.getItem(), SPEED_MODIFIER) && damageIncrease > 0) {
-                weapon.addAttributeModifier(Attributes.ATTACK_DAMAGE, ATTACK_MODIFIER, EquipmentSlot.MAINHAND);
-                weapon.addAttributeModifier(Attributes.ATTACK_SPEED, SPEED_MODIFIER, EquipmentSlot.MAINHAND);
-                weapon.hideTooltipPart(ItemStack.TooltipPart.MODIFIERS);
+                            speedIncrease, ADDITION);
+            if (attributeNotPresent(weapon, ATTACK_MODIFIER)
+                    && attributeNotPresent(weapon, SPEED_MODIFIER)
+                    && damageIncrease > 0) {
+                weapon.addAttributeModifier(ATTACK_DAMAGE, ATTACK_MODIFIER, MAINHAND);
+                weapon.addAttributeModifier(ATTACK_SPEED, SPEED_MODIFIER, MAINHAND);
+                weapon.hideTooltipPart(MODIFIERS);
             }
         }
     }
@@ -345,20 +362,20 @@ public class ClientEvents {
             float speedIncrease = (((float) tagKey.level * PLAYER_SPEED_INCREASE_PERCENT) / 100);
             final AttributeModifier DEFENSE_MODIFIER =
                     new AttributeModifier(UUID.fromString("f83fdd4d-7c5f-4433-92b3-0cc5592ef67c"), "DEFENSE_MODIFIER",
-                            armorItem.getDefense(), AttributeModifier.Operation.ADDITION);
+                            armorItem.getDefense(), ADDITION);
             final AttributeModifier TOUGHNESS_MODIFIER =
                     new AttributeModifier(UUID.fromString("f83fdd4d-7c5f-4433-92b3-0cc5592ef67c"), "TOUGHNESS_MODIFIER",
-                            toughnessIncrease, AttributeModifier.Operation.ADDITION);
+                            toughnessIncrease, ADDITION);
             final AttributeModifier SPEED_MODIFIER =
                     new AttributeModifier(UUID.fromString("bfa50c88-ca13-4224-b73f-0a500d6889e3"), "SPEED_MODIFIER",
-                            speedIncrease, AttributeModifier.Operation.MULTIPLY_TOTAL);
-            if (attributeNotPresent(armor.getItem(), TOUGHNESS_MODIFIER)
-                    && attributeNotPresent(armor.getItem(), SPEED_MODIFIER)
-                    && attributeNotPresent(armor.getItem(), DEFENSE_MODIFIER)
+                            speedIncrease, MULTIPLY_TOTAL);
+            if (attributeNotPresent(armor, TOUGHNESS_MODIFIER)
+                    && attributeNotPresent(armor, SPEED_MODIFIER)
+                    && attributeNotPresent(armor, DEFENSE_MODIFIER)
                     && toughnessIncrease > 0) {
-                armor.addAttributeModifier(Attributes.ARMOR_TOUGHNESS, TOUGHNESS_MODIFIER, armorItem.getSlot());
-                armor.addAttributeModifier(Attributes.MOVEMENT_SPEED, SPEED_MODIFIER, armorItem.getSlot());
-                armor.addAttributeModifier(Attributes.ARMOR, DEFENSE_MODIFIER, armorItem.getSlot());
+                armor.addAttributeModifier(ARMOR_TOUGHNESS, TOUGHNESS_MODIFIER, armorItem.getSlot());
+                armor.addAttributeModifier(MOVEMENT_SPEED, SPEED_MODIFIER, armorItem.getSlot());
+                armor.addAttributeModifier(ARMOR, DEFENSE_MODIFIER, armorItem.getSlot());
             }
         }
     }
@@ -372,9 +389,9 @@ public class ClientEvents {
         return decimalFormat;
     }
 
-    private static DecimalFormat getDecimalFormater(int nb) {
+    private static DecimalFormat getDecimalFormater(int amountBeforeDot) {
         StringBuilder amountAfterDot = new StringBuilder();
-        amountAfterDot.append("#".repeat(Math.max(0, nb)));
+        amountAfterDot.append("#".repeat(Math.max(0, amountBeforeDot)));
         DecimalFormat decimalFormat = new DecimalFormat("##." + amountAfterDot);
         decimalFormat.setRoundingMode(RoundingMode.DOWN);
         DecimalFormatSymbols decimalFormatSymbols = new DecimalFormatSymbols();
@@ -382,6 +399,7 @@ public class ClientEvents {
         decimalFormat.setDecimalFormatSymbols(decimalFormatSymbols);
         return decimalFormat;
     }
+
 
     @SubscribeEvent
     public static void itemTooltip(ItemTooltipEvent event) {
@@ -415,12 +433,13 @@ public class ClientEvents {
         }
     }
 
-    private static void setAttributes(ItemTooltipEvent event, RarityTags tagKey) {
-        Item item = event.getItemStack().getItem();
+
+    private static void setAttributes(ItemStack itemStack) {
+        Item item = itemStack.getItem();
         if (item instanceof SwordItem) {
-            setWeaponAttributes(event, tagKey);
+            setWeaponAttributes(itemStack);
         } else if (item instanceof ArmorItem) {
-            setArmorAttributes(event, tagKey);
+            setArmorAttributes(itemStack);
         }
     }
 
@@ -628,9 +647,9 @@ public class ClientEvents {
     private static String getBonusSpeed(SwordItem item, int level) {
         String bonusSpeed = "";
         float speed = (float) Math.round(
-                (Attributes.ATTACK_SPEED.getDefaultValue() +
-                        item.getDefaultAttributeModifiers(EquipmentSlot.MAINHAND)
-                                .get(Attributes.ATTACK_SPEED).stream().toList().get(0).getAmount())
+                (ATTACK_SPEED.getDefaultValue() +
+                        item.getDefaultAttributeModifiers(MAINHAND)
+                                .get(ATTACK_SPEED).stream().toList().get(0).getAmount())
                         * 10) / 10;
         if (level > 0) {
             float speedBonus = speed * ((float) (level * ATTACK_SPEED_INCREASE_PERCENT)) / 100f;
@@ -641,8 +660,8 @@ public class ClientEvents {
         return bonusSpeed;
     }
 
-    private static boolean attributeNotPresent(Item weapon, AttributeModifier attribute) {
-        return !weapon.getDefaultInstance().getAttributeModifiers(EquipmentSlot.MAINHAND).containsValue(attribute);
+    private static boolean attributeNotPresent(ItemStack weapon, AttributeModifier attribute) {
+        return !weapon.getAttributeModifiers(MAINHAND).containsValue(attribute);
     }
 
     private static int getXpFromKilling(LivingEntity entity) {
