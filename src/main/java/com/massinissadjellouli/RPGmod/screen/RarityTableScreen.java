@@ -17,7 +17,12 @@ public class RarityTableScreen extends AbstractContainerScreen<RarityTableMenu> 
     public RarityTableScreen(RarityTableMenu rarityTableMenu, Inventory inventory, Component component) {
         super(rarityTableMenu, inventory, component);
     }
-
+    @Override
+    public void render(PoseStack pPoseStack, int mouseX, int mouseY, float delta) {
+        renderBackground(pPoseStack);
+        super.render(pPoseStack, mouseX, mouseY, delta);
+        renderTooltip(pPoseStack,mouseX,mouseY);
+    }
     public static final ResourceLocation BG_TEXTURE = new ResourceLocation(RPGMod.MODID,
             "textures/gui/rarity_table_screen.png");
 
