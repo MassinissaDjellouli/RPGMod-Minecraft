@@ -13,6 +13,9 @@ import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 
+import java.util.Arrays;
+import java.util.List;
+
 import static net.minecraft.world.item.Items.*;
 
 public class ModTags {
@@ -81,6 +84,24 @@ public class ModTags {
                 tagKey = rarity;
                 this.name = name;
                 this.level = level;
+            }
+
+            public static RarityTags getTag(String tagString) {
+                List<RarityTags> tags =
+                        Arrays.stream(RarityTags.values()).filter(rarityTags -> rarityTags.name.equals(tagString)).toList();
+                if(tags.isEmpty()){
+                    return COMMON;
+                }
+                return tags.get(0);
+            }
+
+            public static RarityTags getTagByLevel(int level) {
+                List<RarityTags> tags =
+                        Arrays.stream(RarityTags.values()).filter(rarityTags -> rarityTags.level == level).toList();
+                if(tags.isEmpty()){
+                    return COMMON;
+                }
+                return tags.get(0);
             }
         }
 
