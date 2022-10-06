@@ -4,9 +4,12 @@ import com.massinissadjellouli.RPGmod.recipe.ItemCompressorRecipe;
 import com.massinissadjellouli.RPGmod.recipe.RarityTableRecipe;
 import com.massinissadjellouli.RPGmod.screen.ItemCompressorMenu;
 import com.massinissadjellouli.RPGmod.screen.RarityTableMenu;
+import com.massinissadjellouli.RPGmod.tags.ModTags;
+import com.massinissadjellouli.RPGmod.tags.ModTags.Items.RarityTags;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.StringTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.Containers;
 import net.minecraft.world.MenuProvider;
@@ -15,7 +18,9 @@ import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.ContainerData;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
@@ -109,6 +114,12 @@ public class RarityTableBlockEntity extends BlockEntity implements MenuProvider 
                             BlockState state, RarityTableBlockEntity rarityTableBlock) {
 
         if(level.isClientSide()) return;
+
+        SimpleContainer inventory = new SimpleContainer(rarityTableBlock.itemStackHandler.getSlots());
+        for (int i = 0; i < rarityTableBlock.itemStackHandler.getSlots(); i++) {
+            inventory.setItem(i,rarityTableBlock.itemStackHandler.getStackInSlot(i));
+        }
+        craftItem(rarityTableBlock);
 //        if(hasRecipe(itemCompressor) && hasEnergy(itemCompressor)){
 //            Optional<ItemCompressorRecipe> recipe = getRecipe(itemCompressor);
 //            itemCompressor.maxProgress = recipe.get().getDuration() * 20;
@@ -153,6 +164,14 @@ public class RarityTableBlockEntity extends BlockEntity implements MenuProvider 
         return inventory.getItem(POSITION_OF_RESULT_SLOT).getItem() == itemStack.getItem() || inventory.getItem(POSITION_OF_RESULT_SLOT).isEmpty();
     }
     private static void craftItem(RarityTableBlockEntity rarityTable) {
-
+        ItemStack item = rarityTable.itemStackHandler.getStackInSlot(POSITION_OF_ITEM_SLOT);
+        if(item.getTag() != null && !(item.getTag().getString("item_rarity").isBlank()
+                || item.getTag().getString("item_rarity").equals("none") )){
+            ItemStack itemStack = new ItemStack(item.getItem(), 1);
+            String itemRarity = item.getTag().getString("item_rarity");
+            int level = RarityTags.getTag(itemRarity).level;
+            itemStack.addTagElement("item_rarity", StringTag.valueOf(RarityTags.getTagByLevel(level + 1).name));
+            rarityTable.itemStackHandler.insertItem(POSITION_OF_RESULT_SLOT,itemStack,false);
+        }
     }
 }
