@@ -1,0 +1,9 @@
+{
+  "parent": "block/orientable",
+  "textures": {
+    "top": "rpgmod:blocks/rarity_table_top",
+    "front": "rpgmod:blocks/rarity_table_front",
+    "side": "rpgmod:blocks/rarity_table_sides",
+    "bottom": "rpgmod:blocks/rarity_table_sides"
+  }
+}
