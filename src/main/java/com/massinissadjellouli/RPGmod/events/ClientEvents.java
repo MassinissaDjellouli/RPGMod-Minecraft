@@ -317,7 +317,9 @@ public class ClientEvents {
         }else{
             ItemStack item = event.player.getItemInHand(MAIN_HAND);
             setupCurrentItem(item);
-            setAttributes(item);
+            if(savedItemRegularTooltips.containsKey(getItemId(item))){
+                setAttributes(item);
+            }
         }
     }
 
@@ -419,7 +421,6 @@ public class ClientEvents {
 
     @SubscribeEvent
     public static void itemTooltip(ItemTooltipEvent event) {
-        //Todo fix that again
 
         if (event.getEntity() != null && event.getEntity().level.isClientSide) {
             ItemStack item = event.getItemStack();
