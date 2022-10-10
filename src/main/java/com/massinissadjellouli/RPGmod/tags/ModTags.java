@@ -4,19 +4,20 @@ import com.massinissadjellouli.RPGmod.RPGMod;
 import com.massinissadjellouli.RPGmod.item.ModItems;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.Registry;
-import net.minecraft.data.tags.EntityTypeTagsProvider;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.tags.*;
+import net.minecraft.tags.BlockTags;
+import net.minecraft.tags.ItemTags;
+import net.minecraft.tags.TagKey;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.Item;
-import net.minecraft.world.item.Items;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.Blocks;
 
 import java.util.Arrays;
 import java.util.List;
 
-import static net.minecraft.world.item.Items.*;
+import static net.minecraft.world.item.Items.COAL_BLOCK;
+import static net.minecraft.world.item.Items.LAVA_BUCKET;
 
 public class ModTags {
     public static class EntityTypes {
@@ -89,7 +90,7 @@ public class ModTags {
             public static RarityTags getTag(String tagString) {
                 List<RarityTags> tags =
                         Arrays.stream(RarityTags.values()).filter(rarityTags -> rarityTags.name.equals(tagString)).toList();
-                if(tags.isEmpty()){
+                if (tags.isEmpty()) {
                     return COMMON;
                 }
                 return tags.get(0);
@@ -98,11 +99,22 @@ public class ModTags {
             public static RarityTags getTagByLevel(int level) {
                 List<RarityTags> tags =
                         Arrays.stream(RarityTags.values()).filter(rarityTags -> rarityTags.level == level).toList();
-                if(tags.isEmpty()){
+                if (tags.isEmpty()) {
                     return COMMON;
                 }
                 return tags.get(0);
             }
+
+            public static boolean itemHasNoRarity(ItemStack item) {
+                return item.getTag() == null
+                        || getItemRarity(item).isBlank()
+                        || getItemRarity(item).equals("none");
+            }
+
+            public static String getItemRarity(ItemStack item) {
+                return item.getTag().getString("item_rarity");
+            }
+
         }
 
         public static final TagKey<Item> COMMON = createTag("rarity/common");
@@ -113,10 +125,10 @@ public class ModTags {
         public static final TagKey<Item> MYTHICAL = createTag("rarity/mythical");
 
         public enum CompressorFuels {
-            COAL(net.minecraft.world.item.Items.COAL,10),
+            COAL(net.minecraft.world.item.Items.COAL, 10),
             CHARCOAL(net.minecraft.world.item.Items.CHARCOAL, 15),
-            COAL_BLOC(COAL_BLOCK,95),
-            COMPRESSED_COAL(ModItems.COMPRESSED_COAL.get(),2000),
+            COAL_BLOC(COAL_BLOCK, 95),
+            COMPRESSED_COAL(ModItems.COMPRESSED_COAL.get(), 2000),
             LAVA(LAVA_BUCKET, 300);
 
             public final Item item;
@@ -128,6 +140,7 @@ public class ModTags {
                 this.energy = energy;
             }
         }
+
         private static TagKey<Item> createTag(String ressourceLocation) {
             return ItemTags.create(new ResourceLocation(RPGMod.MODID, ressourceLocation));
         }

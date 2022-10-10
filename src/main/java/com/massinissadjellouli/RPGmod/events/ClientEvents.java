@@ -56,7 +56,7 @@ import java.util.*;
 
 import static com.massinissadjellouli.RPGmod.skills.PlayerSkillData.PlayerSkillEnum.ATTACKING;
 import static com.massinissadjellouli.RPGmod.tags.ModTags.EntityTypes.EntityTags.*;
-import static com.massinissadjellouli.RPGmod.tags.ModTags.Items.RarityTags.getTag;
+import static com.massinissadjellouli.RPGmod.tags.ModTags.Items.RarityTags.*;
 import static java.util.Collections.EMPTY_LIST;
 import static net.minecraft.ChatFormatting.*;
 import static net.minecraft.world.InteractionHand.MAIN_HAND;
@@ -331,15 +331,7 @@ public class ClientEvents {
         }
     }
 
-    public static boolean itemHasNoRarity(ItemStack item){
-        return item.getTag() == null
-                || getItemRarity(item).isBlank()
-                || getItemRarity(item).equals("none");
-    }
 
-    public static String getItemRarity(ItemStack item){
-        return item.getTag().getString("item_rarity");
-    }
     private static void setWeaponAttributes(ItemStack weapon) {
         ITagManager<Item> tagManager = ITEMS.tags();
         if(itemHasNoRarity(weapon)){
