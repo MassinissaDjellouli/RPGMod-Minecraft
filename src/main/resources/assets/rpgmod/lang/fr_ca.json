@@ -33,6 +33,10 @@
 
     "item.rpgmod.compressed_diamond": "Diamant compréssé",
     "item.rpgmod.compressed_coal": "Charbon compréssé",
+    "item.rpgmod.compressed_steel": "Acier compréssé",
+    "item.rpgmod.compressed_emerald": "Emeraude compréssé",
+    "item.rpgmod.compressed_netherite": "Netherite compréssé",
+    "item.rpgmod.compressed_titanium": "Titane compréssé",
 
     "block.rpgmod.fire_crystal_ore": "Minerai de cristal de feu",
     "block.rpgmod.ice_crystal_ore": "Minerai de cristal de glace",
@@ -49,6 +53,7 @@
     "block.rpgmod.steel_block": "Bloc d'acier",
     "block.rpgmod.reinforced_titanium_block": "Bloc de titane renforcé",
 
-    "block.rpgmod.item_compressor": "Compresseur à item"
+    "block.rpgmod.item_compressor": "Compresseur à item",
+    "block.rpgmod.rarity_table": "Compresseur de rareté"
 
 }

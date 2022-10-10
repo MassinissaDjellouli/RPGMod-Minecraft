@@ -115,7 +115,11 @@ public class ModItems {
                     new Item.Properties().tab(CreativeModeTab.TAB_MISC)
             )
     );
+    public static final RegistryObject<Item> COMPRESSED_STEEL = createMiscItem("compressed_steel");
     public static final RegistryObject<Item> COMPRESSED_DIAMOND = createMiscItem("compressed_diamond");
+    public static final RegistryObject<Item> COMPRESSED_EMERALD = createMiscItem("compressed_emerald");
+    public static final RegistryObject<Item> COMPRESSED_NETHERITE = createMiscItem("compressed_netherite");
+    public static final RegistryObject<Item> COMPRESSED_TITANIUM = createMiscItem("compressed_titanium");
 
     public static void registerItems(IEventBus eventBus){
         ITEM_DEFERRED_REGISTER.register(eventBus);
