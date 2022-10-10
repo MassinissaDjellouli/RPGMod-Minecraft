@@ -4,7 +4,7 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.massinissadjellouli.RPGmod.RPGMod;
-import com.massinissadjellouli.RPGmod.tags.ModTags.Items.RarityTags;
+import com.massinissadjellouli.RPGmod.tags.RarityTags;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.GsonHelper;
@@ -20,8 +20,7 @@ import java.util.List;
 import java.util.Map;
 
 import static com.massinissadjellouli.RPGmod.block.entities.RarityTableBlockEntity.*;
-import static com.massinissadjellouli.RPGmod.tags.ModTags.Items.RarityTags.*;
-
+import static com.massinissadjellouli.RPGmod.tags.RarityTags.*;
 public class RarityTableRecipe implements Recipe<SimpleContainer> {
     private final ResourceLocation id;
     private final RarityTags rarity;

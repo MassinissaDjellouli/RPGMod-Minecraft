@@ -2,7 +2,7 @@ package com.massinissadjellouli.RPGmod.block.entities;
 
 import com.massinissadjellouli.RPGmod.recipe.RarityTableRecipe;
 import com.massinissadjellouli.RPGmod.screen.RarityTableMenu;
-import com.massinissadjellouli.RPGmod.tags.ModTags.Items.RarityTags;
+import com.massinissadjellouli.RPGmod.tags.RarityTags;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
