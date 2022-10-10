@@ -79,7 +79,7 @@ public class PlayerSkills {
             dataToIncrease.currentXp -= getXpNeededForNextLevel(dataToIncrease.level);
             dataToIncrease.level++;
             RPGModEventFactory.onLevelUp(player,skill,dataToIncrease.level);
-            ClientLastMessageReceived.set("Vous avez atteint le niveau " + dataToIncrease.level + " de " +
+            ClientLastMessageReceived.setImportant("Vous avez atteint le niveau " + dataToIncrease.level + " de " +
                     getTranslatedEnum(dataToIncrease.skill) + "! (XP total: " + dataToIncrease.totalXp + " XP)");
         }
 

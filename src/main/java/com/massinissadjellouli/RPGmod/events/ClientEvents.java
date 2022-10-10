@@ -1,6 +1,7 @@
 package com.massinissadjellouli.RPGmod.events;
 
 import com.massinissadjellouli.RPGmod.RPGMod;
+import com.massinissadjellouli.RPGmod.classSystem.PlayerClassProvider;
 import com.massinissadjellouli.RPGmod.client.ClientGamemodeData;
 import com.massinissadjellouli.RPGmod.client.ClientLastMessageReceived;
 import com.massinissadjellouli.RPGmod.client.MessagesHudOverlay;
@@ -12,7 +13,7 @@ import com.massinissadjellouli.RPGmod.networking.packet.*;
 import com.massinissadjellouli.RPGmod.skills.PlayerSkillData;
 import com.massinissadjellouli.RPGmod.skills.PlayerSkillProvider;
 import com.massinissadjellouli.RPGmod.tags.ModTags;
-import com.massinissadjellouli.RPGmod.tags.ModTags.Items.RarityTags;
+import com.massinissadjellouli.RPGmod.tags.RarityTags;
 import com.massinissadjellouli.RPGmod.thirst.PlayerThirst;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.Screen;
@@ -54,9 +55,10 @@ import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 import java.util.*;
 
+import static com.massinissadjellouli.RPGmod.classSystem.PlayerClassType.*;
 import static com.massinissadjellouli.RPGmod.skills.PlayerSkillData.PlayerSkillEnum.ATTACKING;
 import static com.massinissadjellouli.RPGmod.tags.ModTags.EntityTypes.EntityTags.*;
-import static com.massinissadjellouli.RPGmod.tags.ModTags.Items.RarityTags.*;
+import static com.massinissadjellouli.RPGmod.tags.RarityTags.*;
 import static java.util.Collections.EMPTY_LIST;
 import static net.minecraft.ChatFormatting.*;
 import static net.minecraft.world.InteractionHand.MAIN_HAND;
@@ -100,8 +102,16 @@ public class ClientEvents {
                 if (blockTagHas(BlockTags.MINEABLE_WITH_PICKAXE, event.getState().getBlock())) {
                     if (itemTagHas(Tags.Items.TOOLS_PICKAXES,
                             event.getPlayer().getMainHandItem().getItem())) {
-                        capability.addXP(getXpFromBreakingBlock(
-                                        event.getState().getBlock()),
+                        int xp[] = {getXpFromBreakingBlock(event.getState().getBlock())};
+                        event.getPlayer().getCapability(PlayerClassProvider.PLAYER_CLASS).ifPresent(playerClass -> {
+                                    if(playerClass.isCurrently(MINEUR)){
+                                        playerClass.increaseXp(100);
+                                        xp[0] = (xp[0] * (playerClass.getCurrentClassLevel() + 1));
+
+                                    }
+                                }
+                        );
+                        capability.addXP(xp[0],
                                 PlayerSkillData.PlayerSkillEnum.MINING
                                 , event.getPlayer());
                         capability.blockMined();
@@ -110,14 +120,22 @@ public class ClientEvents {
                 if (blockTagHas(BlockTags.MINEABLE_WITH_AXE, event.getState().getBlock())) {
                     if (itemTagHas(Tags.Items.TOOLS_AXES,
                             event.getPlayer().getMainHandItem().getItem())) {
-                        capability.addXP(getXpFromBreakingBlock(
-                                        event.getState().getBlock()),
+                        int xp[] = {getXpFromBreakingBlock(event.getState().getBlock())};
+                        event.getPlayer().getCapability(PlayerClassProvider.PLAYER_CLASS).ifPresent(playerClass -> {
+                                    if(playerClass.isCurrently(BUCHERON)){
+                                        playerClass.increaseXp(100);
+                                        xp[0] = (xp[0] * (playerClass.getCurrentClassLevel() + 1));
+                                    }
+                                }
+                        );
+                        capability.addXP(xp[0],
                                 PlayerSkillData.PlayerSkillEnum.FORAGING
                                 , event.getPlayer());
                         capability.woodCut();
                     }
                 }
             });
+
         }
     }
 
@@ -280,7 +298,15 @@ public class ClientEvents {
             ActiveDamageIndicators.addDamageIndicator(new DamageIndicatorData(damageIndicator));
             player.getCapability(PlayerSkillProvider.PLAYER_SKILLS).ifPresent(capability -> {
                 if (event.getEntity().getHealth() - event.getAmount() <= 0) {
-                    capability.addXP(getXpFromKilling(event.getEntity()),
+                    final int[] xp = {getXpFromKilling(event.getEntity())};
+                    player.getCapability(PlayerClassProvider.PLAYER_CLASS).ifPresent(playerClass -> {
+                                if(playerClass.isCurrently(SOLDAT)){
+                                    playerClass.increaseXp(200);
+                                    xp[0] = xp[0] * (playerClass.getCurrentClassLevel() + 1);
+                                }
+                            }
+                    );
+                    capability.addXP(xp[0],
                             ATTACKING,
                             player);
                     capability.entityKilled();
@@ -650,7 +676,8 @@ public class ClientEvents {
         if (entityTagHas(DANGEROUS, entity.getType())) return 70;
         if (entityTagHas(VERY_DANGEROUS, entity.getType())) return 150;
         if (entityTagHas(BOSS, entity.getType())) return 1000;
-        return 0;
+        return 10;
+
     }
 
     @Mod.EventBusSubscriber(modid = RPGMod.MODID, value = Dist.CLIENT, bus = Mod.EventBusSubscriber.Bus.MOD)

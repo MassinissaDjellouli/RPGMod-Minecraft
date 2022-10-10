@@ -1,14 +1,13 @@
 package com.massinissadjellouli.RPGmod.events;
 
 import com.massinissadjellouli.RPGmod.RPGMod;
+import com.massinissadjellouli.RPGmod.classSystem.PlayerClassProvider;
 import com.massinissadjellouli.RPGmod.skills.PlayerSkillProvider;
 import com.massinissadjellouli.RPGmod.skills.PlayerSkills;
 import com.massinissadjellouli.RPGmod.skills.PlayerSkillsData.SkillData;
 import com.massinissadjellouli.RPGmod.thirst.PlayerThirst;
 import com.massinissadjellouli.RPGmod.thirst.PlayerThirstProvider;
-
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.player.Player;
@@ -18,7 +17,6 @@ import net.minecraftforge.event.AttachCapabilitiesEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
-import org.checkerframework.checker.units.qual.A;
 
 import static com.massinissadjellouli.RPGmod.skills.PlayerSkillData.PlayerSkillEnum.*;
 
@@ -33,6 +31,9 @@ public class ModEvents {
             if (!((Player) event.getObject()).getCapability(PlayerSkillProvider.PLAYER_SKILLS).isPresent()) {
                 event.addCapability(new ResourceLocation(RPGMod.MODID, "skills"), new PlayerSkillProvider());
             }
+            if (!((Player) event.getObject()).getCapability(PlayerClassProvider.PLAYER_CLASS).isPresent()) {
+                event.addCapability(new ResourceLocation(RPGMod.MODID, "class"), new PlayerClassProvider());
+            }
         }
     }
 
@@ -43,6 +44,11 @@ public class ModEvents {
         if (event.isWasDeath()) {
             event.getOriginal().getCapability(PlayerSkillProvider.PLAYER_SKILLS).ifPresent(oldStore -> {
                 event.getEntity().getCapability(PlayerSkillProvider.PLAYER_SKILLS).ifPresent(newStore -> {
+                    newStore.copyFrom(oldStore);
+                });
+            });
+            event.getOriginal().getCapability(PlayerClassProvider.PLAYER_CLASS).ifPresent(oldStore -> {
+                event.getEntity().getCapability(PlayerClassProvider.PLAYER_CLASS).ifPresent(newStore -> {
                     newStore.copyFrom(oldStore);
                 });
             });
