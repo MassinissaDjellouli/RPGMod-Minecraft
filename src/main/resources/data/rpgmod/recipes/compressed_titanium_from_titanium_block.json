@@ -1,0 +1,11 @@
+{
+  "type": "rpgmod:item_compressing",
+  "ingredients": [
+    {"item": "rpgmod:titanium_block"}
+  ],
+  "output": {
+    "item": "rpgmod:compressed_titanium"
+  },
+  "count": 5,
+  "duration": 50
+}

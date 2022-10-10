@@ -1,0 +1,21 @@
+{
+  "type": "rpgmod:item_compressing",
+  "ingredients": [
+    {"item": "minecraft:netherite_ingot"},
+    {"item": "minecraft:netherite_ingot"},
+    {"item": "minecraft:netherite_ingot"},
+
+    {"item": "minecraft:netherite_ingot"},
+    {"item": "minecraft:netherite_ingot"},
+    {"item": "minecraft:netherite_ingot"},
+
+    {"item": "minecraft:netherite_ingot"},
+    {"item": "minecraft:netherite_ingot"},
+    {"item": "minecraft:netherite_ingot"}
+  ],
+  "output": {
+    "item": "rpgmod:compressed_netherite"
+  },
+  "count": 5,
+  "duration": 45
+}

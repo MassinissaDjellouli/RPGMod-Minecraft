@@ -1,0 +1,11 @@
+{
+  "type": "rpgmod:item_compressing",
+  "ingredients": [
+    {"item": "minecraft:netherite_block"}
+  ],
+  "output": {
+    "item": "rpgmod:compressed_netherite"
+  },
+  "count": 5,
+  "duration": 40
+}

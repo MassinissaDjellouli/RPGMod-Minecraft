@@ -1,0 +1,11 @@
+{
+  "type": "rpgmod:item_compressing",
+  "ingredients": [
+    {"item": "minecraft:emerald_block"}
+  ],
+  "output": {
+    "item": "rpgmod:compressed_emerald"
+  },
+  "count": 5,
+  "duration": 25
+}

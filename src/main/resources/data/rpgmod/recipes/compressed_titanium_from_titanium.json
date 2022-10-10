@@ -1,0 +1,21 @@
+{
+  "type": "rpgmod:item_compressing",
+  "ingredients": [
+    {"item": "rpgmod:steel_ingot"},
+    {"item": "rpgmod:steel_ingot"},
+    {"item": "rpgmod:steel_ingot"},
+
+    {"item": "rpgmod:steel_ingot"},
+    {"item": "rpgmod:steel_ingot"},
+    {"item": "rpgmod:steel_ingot"},
+
+    {"item": "rpgmod:steel_ingot"},
+    {"item": "rpgmod:steel_ingot"},
+    {"item": "rpgmod:steel_ingot"}
+  ],
+  "output": {
+    "item": "rpgmod:compressed_steel"
+  },
+  "count": 5,
+  "duration": 20
+}

@@ -1,0 +1,21 @@
+{
+  "type": "rpgmod:item_compressing",
+  "ingredients": [
+    {"item": "minecraft:emerald"},
+    {"item": "minecraft:emerald"},
+    {"item": "minecraft:emerald"},
+
+    {"item": "minecraft:emerald"},
+    {"item": "minecraft:emerald"},
+    {"item": "minecraft:emerald"},
+
+    {"item": "minecraft:emerald"},
+    {"item": "minecraft:emerald"},
+    {"item": "minecraft:emerald"}
+  ],
+  "output": {
+    "item": "rpgmod:compressed_emerald"
+  },
+  "count": 5,
+  "duration": 30
+}
