@@ -1,9 +1,10 @@
 package com.massinissadjellouli.RPGmod.recipe;
 
 import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.massinissadjellouli.RPGmod.RPGMod;
-import net.minecraft.core.NonNullList;
+import com.massinissadjellouli.RPGmod.tags.ModTags.Items.RarityTags;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.GsonHelper;
@@ -13,17 +14,23 @@ import net.minecraft.world.item.crafting.*;
 import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.Nullable;
 
-import static com.massinissadjellouli.RPGmod.block.entities.ItemCompressorBlockEntity.AMOUNT_OF_SLOTS_TO_COMPRESS;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import static com.massinissadjellouli.RPGmod.block.entities.RarityTableBlockEntity.*;
+import static com.massinissadjellouli.RPGmod.tags.ModTags.Items.RarityTags.*;
 
 public class RarityTableRecipe implements Recipe<SimpleContainer> {
     private final ResourceLocation id;
-    private final ItemStack output;
-    private final NonNullList<Ingredient> recipeItem;
+    private final RarityTags rarity;
+    private final Map<Integer, Ingredient> recipePattern;
 
-    public RarityTableRecipe(ResourceLocation id, ItemStack output, NonNullList<Ingredient> recipeItem) {
+    public RarityTableRecipe(ResourceLocation id, RarityTags rarity, Map<Integer, Ingredient> recipePattern) {
         this.id = id;
-        this.output = output;
-        this.recipeItem = recipeItem;
+        this.rarity = rarity;
+        this.recipePattern = recipePattern;
     }
 
     @Override
@@ -33,33 +40,25 @@ public class RarityTableRecipe implements Recipe<SimpleContainer> {
 
     @Override
     public boolean matches(SimpleContainer pContainer, Level pLevel) {
-        if(pLevel.isClientSide()){
+        if (pLevel.isClientSide() || recipePattern.size() != AMOUNT_OF_SLOTS_TO_INSERT) {
             return false;
         }
-
-        boolean isValid = true;
-        switch (recipeItem.size()){
-            case 1 -> {
-                isValid = false;
-                for (int i = 0; i < AMOUNT_OF_SLOTS_TO_COMPRESS; i++) {
-                    isValid = isValid || recipeItem.get(0).test(pContainer.getItem(i)) &&
-                            recipeItem.get(0).getItems()[0].getCount() <= pContainer.getItem(i).getCount();
-                }
-            }
-            case AMOUNT_OF_SLOTS_TO_COMPRESS -> {
-                for (int i = 0; i < AMOUNT_OF_SLOTS_TO_COMPRESS; i++) {
-                    isValid = isValid && recipeItem.get(i).test(pContainer.getItem(i)) &&
-                            recipeItem.get(i).getItems()[0].getCount() <= pContainer.getItem(i).getCount();
-                }
-            }
+        if (itemHasNoRarity(pContainer.getItem(POSITION_OF_ITEM_SLOT))) {
+            return false;
         }
-
-        return isValid;
+        List<Boolean> validSlots = new ArrayList<>();
+        recipePattern.forEach((i, ingredient) -> {
+            validSlots.add(ingredient.test(pContainer.getItem(i)));
+        });
+        validSlots.add(getTag(
+                getItemRarity(
+                        pContainer.getItem(POSITION_OF_ITEM_SLOT))) == rarity);
+        return validSlots.stream().allMatch(aBoolean -> aBoolean);
     }
 
     @Override
     public ItemStack assemble(SimpleContainer pContainer) {
-        return output;
+        return null;
     }
 
     @Override
@@ -69,8 +68,9 @@ public class RarityTableRecipe implements Recipe<SimpleContainer> {
 
     @Override
     public ItemStack getResultItem() {
-        return output.copy();
+        return null;
     }
+
 
     @Override
     public ResourceLocation getId() {
@@ -89,50 +89,76 @@ public class RarityTableRecipe implements Recipe<SimpleContainer> {
 
 
     public static class Type implements RecipeType<RarityTableRecipe> {
-        private Type(){}
+        private Type() {
+        }
+
         public static final Type INSTANCE = new Type();
         public static final String ID = "item_rarifying";
     }
 
-    public static class Serializer implements RecipeSerializer<RarityTableRecipe>{
+    public static class Serializer implements RecipeSerializer<RarityTableRecipe> {
         public static final Serializer INSTANCE = new Serializer();
-        public static final  ResourceLocation ID = new ResourceLocation(RPGMod.MODID,"item_rarifying");
+        public static final ResourceLocation ID = new ResourceLocation(RPGMod.MODID, "item_rarifying");
 
         @Override
         public RarityTableRecipe fromJson(ResourceLocation pRecipeId, JsonObject pSerializedRecipe) {
-            ItemStack output = ShapedRecipe.itemStackFromJson(GsonHelper.getAsJsonObject(pSerializedRecipe,"output"));
+            int level = GsonHelper.getAsInt(pSerializedRecipe, "inputRarityLevel");
 
-            JsonArray ingredients = GsonHelper.getAsJsonArray(pSerializedRecipe,"ingredients");
-            NonNullList<Ingredient> inputs = NonNullList.withSize(ingredients.size(),Ingredient.EMPTY);
+            RarityTags rarity = getTagByLevel(level);
+            JsonObject keyIngredientMap = GsonHelper.getAsJsonObject(pSerializedRecipe, "keys");
+            JsonArray pattern = GsonHelper.getAsJsonArray(pSerializedRecipe, "pattern");
 
-            for (int i = 0; i < inputs.size(); i++) {
-                Ingredient ingredient = Ingredient.fromJson(ingredients.get(i));
-                ingredient.getItems()[0].setCount(1);
-                inputs.set(i,ingredient);
+            Map<String, ItemStack> map = new HashMap<>();
+            keyIngredientMap.entrySet().forEach(
+                    val -> map.put(val.getKey(), ShapedRecipe.itemStackFromJson(GsonHelper.parse(
+                                            "{" +
+                                                    "\"item\" : \"" + val.getValue().getAsString()
+                                                    + "\"}"
+                                    )
+                            )
+                    )
+            );
+            int currentCol = 0;
+            int currentPos = -3;
+            int currentRow = 0;
+            Map<Integer, Ingredient> ingredientMap = new HashMap<>();
+            for (int i = 0; i < pattern.size(); i++) {
+                if (currentCol == AMOUNT_OF_SLOTS_TO_INSERT_COLS) {
+                    currentCol = 1;
+                    currentRow++;
+                    currentPos = 0;
+                } else {
+                    currentCol++;
+                    currentPos += 3;
+                }
+                JsonElement jsonElement = pattern.get(i);
+                ItemStack itemStack = map.get(jsonElement.getAsString());
+                ingredientMap.put(currentRow + currentPos, Ingredient.of(itemStack));
             }
-            return new RarityTableRecipe(pRecipeId,output,inputs);
+            return new RarityTableRecipe(pRecipeId, rarity, ingredientMap);
         }
 
         @Override
         public @Nullable RarityTableRecipe fromNetwork(ResourceLocation pRecipeId, FriendlyByteBuf pBuffer) {
-            NonNullList<Ingredient> inputs = NonNullList.withSize(pBuffer.readInt(),Ingredient.EMPTY);
+            Map<Integer, Ingredient> inputs = new HashMap<>();
 
-            for (int i = 0; i < inputs.size(); i++) {
-                inputs.set(i,Ingredient.fromNetwork(pBuffer));
+            for (int i = 0; i < pBuffer.readInt(); i++) {
+                inputs.put(i, Ingredient.fromNetwork(pBuffer));
             }
 
-            ItemStack output = pBuffer.readItem();
-            return new RarityTableRecipe(pRecipeId,output,inputs);
+            int level = pBuffer.readInt();
+            return new RarityTableRecipe(pRecipeId, getTagByLevel(level), inputs);
         }
 
         @Override
         public void toNetwork(FriendlyByteBuf pBuffer, RarityTableRecipe pRecipe) {
             pBuffer.writeInt(pRecipe.getIngredients().size());
 
-            for (Ingredient ing: pRecipe.getIngredients()) {
-                ing.toNetwork(pBuffer);
-            }
-            pBuffer.writeItemStack(pRecipe.getResultItem(),false);
+            pRecipe.recipePattern.forEach((i, ingredient) -> {
+                ingredient.toNetwork(pBuffer);
+            });
+
+            pBuffer.writeInt(pRecipe.rarity.level);
         }
     }
 }
