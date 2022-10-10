@@ -19,7 +19,7 @@ public class MessagesHudOverlay {
             return;
         }
         Font font = Minecraft.getInstance().font;
-        font.draw(poseStack, Component.literal(ClientLastMessageReceived.get()).withStyle(ChatFormatting.GOLD),10,10,10);
+        font.draw(poseStack, Component.literal(ClientLastMessageReceived.get()).withStyle(ClientLastMessageReceived.isImportant()?ChatFormatting.GOLD:ChatFormatting.AQUA),10,10,10);
 
     }));
 
