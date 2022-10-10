@@ -32,9 +32,6 @@ public class PlayerThirst {
         thirst = Math.max(thirst - toReduce,MIN_THIRST);
         System.out.println(thirst + ":" + reduceByTick);
     }
-    public void copyFrom(PlayerThirst playerThirst){
-        thirst = playerThirst.thirst;
-    }
     public void saveNBTData(CompoundTag nbt){
         nbt.putInt("thirst",thirst);
     }
