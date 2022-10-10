@@ -1,0 +1,12 @@
+{
+  "type": "rpgmod:item_rarifying",
+  "keys": {
+    "X": "rpgmod:compressed_emerald"
+    },
+  "pattern": [
+    "X","X","X",
+    "X","X","X",
+    "X","X","X"
+  ],
+  "inputRarityLevel": 2
+}

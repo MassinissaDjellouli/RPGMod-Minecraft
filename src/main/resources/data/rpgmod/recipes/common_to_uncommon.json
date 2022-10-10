@@ -1,0 +1,12 @@
+{
+  "type": "rpgmod:item_rarifying",
+  "keys": {
+    "X": "rpgmod:compressed_steel"
+    },
+  "pattern": [
+    "X","X","X",
+    "X","X","X",
+    "X","X","X"
+  ],
+  "inputRarityLevel": 0
+}
