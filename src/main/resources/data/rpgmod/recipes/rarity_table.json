@@ -1,0 +1,22 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "X": {
+      "item": "rpgmod:reinforced_titanium_block"
+    } ,
+    "#": {
+      "item": "rpgmod:compressed_titanium"
+    } ,
+    "?": {
+      "item": "minecraft:crafting_table"
+    }
+  },
+  "pattern": [
+    "X?X",
+    "X#X",
+    "XXX"
+  ],
+  "result": {
+    "item": "rpgmod:rarity_table"
+  }
+}
