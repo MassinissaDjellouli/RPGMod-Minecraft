@@ -2,6 +2,7 @@
   "replace": false,
   "values": [
     "rpgmod:titanium_ore",
+    "rpgmod:titanium_block",
     "rpgmod:deepslate_titanium_ore"
   ]
 }

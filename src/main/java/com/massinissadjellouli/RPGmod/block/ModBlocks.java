@@ -80,6 +80,11 @@ public class ModBlocks {
                     BlockBehaviour.Properties.of(Material.HEAVY_METAL)
                             .strength(7f,4f).requiresCorrectToolForDrops().sound(SoundType.METAL))
             ,CreativeModeTab.TAB_BUILDING_BLOCKS);
+    public static final RegistryObject<Block> TITANIUM_BLOCK = registerBlock("titanium_block",
+            ()-> new Block(
+                    BlockBehaviour.Properties.of(Material.HEAVY_METAL)
+                            .strength(5f,4f).requiresCorrectToolForDrops().sound(SoundType.METAL))
+            ,CreativeModeTab.TAB_BUILDING_BLOCKS);
     public static final RegistryObject<Block> ITEM_COMPRESSOR = registerBlock("item_compressor",
             () -> new ItemCompressorBlock(
                     BlockBehaviour.Properties.of(Material.HEAVY_METAL).strength(4f,4f)
