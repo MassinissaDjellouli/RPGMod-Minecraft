@@ -55,6 +55,9 @@
     "block.rpgmod.titanium_block": "Bloc de titane",
 
     "block.rpgmod.item_compressor": "Compresseur à item",
-    "block.rpgmod.rarity_table": "Compresseur de rareté"
+    "block.rpgmod.rarity_table": "Compresseur de rareté",
+
+    "key.category.rpgmod.rpgmod": "RPGMOD",
+    "key.rpgmod.class_menu": "Menu de changement de classe"
 
 }

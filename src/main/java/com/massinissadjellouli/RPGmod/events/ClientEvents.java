@@ -679,13 +679,26 @@ public class ClientEvents {
         return 10;
 
     }
+    @SubscribeEvent
+    public static void onKeyInput(InputEvent.Key event){
+        if(KeyBinding.OPEN_MENU_KEY.consumeClick()){
+            ModPackets.sendToServer(new OpenClassMenuC2SPacket());
 
+        }
+    }
     @Mod.EventBusSubscriber(modid = RPGMod.MODID, value = Dist.CLIENT, bus = Mod.EventBusSubscriber.Bus.MOD)
     public static class ClientModBusEvents {
         @SubscribeEvent
         public static void registerGuiOverlays(RegisterGuiOverlaysEvent event) {
             event.registerAboveAll("thirst_hud", ThirstHudOverlay.HUD_THIRST);
             event.registerAboveAll("message_hud", MessagesHudOverlay.HUD_MESSAGE);
+        }
+
+
+
+        @SubscribeEvent
+        public static void onKeyRegister(RegisterKeyMappingsEvent event){
+            event.register(KeyBinding.OPEN_MENU_KEY);
         }
     }
 
