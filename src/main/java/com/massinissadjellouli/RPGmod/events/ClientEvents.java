@@ -1,6 +1,7 @@
 package com.massinissadjellouli.RPGmod.events;
 
 import com.massinissadjellouli.RPGmod.RPGMod;
+import com.massinissadjellouli.RPGmod.Utils.KeyBinding;
 import com.massinissadjellouli.RPGmod.classSystem.PlayerClassProvider;
 import com.massinissadjellouli.RPGmod.client.ClientGamemodeData;
 import com.massinissadjellouli.RPGmod.client.ClientLastMessageReceived;
@@ -10,6 +11,7 @@ import com.massinissadjellouli.RPGmod.damageIndicator.ActiveDamageIndicators;
 import com.massinissadjellouli.RPGmod.damageIndicator.DamageIndicatorData;
 import com.massinissadjellouli.RPGmod.networking.ModPackets;
 import com.massinissadjellouli.RPGmod.networking.packet.*;
+import com.massinissadjellouli.RPGmod.screen.ClassChangeMenu;
 import com.massinissadjellouli.RPGmod.skills.PlayerSkillData;
 import com.massinissadjellouli.RPGmod.skills.PlayerSkillProvider;
 import com.massinissadjellouli.RPGmod.tags.ModTags;
@@ -36,7 +38,9 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.*;
 import net.minecraft.world.level.block.Block;
 import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.client.event.InputEvent;
 import net.minecraftforge.client.event.RegisterGuiOverlaysEvent;
+import net.minecraftforge.client.event.RegisterKeyMappingsEvent;
 import net.minecraftforge.common.Tags;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.living.LivingEntityUseItemEvent;
@@ -102,7 +106,7 @@ public class ClientEvents {
                 if (blockTagHas(BlockTags.MINEABLE_WITH_PICKAXE, event.getState().getBlock())) {
                     if (itemTagHas(Tags.Items.TOOLS_PICKAXES,
                             event.getPlayer().getMainHandItem().getItem())) {
-                        int xp[] = {getXpFromBreakingBlock(event.getState().getBlock())};
+                        int[] xp = {getXpFromBreakingBlock(event.getState().getBlock())};
                         event.getPlayer().getCapability(PlayerClassProvider.PLAYER_CLASS).ifPresent(playerClass -> {
                                     if(playerClass.isCurrently(MINEUR)){
                                         playerClass.increaseXp(100);
@@ -120,7 +124,7 @@ public class ClientEvents {
                 if (blockTagHas(BlockTags.MINEABLE_WITH_AXE, event.getState().getBlock())) {
                     if (itemTagHas(Tags.Items.TOOLS_AXES,
                             event.getPlayer().getMainHandItem().getItem())) {
-                        int xp[] = {getXpFromBreakingBlock(event.getState().getBlock())};
+                        int[] xp = {getXpFromBreakingBlock(event.getState().getBlock())};
                         event.getPlayer().getCapability(PlayerClassProvider.PLAYER_CLASS).ifPresent(playerClass -> {
                                     if(playerClass.isCurrently(BUCHERON)){
                                         playerClass.increaseXp(100);

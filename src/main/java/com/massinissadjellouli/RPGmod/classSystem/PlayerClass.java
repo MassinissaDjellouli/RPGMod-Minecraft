@@ -8,8 +8,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class PlayerClass {
-    PlayerClassType currentClass;
-    Map<PlayerClassType, PlayerClassLevel> classLevels = new HashMap<>();
+    private PlayerClassType currentClass;
+    private Map<PlayerClassType, PlayerClassLevel> classLevels;
 
     public PlayerClass() {
         currentClass = PlayerClassType.MINEUR;
@@ -79,5 +79,9 @@ public class PlayerClass {
 
     private int getXpNeededForNextLevel(int level) {
         return (int) (PlayerClassLevel.XP_THRESHOLD * (1 + level * 0.75));
+    }
+
+    public void change(PlayerClassType type) {
+        currentClass = type;
     }
 }

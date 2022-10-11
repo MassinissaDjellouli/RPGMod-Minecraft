@@ -66,6 +66,16 @@ public class ModPackets {
                 .encoder(ThirstEffectC2SPacket::toBytes)
                 .consumerMainThread(ThirstEffectC2SPacket::handle)
                 .add();
+        net.messageBuilder(OpenClassMenuC2SPacket.class,id(), NetworkDirection.PLAY_TO_SERVER)
+                .decoder(OpenClassMenuC2SPacket::new)
+                .encoder(OpenClassMenuC2SPacket::toBytes)
+                .consumerMainThread(OpenClassMenuC2SPacket::handle)
+                .add();
+        net.messageBuilder(ChangeClassC2SPacket.class,id(), NetworkDirection.PLAY_TO_SERVER)
+                .decoder(ChangeClassC2SPacket::new)
+                .encoder(ChangeClassC2SPacket::toBytes)
+                .consumerMainThread(ChangeClassC2SPacket::handle)
+                .add();
     }
 
     public static <T> void sendToServer(T message){
