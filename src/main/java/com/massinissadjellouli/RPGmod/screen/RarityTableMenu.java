@@ -23,7 +23,7 @@ public class RarityTableMenu extends AbstractContainerMenu {
     }
 
     public RarityTableMenu(int id, Inventory inventory, BlockEntity entity) {
-        super(ModMenuTypes.RATITY_TABLE_MENU.get(), id);
+        super(ModMenuTypes.RARITY_TABLE_MENU.get(), id);
         checkContainerSize(inventory, AMOUNT_OF_SLOTS);
         blockEntity = (RarityTableBlockEntity) entity;
         this.level = inventory.player.level;
