@@ -9,6 +9,7 @@ import com.massinissadjellouli.RPGmod.recipe.ModRecipes;
 import com.massinissadjellouli.RPGmod.screen.*;
 import com.massinissadjellouli.RPGmod.world.features.ModConfiguredFeatures;
 import com.massinissadjellouli.RPGmod.world.features.ModPlacedFeatures;
+import com.massinissadjellouli.effects.ModEffects;
 import net.minecraft.client.gui.screens.MenuScreens;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.eventbus.api.IEventBus;
@@ -43,6 +44,7 @@ public class RPGMod
         ModConfiguredFeatures.registerConfiguredFeatures(modEventBus);
         ModPlacedFeatures.registerPlacedFeatures(modEventBus);
         ModRecipes.register(modEventBus);
+        ModEffects.register(modEventBus);
     }
 
     @Mod.EventBusSubscriber(modid = MODID,bus = Mod.EventBusSubscriber.Bus.MOD)

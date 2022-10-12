@@ -58,6 +58,9 @@
     "block.rpgmod.rarity_table": "Compresseur de rareté",
 
     "key.category.rpgmod.rpgmod": "RPGMOD",
-    "key.rpgmod.class_menu": "Menu de changement de classe"
+    "key.rpgmod.class_menu": "Menu de changement de classe",
+
+    "effect.rpgmod.freeze": "Gelé",
+    "effect.rpgmod.burning": "En feu"
 
 }
