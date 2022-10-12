@@ -23,6 +23,10 @@
     "item.rpgmod.reinforced_titanium_hoe": "Houe en titane renforcé",
     "item.rpgmod.reinforced_titanium_sword": "Épée en titane renforcé",
 
+    "item.rpgmod.fire_sword": "Épée élémentaire de feu",
+    "item.rpgmod.ice_sword": "Épée élémentaire de glace",
+    "item.rpgmod.poison_sword": "Épée élémentaire de poison",
+
     "item.rpgmod.steel_ingot": "Lingot d'acier",
     "item.rpgmod.titanium_ingot": "Lingot de titane",
     "item.rpgmod.reinforced_titanium_ingot": "Lingot de titane renforcé",
@@ -55,12 +59,13 @@
     "block.rpgmod.titanium_block": "Bloc de titane",
 
     "block.rpgmod.item_compressor": "Compresseur à item",
-    "block.rpgmod.rarity_table": "Compresseur de rareté",
+    "block.rpgmod.rarity_table": "Table de rareté",
 
     "key.category.rpgmod.rpgmod": "RPGMOD",
     "key.rpgmod.class_menu": "Menu de changement de classe",
 
     "effect.rpgmod.freeze": "Gelé",
-    "effect.rpgmod.burning": "En feu"
+    "effect.rpgmod.burning": "En feu",
+    "effect.rpgmod.mob_poison": "Envenimé"
 
 }

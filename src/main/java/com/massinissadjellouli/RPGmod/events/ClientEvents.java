@@ -9,6 +9,7 @@ import com.massinissadjellouli.RPGmod.client.MessagesHudOverlay;
 import com.massinissadjellouli.RPGmod.client.ThirstHudOverlay;
 import com.massinissadjellouli.RPGmod.damageIndicator.ActiveDamageIndicators;
 import com.massinissadjellouli.RPGmod.damageIndicator.DamageIndicatorData;
+import com.massinissadjellouli.RPGmod.item.custom.ElementalSwordItem;
 import com.massinissadjellouli.RPGmod.networking.ModPackets;
 import com.massinissadjellouli.RPGmod.networking.packet.*;
 import com.massinissadjellouli.RPGmod.screen.ClassChangeMenu;

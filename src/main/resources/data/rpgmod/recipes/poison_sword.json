@@ -1,0 +1,21 @@
+{
+  "type": "rpgmod:item_compressing",
+  "ingredients": [
+    {"item": "rpgmod:poison_crystal"},
+    {"item": "rpgmod:poison_crystal"},
+    {"item": "rpgmod:poison_crystal"},
+
+    {"item": "rpgmod:poison_crystal"},
+    {"item": "rpgmod:reinforced_titanium_sword"},
+    {"item": "rpgmod:poison_crystal"},
+
+    {"item": "rpgmod:poison_crystal"},
+    {"item": "rpgmod:poison_crystal"},
+    {"item": "rpgmod:poison_crystal"}
+  ],
+  "output": {
+    "item": "rpgmod:poison_sword"
+  },
+  "count": 5,
+  "duration": 100
+}

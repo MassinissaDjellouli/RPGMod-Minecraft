@@ -1,7 +1,9 @@
 package com.massinissadjellouli.RPGmod.item;
 
+import com.massinissadjellouli.RPGmod.Elements.Elements;
 import com.massinissadjellouli.RPGmod.RPGMod;
 import com.massinissadjellouli.RPGmod.item.custom.CompressedCoalItem;
+import com.massinissadjellouli.RPGmod.item.custom.ElementalSwordItem;
 import net.minecraft.world.item.*;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.registries.DeferredRegister;
@@ -78,12 +80,25 @@ public class ModItems {
     public static final RegistryObject<SwordItem> REINFORCED_TITANIUM_SWORD =
             createSword("reinforced_titanium_sword", ToolTiers.REINFORCED_TITANIUM);
 
+    public static final RegistryObject<ElementalSwordItem> FIRE_SWORD =
+            createElementalSword("fire_sword", ToolTiers.REINFORCED_TITANIUM,Elements.FIRE);
+    public static final RegistryObject<ElementalSwordItem> ICE_SWORD =
+            createElementalSword("ice_sword", ToolTiers.REINFORCED_TITANIUM,Elements.ICE);
+    public static final RegistryObject<ElementalSwordItem> POISON_SWORD =
+            createElementalSword("poison_sword", ToolTiers.REINFORCED_TITANIUM,Elements.POISON);
+
     //Create objects functions
     private static RegistryObject<SwordItem> createSword(String name,Tier tier){
         return ITEM_DEFERRED_REGISTER.register(name,
                 ()-> new SwordItem(
                         tier,4,-2.4f,
                         new Item.Properties().tab(CreativeModeTab.TAB_COMBAT)));
+    }
+    private static RegistryObject<ElementalSwordItem> createElementalSword(String name, Tier tier, Elements element){
+        return ITEM_DEFERRED_REGISTER.register(name,
+                ()-> new ElementalSwordItem(
+                        tier,4,-2.4f,
+                        new Item.Properties().tab(CreativeModeTab.TAB_COMBAT),element));
     }
     private static RegistryObject<PickaxeItem> createPickaxe(String name,Tier tier){
         return ITEM_DEFERRED_REGISTER.register(name,

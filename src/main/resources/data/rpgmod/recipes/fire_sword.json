@@ -1,0 +1,21 @@
+{
+  "type": "rpgmod:item_compressing",
+  "ingredients": [
+    {"item": "rpgmod:fire_crystal"},
+    {"item": "rpgmod:fire_crystal"},
+    {"item": "rpgmod:fire_crystal"},
+
+    {"item": "rpgmod:fire_crystal"},
+    {"item": "rpgmod:reinforced_titanium_sword"},
+    {"item": "rpgmod:fire_crystal"},
+
+    {"item": "rpgmod:fire_crystal"},
+    {"item": "rpgmod:fire_crystal"},
+    {"item": "rpgmod:fire_crystal"}
+  ],
+  "output": {
+    "item": "rpgmod:fire_sword"
+  },
+  "count": 5,
+  "duration": 100
+}

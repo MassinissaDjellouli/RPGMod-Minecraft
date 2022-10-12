@@ -1,0 +1,21 @@
+{
+  "type": "rpgmod:item_compressing",
+  "ingredients": [
+    {"item": "rpgmod:ice_crystal"},
+    {"item": "rpgmod:ice_crystal"},
+    {"item": "rpgmod:ice_crystal"},
+
+    {"item": "rpgmod:ice_crystal"},
+    {"item": "rpgmod:reinforced_titanium_sword"},
+    {"item": "rpgmod:ice_crystal"},
+
+    {"item": "rpgmod:ice_crystal"},
+    {"item": "rpgmod:ice_crystal"},
+    {"item": "rpgmod:ice_crystal"}
+  ],
+  "output": {
+    "item": "rpgmod:ice_sword"
+  },
+  "count": 5,
+  "duration": 100
+}
