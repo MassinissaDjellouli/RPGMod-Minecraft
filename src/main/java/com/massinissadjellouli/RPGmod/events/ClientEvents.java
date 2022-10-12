@@ -347,9 +347,10 @@ public class ClientEvents {
         }else{
             ItemStack item = event.player.getItemInHand(MAIN_HAND);
             setupCurrentItem(item);
-            if(savedItemRegularTooltips.containsKey(getItemId(item))){
-                setAttributes(item);
+            if(itemHasNoRarity(item)){
+                return;
             }
+            setAttributes(item);
         }
     }
 
