@@ -348,9 +348,11 @@ public class ClientEvents {
         }else{
             ItemStack item = event.player.getItemInHand(MAIN_HAND);
             setupCurrentItem(item);
-            if(itemHasNoRarity(item)){
+            if(itemHasNoRarity(item) || itemHasNoId(item)){
                 return;
             }
+            List<Component> itemOriginalTooltips = new ItemStack(item.getItem()).getTooltipLines(event.player, TooltipFlag.Default.ADVANCED);
+            saveItemRegularTooltip(itemOriginalTooltips, getTag(getItemRarity(item)),getItemId(item));
             setAttributes(item);
         }
     }
@@ -496,6 +498,15 @@ public class ClientEvents {
     }
 
     private static void saveItemRegularTooltip(ItemTooltipEvent event,RarityTags rarityTag) {
+        List<Component> currentTooltips = createTooltip(event.getToolTip(), rarityTag);
+        savedItemRegularTooltips.put(getItemId(event.getItemStack()),currentTooltips);
+    }
+    private static void saveItemRegularTooltip(List<Component> currentTooltips,RarityTags rarityTag,String itemId) {
+        List<Component> newTooltips = createTooltip(currentTooltips, rarityTag);
+        savedItemRegularTooltips.put(itemId,newTooltips);
+    }
+
+    private static List<Component> createTooltip(List<Component> currentTooltips, RarityTags rarityTag) {
         List<Component> newTooltips = new ArrayList<>();
         List<Component> currentTooltips = event.getToolTip();
         final int size = currentTooltips.size();
@@ -515,7 +526,7 @@ public class ClientEvents {
                 );
             }
         }
-        savedItemRegularTooltips.put(getItemId(event.getItemStack()),newTooltips);
+        return newTooltips;
     }
 
     private static void setItemIdIfNecessary(ItemStack item) {
