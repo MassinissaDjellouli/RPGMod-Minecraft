@@ -14,8 +14,8 @@ public class MobPoisonEffect extends MobEffect implements DamagingMobEffect{
         super(pCategory, pColor);
     }
     @Override
-    public void applyElementalEffectTickFromPlayer(LivingEntity pLivingEntity, int pAmplifier){
-        applyEffectTick(pLivingEntity,pAmplifier);
+    public void applyElementalEffectTickFromPlayer(LivingEntity pLivingEntity){
+        applyEffectTick(pLivingEntity,1);
         if(pLivingEntity.getHealth() == 0 && !pLivingEntity.isAlive()){
             RPGModEventFactory.onKilledBySwordEffect(pLivingEntity);
             pLivingEntity.removeEffect(this);

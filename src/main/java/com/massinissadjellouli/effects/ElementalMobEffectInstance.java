@@ -18,16 +18,18 @@ public class ElementalMobEffectInstance extends MobEffectInstance {
 
     @Override
     public void applyEffect(LivingEntity pEntity) {
-        if(isResistant){
+        if (isResistant) {
             return;
         }
-        if(this.getEffect() instanceof DamagingMobEffect effect && fromPlayerSword){
-            effect.applyElementalEffectTickFromPlayer(pEntity,1);
-            return;
+        if (this.getEffect() instanceof DamagingMobEffect effect) {
+            if (isVulnerable) {
+                effect.setIsVulnerable();
+            }
+            if (fromPlayerSword){
+                effect.applyElementalEffectTickFromPlayer(pEntity);
+                return;
+            }
+            super.applyEffect(pEntity);
         }
-        if(this.getEffect() instanceof VulnerableDamagingMobEffect effect && isVulnerable){
-            effect.setIsVulnerable();
-        }
-        super.applyEffect(pEntity);
     }
 }

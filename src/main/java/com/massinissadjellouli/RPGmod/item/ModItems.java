@@ -4,11 +4,18 @@ import com.massinissadjellouli.RPGmod.Elements.Elements;
 import com.massinissadjellouli.RPGmod.RPGMod;
 import com.massinissadjellouli.RPGmod.item.custom.CompressedCoalItem;
 import com.massinissadjellouli.RPGmod.item.custom.ElementalSwordItem;
+import com.massinissadjellouli.RPGmod.item.custom.MultiElementalSwordItem;
 import net.minecraft.world.item.*;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
+
+import java.util.Arrays;
+import java.util.List;
+
+import static com.massinissadjellouli.RPGmod.Elements.Elements.*;
+import static com.massinissadjellouli.RPGmod.Elements.Elements.LIGHTNING;
 
 public class ModItems {
     public static final DeferredRegister<Item> ITEM_DEFERRED_REGISTER =
@@ -81,11 +88,19 @@ public class ModItems {
             createSword("reinforced_titanium_sword", ToolTiers.REINFORCED_TITANIUM);
 
     public static final RegistryObject<ElementalSwordItem> FIRE_SWORD =
-            createElementalSword("fire_sword", ToolTiers.REINFORCED_TITANIUM,Elements.FIRE);
+            createElementalSword("fire_sword", ToolTiers.REINFORCED_TITANIUM, FIRE);
     public static final RegistryObject<ElementalSwordItem> ICE_SWORD =
-            createElementalSword("ice_sword", ToolTiers.REINFORCED_TITANIUM,Elements.ICE);
+            createElementalSword("ice_sword", ToolTiers.REINFORCED_TITANIUM, ICE);
     public static final RegistryObject<ElementalSwordItem> POISON_SWORD =
-            createElementalSword("poison_sword", ToolTiers.REINFORCED_TITANIUM,Elements.POISON);
+            createElementalSword("poison_sword", ToolTiers.REINFORCED_TITANIUM, POISON);
+
+    public static final RegistryObject<ElementalSwordItem> THORS_HAMMER =
+            createElementalSword("thors_hammer", ToolTiers.DIVINE_ALLOY, LIGHTNING);
+
+    static final RegistryObject<MultiElementalSwordItem> HELL_SWORD =
+            createMultiElementalSword("hell_sword", ToolTiers.HELL_ALLOY, POISON, FIRE);
+    static final RegistryObject<MultiElementalSwordItem> GOD_SWORD =
+            createMultiElementalSword("god_sword", ToolTiers.DIVINE_ALLOY, POISON, FIRE, ICE,LIGHTNING);
 
     //Create objects functions
     private static RegistryObject<SwordItem> createSword(String name,Tier tier){
@@ -99,6 +114,14 @@ public class ModItems {
                 ()-> new ElementalSwordItem(
                         tier,4,-2.4f,
                         new Item.Properties().tab(CreativeModeTab.TAB_COMBAT),element));
+    }
+
+    private static RegistryObject<MultiElementalSwordItem> createMultiElementalSword(String name, Tier tier,Elements ...element){
+        List<Elements> elements = Arrays.stream(element).toList();
+        return ITEM_DEFERRED_REGISTER.register(name,
+                ()-> new MultiElementalSwordItem(
+                        tier,4,-2.4f,
+                        new Item.Properties().tab(CreativeModeTab.TAB_COMBAT),elements));
     }
     private static RegistryObject<PickaxeItem> createPickaxe(String name,Tier tier){
         return ITEM_DEFERRED_REGISTER.register(name,

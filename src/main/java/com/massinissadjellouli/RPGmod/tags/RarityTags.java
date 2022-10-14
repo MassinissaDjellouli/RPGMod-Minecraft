@@ -14,7 +14,8 @@ public enum RarityTags {
     RARE(ModTags.Items.RARE, "Rare", ChatFormatting.BLUE, 2),
     VERY_RARE(ModTags.Items.VERY_RARE, "Très rare", ChatFormatting.DARK_PURPLE, 3),
     LEGENDARY(ModTags.Items.LEGENDARY, "Légendaire", ChatFormatting.GOLD, 4),
-    MYTHICAL(ModTags.Items.MYTHICAL, "Mythique", ChatFormatting.DARK_RED, 5);
+    MYTHICAL(ModTags.Items.MYTHICAL, "Mythique", ChatFormatting.DARK_RED, 5),
+    GODLY(ModTags.Items.GODLY, "Divine", ChatFormatting.LIGHT_PURPLE, 6);
 
     public final TagKey<Item> tagKey;
     public final String name;

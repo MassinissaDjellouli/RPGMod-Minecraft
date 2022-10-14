@@ -50,13 +50,15 @@ public class ItemCompressorRecipe implements Recipe<SimpleContainer> {
                 isValid = false;
                 for (int i = 0; i < AMOUNT_OF_SLOTS_TO_COMPRESS; i++) {
                     isValid = isValid || recipeItem.get(0).test(pContainer.getItem(i)) &&
-                            recipeItem.get(0).getItems()[0].getCount() <= pContainer.getItem(i).getCount();
+                            (recipeItem.get(0).getItems()[0].getCount() <= pContainer.getItem(i).getCount()
+                                    || recipeItem.get(0).getItems()[0].getMaxStackSize() == 1);
                 }
             }
             case AMOUNT_OF_SLOTS_TO_COMPRESS -> {
                 for (int i = 0; i < AMOUNT_OF_SLOTS_TO_COMPRESS; i++) {
                     isValid = isValid && recipeItem.get(i).test(pContainer.getItem(i)) &&
-                            recipeItem.get(i).getItems()[0].getCount() <= pContainer.getItem(i).getCount();
+                            (recipeItem.get(i).getItems()[0].getCount() <= pContainer.getItem(i).getCount()
+                            || recipeItem.get(i).getItems()[0].getMaxStackSize() == 1);
                 }
             }
         }

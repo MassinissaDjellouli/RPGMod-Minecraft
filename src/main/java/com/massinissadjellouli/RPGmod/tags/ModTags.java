@@ -112,6 +112,7 @@ public class ModTags {
         public static final TagKey<Item> VERY_RARE = createTag("rarity/very_rare");
         public static final TagKey<Item> LEGENDARY = createTag("rarity/legendary");
         public static final TagKey<Item> MYTHICAL = createTag("rarity/mythical");
+        public static final TagKey<Item> GODLY = createTag("rarity/godly");
 
         public enum CompressorFuels {
             COAL(net.minecraft.world.item.Items.COAL, 10),

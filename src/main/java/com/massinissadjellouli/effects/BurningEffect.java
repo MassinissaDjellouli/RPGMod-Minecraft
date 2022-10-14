@@ -13,8 +13,8 @@ public class BurningEffect extends MobEffect implements DamagingMobEffect{
     }
 
     @Override
-    public void applyElementalEffectTickFromPlayer(LivingEntity pLivingEntity, int pAmplifier){
-        applyEffectTick(pLivingEntity,pAmplifier);
+    public void applyElementalEffectTickFromPlayer(LivingEntity pLivingEntity){
+        applyEffectTick(pLivingEntity,1);
         if(!pLivingEntity.isAlive()){
             RPGModEventFactory.onKilledBySwordEffect(pLivingEntity);
             pLivingEntity.removeEffect(this);

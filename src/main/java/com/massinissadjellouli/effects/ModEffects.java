@@ -21,8 +21,12 @@ public class ModEffects {
     public static final RegistryObject<MobEffect> MOB_POISON = MOB_EFFECTS.register(
             "poison",() -> RPGModEffects.MOB_POISON.effect
     );
+    public static final RegistryObject<MobEffect> LIGHTNING = MOB_EFFECTS.register(
+            "lightning",() -> RPGModEffects.LIGHTNING.effect
+    );
 
     public enum RPGModEffects{
+        LIGHTNING(new LightningEffect(MobEffectCategory.HARMFUL,16187136)),
         MOB_POISON(new MobPoisonEffect(MobEffectCategory.HARMFUL,14088995 )),
         FREEZE(new FreezeEffect(MobEffectCategory.HARMFUL,3124687 )),
         BURNING(new BurningEffect(MobEffectCategory.HARMFUL,16728064));

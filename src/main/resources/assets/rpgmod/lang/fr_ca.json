@@ -26,6 +26,9 @@
     "item.rpgmod.fire_sword": "Épée élémentaire de feu",
     "item.rpgmod.ice_sword": "Épée élémentaire de glace",
     "item.rpgmod.poison_sword": "Épée élémentaire de poison",
+    "item.rpgmod.hell_sword": "Épée de l'enfer",
+    "item.rpgmod.god_sword": "Épée de dieu",
+    "item.rpgmod.thors_hammer": "Mjölnir",
 
     "item.rpgmod.steel_ingot": "Lingot d'acier",
     "item.rpgmod.titanium_ingot": "Lingot de titane",
@@ -66,6 +69,7 @@
 
     "effect.rpgmod.freeze": "Gelé",
     "effect.rpgmod.burning": "En feu",
-    "effect.rpgmod.poison": "Envenimé"
+    "effect.rpgmod.poison": "Envenimé",
+    "effect.rpgmod.lightning": "Éléctrifié"
 
 }

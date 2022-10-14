@@ -1,40 +1,44 @@
 package com.massinissadjellouli.RPGmod.item.custom;
 
 import com.massinissadjellouli.RPGmod.Elements.Elements;
-import com.massinissadjellouli.RPGmod.tags.ModTags;
 import com.massinissadjellouli.RPGmod.tags.ModTags.EntityTypes.EntityTags;
 import com.massinissadjellouli.effects.ElementalMobEffectInstance;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.inventory.tooltip.TooltipComponent;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.SwordItem;
 import net.minecraft.world.item.Tier;
 
-import java.util.Optional;
+import java.util.List;
 
 import static com.massinissadjellouli.RPGmod.tags.RarityTags.*;
 
-public class ElementalSwordItem extends SwordItem {
-    Elements element;
-    public ElementalSwordItem(Tier pTier, int pAttackDamageModifier, float pAttackSpeedModifier, Properties pProperties, Elements element) {
+public class MultiElementalSwordItem extends SwordItem {
+    List<Elements> elements;
+    public MultiElementalSwordItem(Tier pTier, int pAttackDamageModifier, float pAttackSpeedModifier, Properties pProperties, List<Elements> elements) {
         super(pTier, pAttackDamageModifier, pAttackSpeedModifier, pProperties);
-        this.element = element;
+        this.elements = elements;
     }
 
 
     @Override
     public boolean hurtEnemy(ItemStack pStack, LivingEntity pTarget, LivingEntity pAttacker) {
-        if(entityResistantToElement(pTarget)){
-            return super.hurtEnemy(pStack, pTarget, pAttacker);
+        elements.forEach(element -> {
+            applyElement(pTarget,pAttacker,element,pStack);
+        });
+        return super.hurtEnemy(pStack, pTarget, pAttacker);
+    }
+
+    private void applyElement(LivingEntity pTarget, LivingEntity pAttacker, Elements element,ItemStack pStack) {
+        if(entityResistantToElement(pTarget,element)){
+            return;
         }
         int amplifier = getAmplifier(pStack);
         pTarget.addEffect(new ElementalMobEffectInstance(element.effect,20 * (amplifier + 1),
-                        pAttacker instanceof Player,
-                entityVulnerableToElement(pTarget),
-                entityResistantToElement(pTarget)));
-        return super.hurtEnemy(pStack, pTarget, pAttacker);
+                pAttacker instanceof Player,
+                entityVulnerableToElement(pTarget,element),
+                entityResistantToElement(pTarget,element)));
     }
 
     private int getAmplifier(ItemStack pStack) {
@@ -48,11 +52,11 @@ public class ElementalSwordItem extends SwordItem {
         if(tag == null || tag == EntityTags.NO) return false;
         return entity.is(tag.tagKey);
     }
-    private boolean entityResistantToElement(LivingEntity pTarget) {
+    private boolean entityResistantToElement(LivingEntity pTarget,Elements element) {
         return entityTagHas(EntityTags.getResistance(element),pTarget.getType());
 
     }
-    private boolean entityVulnerableToElement(LivingEntity pTarget) {
+    private static boolean entityVulnerableToElement(LivingEntity pTarget,Elements element) {
         return entityTagHas(EntityTags.getVulnerablility(element),pTarget.getType());
     }
 }

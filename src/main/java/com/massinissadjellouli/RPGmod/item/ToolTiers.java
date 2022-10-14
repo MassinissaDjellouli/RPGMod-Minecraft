@@ -27,6 +27,10 @@ public class ToolTiers {
     public static final Tier REINFORCED_TITANIUM =
             new ForgeTier(5,5095,14,6f,25, ModTags.Blocks.NEEDS_TITANIUM_TOOLS,
             () -> Ingredient.of(ModItems.REINFORCED_TITANIUM_INGOT.get()));
+    public static final Tier HELL_ALLOY =
+            new ForgeTier(6,16000,16,25f,25, ModTags.Blocks.NEEDS_TITANIUM_TOOLS, Ingredient::of);
+    public static final Tier DIVINE_ALLOY =
+            new ForgeTier(7,26000,16,55f,25, ModTags.Blocks.NEEDS_TITANIUM_TOOLS, Ingredient::of);
 
     public static void registerTiers() {
         TierSortingRegistry.registerTier(COPPER,new ResourceLocation(RPGMod.MODID,"copper"),
@@ -38,6 +42,14 @@ public class ToolTiers {
         );
         TierSortingRegistry.registerTier(REINFORCED_TITANIUM,new ResourceLocation(RPGMod.MODID,"reinforced_titanium"),
                 List.of(TITANIUM),
+                List.of()
+        );
+        TierSortingRegistry.registerTier(HELL_ALLOY,new ResourceLocation(RPGMod.MODID,"hell_alloy"),
+                List.of(REINFORCED_TITANIUM),
+                List.of()
+        );
+        TierSortingRegistry.registerTier(DIVINE_ALLOY,new ResourceLocation(RPGMod.MODID,"divine_alloy"),
+                List.of(HELL_ALLOY),
                 List.of()
         );
     }
