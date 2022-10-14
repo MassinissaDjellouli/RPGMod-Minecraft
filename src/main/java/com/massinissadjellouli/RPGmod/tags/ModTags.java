@@ -1,5 +1,6 @@
 package com.massinissadjellouli.RPGmod.tags;
 
+import com.massinissadjellouli.RPGmod.Elements.Elements;
 import com.massinissadjellouli.RPGmod.RPGMod;
 import com.massinissadjellouli.RPGmod.item.ModItems;
 import net.minecraft.ChatFormatting;
@@ -21,24 +22,66 @@ import static net.minecraft.world.item.Items.LAVA_BUCKET;
 
 public class ModTags {
     public static class EntityTypes {
-        //TODO: Fix it or smth
         public static final TagKey<EntityType<?>> HARMLESS = createTag("harmless");
         public static final TagKey<EntityType<?>> HARMFUL = createTag("harmful");
         public static final TagKey<EntityType<?>> DANGEROUS = createTag("dangerous");
         public static final TagKey<EntityType<?>> VERY_DANGEROUS = createTag("very_dangerous");
         public static final TagKey<EntityType<?>> BOSS = createTag("boss");
+        public static final TagKey<EntityType<?>> RESISTANT_TO_FREEZE = createTag("resistant_to_freeze");
+        public static final TagKey<EntityType<?>> RESISTANT_TO_FIRE = createTag("resistant_to_burning");
+        public static final TagKey<EntityType<?>> RESISTANT_TO_POISON = createTag("resistant_to_poison");
+        public static final TagKey<EntityType<?>> VULNERABLE_TO_FREEZE = createTag("vulnerable_to_freeze");
+        public static final TagKey<EntityType<?>> VULNERABLE_TO_FIRE = createTag("vulnerable_to_burning");
+        public static final TagKey<EntityType<?>> VULNERABLE_TO_POISON = createTag("vulnerable_to_poison");
 
         public enum EntityTags {
             HARMLESS(EntityTypes.HARMLESS),
             HARMFUL(EntityTypes.HARMFUL),
             DANGEROUS(EntityTypes.DANGEROUS),
             VERY_DANGEROUS(EntityTypes.VERY_DANGEROUS),
-            BOSS(EntityTypes.BOSS);
+            BOSS(EntityTypes.BOSS),
+
+            RESISTANT_TO_FREEZE(EntityTypes.RESISTANT_TO_FREEZE),
+            RESISTANT_TO_FIRE(EntityTypes.RESISTANT_TO_FIRE),
+            RESISTANT_TO_POISON(EntityTypes.RESISTANT_TO_POISON),
+            VULNERABLE_TO_FREEZE(EntityTypes.VULNERABLE_TO_FREEZE),
+            VULNERABLE_TO_FIRE(EntityTypes.VULNERABLE_TO_FIRE),
+            VULNERABLE_TO_POISON(EntityTypes.VULNERABLE_TO_POISON),
+            NO(null);
 
             public final TagKey<EntityType<?>> tagKey;
 
             EntityTags(TagKey<EntityType<?>> tagKey) {
                 this.tagKey = tagKey;
+            }
+
+            public static EntityTags getResistance(Elements element) {
+                switch (element){
+                    case ICE -> {
+                        return RESISTANT_TO_FREEZE;
+                    }
+                    case FIRE -> {
+                        return RESISTANT_TO_FIRE;
+                    }
+                    case POISON -> {
+                        return RESISTANT_TO_POISON;
+                    }
+                }
+                return EntityTags.NO;
+            }
+            public static EntityTags getVulnerablility(Elements element) {
+                switch (element){
+                    case ICE -> {
+                        return VULNERABLE_TO_FREEZE;
+                    }
+                    case FIRE -> {
+                        return VULNERABLE_TO_FIRE;
+                    }
+                    case POISON -> {
+                        return VULNERABLE_TO_POISON;
+                    }
+                }
+                return EntityTags.NO;
             }
         }
 

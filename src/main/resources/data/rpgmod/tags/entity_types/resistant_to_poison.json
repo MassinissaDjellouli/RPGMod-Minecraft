@@ -1,0 +1,15 @@
+{
+  "replace": false,
+  "values": [
+    "minecraft:warden",
+    "minecraft:evoker",
+    "minecraft:vindicator",
+    "minecraft:pillager",
+    "minecraft:illusioner",
+    "minecraft:spider",
+    "minecraft:cave_spider",
+    "minecraft:witch",
+    "minecraft:skeleton",
+    "minecraft:pufferfish"
+  ]
+}

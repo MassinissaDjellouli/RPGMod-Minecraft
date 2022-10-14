@@ -9,6 +9,7 @@ import net.minecraft.world.entity.LivingEntity;
 public class MobPoisonEffect extends MobEffect implements DamagingMobEffect{
 
 
+    private boolean isVulnerable = false;
     protected MobPoisonEffect(MobEffectCategory pCategory, int pColor) {
         super(pCategory, pColor);
     }
@@ -22,12 +23,18 @@ public class MobPoisonEffect extends MobEffect implements DamagingMobEffect{
     }
     @Override
     public void applyEffectTick(LivingEntity pLivingEntity, int pAmplifier) {
-        pLivingEntity.hurt(DamageSource.MAGIC, 1.0F);
+        int hurt = isVulnerable?2:1;
+        pLivingEntity.hurt(DamageSource.MAGIC, hurt);
         super.applyEffectTick(pLivingEntity, pAmplifier);
     }
 
     @Override
     public boolean isDurationEffectTick(int pDuration, int pAmplifier) {
         return true;
+    }
+
+    @Override
+    public void setIsVulnerable() {
+        isVulnerable = true;
     }
 }

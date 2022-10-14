@@ -1,11 +1,13 @@
 package com.massinissadjellouli.effects;
 //Source : https://www.youtube.com/watch?v=fm7urzE4pmo&t=206s&ab_channel=ModdingbyKaupenjoe
+import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectCategory;
 import net.minecraft.world.entity.LivingEntity;
 
-public class FreezeEffect extends MobEffect {
+public class FreezeEffect extends MobEffect implements VulnerableDamagingMobEffect{
 
+    boolean isVulnerable = false;
     protected FreezeEffect(MobEffectCategory pCategory, int pColor) {
         super(pCategory, pColor);
     }
@@ -19,12 +21,21 @@ public class FreezeEffect extends MobEffect {
 
             pLivingEntity.teleportTo(x,y,z);
             pLivingEntity.setDeltaMovement(0,0,0);
+            if(isVulnerable){
+                pLivingEntity.hurt(DamageSource.MAGIC,1);
+            }
         }
+
         super.applyEffectTick(pLivingEntity, pAmplifier);
     }
 
     @Override
     public boolean isDurationEffectTick(int pDuration, int pAmplifier) {
         return true;
+    }
+
+    @Override
+    public void setIsVulnerable() {
+        isVulnerable = true;
     }
 }

@@ -1,0 +1,19 @@
+{
+  "replace": false,
+  "values": [
+    "minecraft:ghast",
+    "minecraft:ender_dragon",
+    "minecraft:warden",
+    "minecraft:piglin",
+    "minecraft:hoglin",
+    "minecraft:zoglin",
+    "minecraft:piglin_brute",
+    "minecraft:wither",
+    "minecraft:zombified_piglin",
+    "minecraft:blaze",
+    "minecraft:wither_skeleton",
+    "minecraft:magma_cube",
+    "minecraft:iron_golem",
+    "minecraft:skeleton_horse"
+  ]
+}
