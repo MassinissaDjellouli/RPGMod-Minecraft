@@ -22,11 +22,11 @@ import static net.minecraft.world.item.Items.LAVA_BUCKET;
 public class ModTags {
     public static class EntityTypes {
         //TODO: Fix it or smth
-        public static final TagKey<EntityType<?>> HARMLESS = createTag("entity_types/harmless");
-        public static final TagKey<EntityType<?>> HARMFUL = createTag("entity_types/harmful");
-        public static final TagKey<EntityType<?>> DANGEROUS = createTag("entity_types/dangerous");
-        public static final TagKey<EntityType<?>> VERY_DANGEROUS = createTag("entity_types/very_dangerous");
-        public static final TagKey<EntityType<?>> BOSS = createTag("entity_types/boss");
+        public static final TagKey<EntityType<?>> HARMLESS = createTag("harmless");
+        public static final TagKey<EntityType<?>> HARMFUL = createTag("harmful");
+        public static final TagKey<EntityType<?>> DANGEROUS = createTag("dangerous");
+        public static final TagKey<EntityType<?>> VERY_DANGEROUS = createTag("very_dangerous");
+        public static final TagKey<EntityType<?>> BOSS = createTag("boss");
 
         public enum EntityTags {
             HARMLESS(EntityTypes.HARMLESS),

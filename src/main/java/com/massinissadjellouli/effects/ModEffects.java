@@ -16,18 +16,18 @@ public class ModEffects {
             "freeze",() -> RPGModEffects.FREEZE.effect
     );
     public static final RegistryObject<MobEffect> BURNING = MOB_EFFECTS.register(
-            "burning",() -> RPGModEffects.MOB_POISON.effect
+            "burning",() -> RPGModEffects.BURNING.effect
     );
     public static final RegistryObject<MobEffect> MOB_POISON = MOB_EFFECTS.register(
-            "poison",() -> RPGModEffects.BURNING.effect
+            "poison",() -> RPGModEffects.MOB_POISON.effect
     );
 
     public enum RPGModEffects{
-        MOB_POISON(new MobPoisonEffect(MobEffectCategory.HARMFUL,65301 )),
+        MOB_POISON(new MobPoisonEffect(MobEffectCategory.HARMFUL,14088995 )),
         FREEZE(new FreezeEffect(MobEffectCategory.HARMFUL,3124687 )),
-        BURNING(new BurningEffect(MobEffectCategory.HARMFUL,16728064 ));
+        BURNING(new BurningEffect(MobEffectCategory.HARMFUL,16728064));
 
-        public MobEffect effect;
+        public final MobEffect effect;
         RPGModEffects(MobEffect effect){
             this.effect = effect;
         }

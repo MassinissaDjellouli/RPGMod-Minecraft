@@ -1,8 +1,9 @@
 package com.massinissadjellouli.RPGmod.item.custom;
 
 import com.massinissadjellouli.RPGmod.Elements.Elements;
-import net.minecraft.world.effect.MobEffectInstance;
+import com.massinissadjellouli.effects.ElementalMobEffectInstance;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.SwordItem;
 import net.minecraft.world.item.Tier;
@@ -22,7 +23,7 @@ public class ElementalSwordItem extends SwordItem {
             return super.hurtEnemy(pStack, pTarget, pAttacker);
         }
         int amplifier = getAmplifier(pStack,pTarget);
-        pTarget.addEffect(new MobEffectInstance(element.effect,20 * (amplifier + 1),1));
+        pTarget.addEffect(new ElementalMobEffectInstance(element.effect,20 * (amplifier + 1),pAttacker instanceof Player));
         return super.hurtEnemy(pStack, pTarget, pAttacker);
     }
 

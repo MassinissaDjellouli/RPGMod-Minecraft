@@ -66,6 +66,6 @@
 
     "effect.rpgmod.freeze": "Gelé",
     "effect.rpgmod.burning": "En feu",
-    "effect.rpgmod.mob_poison": "Envenimé"
+    "effect.rpgmod.poison": "Envenimé"
 
 }

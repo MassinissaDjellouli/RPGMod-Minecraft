@@ -2,6 +2,7 @@ package com.massinissadjellouli.RPGmod.networking;
 
 import com.massinissadjellouli.RPGmod.RPGMod;
 import com.massinissadjellouli.RPGmod.networking.packet.*;
+import net.minecraft.client.Minecraft;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraftforge.network.NetworkDirection;
@@ -30,6 +31,11 @@ public class ModPackets {
                 .decoder(DrankC2SPacket::new)
                 .encoder(DrankC2SPacket::toBytes)
                 .consumerMainThread(DrankC2SPacket::handle)
+                .add();
+        net.messageBuilder(KilledBySwordEffectC2SPacket.class,id(), NetworkDirection.PLAY_TO_SERVER)
+                .decoder(KilledBySwordEffectC2SPacket::new)
+                .encoder(KilledBySwordEffectC2SPacket::toBytes)
+                .consumerMainThread(KilledBySwordEffectC2SPacket::handle)
                 .add();
 
         net.messageBuilder(JumpReduceThirstC2SPacket.class,id(), NetworkDirection.PLAY_TO_SERVER)
@@ -79,6 +85,9 @@ public class ModPackets {
     }
 
     public static <T> void sendToServer(T message){
+        if(Minecraft.getInstance().getConnection() == null){
+            return;
+        }
         INSTANCE.sendToServer(message);
     }
     public static <T> void sendToPlayer(T message, ServerPlayer player){

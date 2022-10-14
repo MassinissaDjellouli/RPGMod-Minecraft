@@ -9,10 +9,8 @@ import com.massinissadjellouli.RPGmod.client.MessagesHudOverlay;
 import com.massinissadjellouli.RPGmod.client.ThirstHudOverlay;
 import com.massinissadjellouli.RPGmod.damageIndicator.ActiveDamageIndicators;
 import com.massinissadjellouli.RPGmod.damageIndicator.DamageIndicatorData;
-import com.massinissadjellouli.RPGmod.item.custom.ElementalSwordItem;
 import com.massinissadjellouli.RPGmod.networking.ModPackets;
 import com.massinissadjellouli.RPGmod.networking.packet.*;
-import com.massinissadjellouli.RPGmod.screen.ClassChangeMenu;
 import com.massinissadjellouli.RPGmod.skills.PlayerSkillData;
 import com.massinissadjellouli.RPGmod.skills.PlayerSkillProvider;
 import com.massinissadjellouli.RPGmod.tags.ModTags;
@@ -301,23 +299,27 @@ public class ClientEvents {
             damageIndicator.setNoGravity(true);
 
             ActiveDamageIndicators.addDamageIndicator(new DamageIndicatorData(damageIndicator));
-            player.getCapability(PlayerSkillProvider.PLAYER_SKILLS).ifPresent(capability -> {
-                if (event.getEntity().getHealth() - event.getAmount() <= 0) {
-                    final int[] xp = {getXpFromKilling(event.getEntity())};
-                    player.getCapability(PlayerClassProvider.PLAYER_CLASS).ifPresent(playerClass -> {
-                                if(playerClass.isCurrently(SOLDAT)){
-                                    playerClass.increaseXp(200);
-                                    xp[0] = xp[0] * (playerClass.getCurrentClassLevel() + 1);
-                                }
-                            }
-                    );
-                    capability.addXP(xp[0],
-                            ATTACKING,
-                            player);
-                    capability.entityKilled();
-                }
-            });
+            if (event.getEntity().getHealth() - event.getAmount() <= 0) {
+                givePlayerKillXp(event.getEntity().getType(),player);
+            }
         }
+    }
+
+    public static void givePlayerKillXp(EntityType entity,Player player) {
+        player.getCapability(PlayerSkillProvider.PLAYER_SKILLS).ifPresent(capability -> {
+                final int[] xp = {getXpFromKilling(entity)};
+                player.getCapability(PlayerClassProvider.PLAYER_CLASS).ifPresent(playerClass -> {
+                            if(playerClass.isCurrently(SOLDAT)){
+                                playerClass.increaseXp(200);
+                                xp[0] = xp[0] * (playerClass.getCurrentClassLevel() + 1);
+                            }
+                        }
+                );
+                capability.addXP(xp[0],
+                        ATTACKING,
+                        player);
+                capability.entityKilled();
+        });
     }
 
     @SubscribeEvent
@@ -508,7 +510,6 @@ public class ClientEvents {
 
     private static List<Component> createTooltip(List<Component> currentTooltips, RarityTags rarityTag) {
         List<Component> newTooltips = new ArrayList<>();
-        List<Component> currentTooltips = event.getToolTip();
         final int size = currentTooltips.size();
         for (int i = 0; i < size; i++) {
             switch (i){
@@ -687,12 +688,16 @@ public class ClientEvents {
         return !weapon.getAttributeModifiers(MAINHAND).containsValue(attribute);
     }
 
-    private static int getXpFromKilling(LivingEntity entity) {
-        if (entityTagHas(HARMLESS, entity.getType())) return 10;
-        if (entityTagHas(HARMFUL, entity.getType())) return 30;
-        if (entityTagHas(DANGEROUS, entity.getType())) return 70;
-        if (entityTagHas(VERY_DANGEROUS, entity.getType())) return 150;
-        if (entityTagHas(BOSS, entity.getType())) return 1000;
+    @SubscribeEvent
+    public static void onKilledByEffect(KilledBySwordEffectEvent event){
+        ModPackets.sendToServer(new KilledBySwordEffectC2SPacket(event.getEntity().getType()));
+    }
+    private static int getXpFromKilling(EntityType<?> entity) {
+        if (entityTagHas(HARMLESS, entity)) return 10;
+        if (entityTagHas(HARMFUL, entity)) return 30;
+        if (entityTagHas(DANGEROUS, entity)) return 70;
+        if (entityTagHas(VERY_DANGEROUS, entity)) return 150;
+        if (entityTagHas(BOSS, entity)) return 1000;
         return 10;
 
     }
