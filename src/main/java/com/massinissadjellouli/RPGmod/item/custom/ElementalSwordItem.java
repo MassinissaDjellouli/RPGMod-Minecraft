@@ -1,18 +1,14 @@
 package com.massinissadjellouli.RPGmod.item.custom;
 
 import com.massinissadjellouli.RPGmod.Elements.Elements;
-import com.massinissadjellouli.RPGmod.tags.ModTags;
 import com.massinissadjellouli.RPGmod.tags.ModTags.EntityTypes.EntityTags;
 import com.massinissadjellouli.effects.ElementalMobEffectInstance;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.inventory.tooltip.TooltipComponent;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.SwordItem;
 import net.minecraft.world.item.Tier;
-
-import java.util.Optional;
 
 import static com.massinissadjellouli.RPGmod.tags.RarityTags.*;
 

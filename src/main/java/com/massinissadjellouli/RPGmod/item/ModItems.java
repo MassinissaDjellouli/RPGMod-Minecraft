@@ -15,7 +15,6 @@ import java.util.Arrays;
 import java.util.List;
 
 import static com.massinissadjellouli.RPGmod.Elements.Elements.*;
-import static com.massinissadjellouli.RPGmod.Elements.Elements.LIGHTNING;
 
 public class ModItems {
     public static final DeferredRegister<Item> ITEM_DEFERRED_REGISTER =

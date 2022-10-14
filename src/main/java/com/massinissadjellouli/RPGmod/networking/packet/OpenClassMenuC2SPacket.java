@@ -1,24 +1,17 @@
 package com.massinissadjellouli.RPGmod.networking.packet;
 
-import com.massinissadjellouli.RPGmod.client.ClientThirstData;
 import com.massinissadjellouli.RPGmod.screen.ClassChangeMenu;
-import com.massinissadjellouli.RPGmod.thirst.PlayerThirst;
 import io.netty.buffer.Unpooled;
-import net.minecraft.client.Minecraft;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.MenuProvider;
-import net.minecraft.world.entity.ai.attributes.AttributeModifier;
-import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraftforge.network.NetworkEvent;
 import net.minecraftforge.network.NetworkHooks;
-import org.jetbrains.annotations.Nullable;
 
-import java.util.UUID;
 import java.util.function.Supplier;
 
 public class OpenClassMenuC2SPacket {

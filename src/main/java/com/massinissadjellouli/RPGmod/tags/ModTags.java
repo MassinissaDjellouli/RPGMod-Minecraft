@@ -3,7 +3,6 @@ package com.massinissadjellouli.RPGmod.tags;
 import com.massinissadjellouli.RPGmod.Elements.Elements;
 import com.massinissadjellouli.RPGmod.RPGMod;
 import com.massinissadjellouli.RPGmod.item.ModItems;
-import net.minecraft.ChatFormatting;
 import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.BlockTags;
@@ -11,11 +10,7 @@ import net.minecraft.tags.ItemTags;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.Item;
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.Block;
-
-import java.util.Arrays;
-import java.util.List;
 
 import static net.minecraft.world.item.Items.COAL_BLOCK;
 import static net.minecraft.world.item.Items.LAVA_BUCKET;

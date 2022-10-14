@@ -4,6 +4,7 @@ import com.massinissadjellouli.RPGmod.thirst.PlayerThirst;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraftforge.network.NetworkEvent;
+
 import java.util.function.Supplier;
 
 public class JumpReduceThirstC2SPacket {

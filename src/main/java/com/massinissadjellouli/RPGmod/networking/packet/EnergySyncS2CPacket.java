@@ -1,7 +1,6 @@
 package com.massinissadjellouli.RPGmod.networking.packet;
 
 import com.massinissadjellouli.RPGmod.block.entities.ItemCompressorBlockEntity;
-import com.massinissadjellouli.RPGmod.client.ClientThirstData;
 import com.massinissadjellouli.RPGmod.screen.ItemCompressorMenu;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;

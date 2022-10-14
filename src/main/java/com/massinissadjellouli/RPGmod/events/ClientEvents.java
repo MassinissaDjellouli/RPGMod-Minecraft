@@ -29,7 +29,6 @@ import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.MobSpawnType;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.decoration.ArmorStand;
@@ -470,8 +469,10 @@ public class ClientEvents {
                 }
                 tooltips = savedItemAltTooltips.get(getItemId(item));
             }
-            event.getToolTip().clear();
-            event.getToolTip().addAll(tooltips);
+            if(tooltips != null){
+                event.getToolTip().clear();
+                event.getToolTip().addAll(tooltips);
+            }
         }
     }
 

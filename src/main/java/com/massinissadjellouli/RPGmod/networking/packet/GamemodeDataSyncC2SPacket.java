@@ -1,7 +1,6 @@
 package com.massinissadjellouli.RPGmod.networking.packet;
 
 import com.massinissadjellouli.RPGmod.client.ClientGamemodeData;
-import com.massinissadjellouli.RPGmod.client.ClientThirstData;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraftforge.network.NetworkEvent;
 

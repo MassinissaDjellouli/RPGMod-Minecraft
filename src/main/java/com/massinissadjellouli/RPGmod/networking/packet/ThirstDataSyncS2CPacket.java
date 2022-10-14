@@ -1,10 +1,7 @@
 package com.massinissadjellouli.RPGmod.networking.packet;
 
 import com.massinissadjellouli.RPGmod.client.ClientThirstData;
-import com.massinissadjellouli.RPGmod.thirst.PlayerThirst;
-import com.massinissadjellouli.RPGmod.thirst.PlayerThirstProvider;
 import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.server.level.ServerPlayer;
 import net.minecraftforge.network.NetworkEvent;
 
 import java.util.function.Supplier;

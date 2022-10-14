@@ -1,9 +1,8 @@
 package com.massinissadjellouli.RPGmod.skills.PlayerSkillsData;
 
-import com.massinissadjellouli.RPGmod.skills.PlayerSkillData;
 import net.minecraft.nbt.CompoundTag;
 
-import static com.massinissadjellouli.RPGmod.skills.PlayerSkillData.PlayerSkillEnum.*;
+import static com.massinissadjellouli.RPGmod.skills.PlayerSkillData.PlayerSkillEnum.FORAGING;
 
 public class PlayerForagingSkillData extends SkillData{
     public int woodCut;

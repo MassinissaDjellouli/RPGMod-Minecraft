@@ -3,7 +3,6 @@ package com.massinissadjellouli.RPGmod.block;
 import com.massinissadjellouli.RPGmod.RPGMod;
 import com.massinissadjellouli.RPGmod.block.custom.ItemCompressorBlock;
 import com.massinissadjellouli.RPGmod.block.custom.RarityTableBlock;
-import com.massinissadjellouli.RPGmod.client.ClientLastMessageReceived;
 import com.massinissadjellouli.RPGmod.item.ModItems;
 import net.minecraft.util.valueproviders.UniformInt;
 import net.minecraft.world.item.BlockItem;

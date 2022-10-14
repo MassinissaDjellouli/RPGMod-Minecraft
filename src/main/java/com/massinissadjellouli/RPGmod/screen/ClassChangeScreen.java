@@ -1,8 +1,6 @@
 package com.massinissadjellouli.RPGmod.screen;
 
 import com.massinissadjellouli.RPGmod.RPGMod;
-import com.massinissadjellouli.RPGmod.classSystem.PlayerClassProvider;
-import com.massinissadjellouli.RPGmod.classSystem.PlayerClassType;
 import com.massinissadjellouli.RPGmod.client.ClientLastMessageReceived;
 import com.massinissadjellouli.RPGmod.networking.ModPackets;
 import com.massinissadjellouli.RPGmod.networking.packet.ChangeClassC2SPacket;
@@ -14,10 +12,6 @@ import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
-import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.level.Level;
-
-import java.util.HashMap;
 
 import static com.massinissadjellouli.RPGmod.classSystem.PlayerClassType.*;
 

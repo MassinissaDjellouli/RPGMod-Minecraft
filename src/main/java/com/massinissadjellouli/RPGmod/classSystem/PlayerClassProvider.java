@@ -1,6 +1,5 @@
 package com.massinissadjellouli.RPGmod.classSystem;
 
-import com.massinissadjellouli.RPGmod.thirst.PlayerThirst;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraftforge.common.capabilities.Capability;

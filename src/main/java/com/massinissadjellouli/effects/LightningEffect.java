@@ -1,8 +1,7 @@
 package com.massinissadjellouli.effects;
 //Source : https://www.youtube.com/watch?v=fm7urzE4pmo&t=206s&ab_channel=ModdingbyKaupenjoe
+
 import com.massinissadjellouli.RPGmod.events.RPGModEventFactory;
-import com.massinissadjellouli.RPGmod.tags.ModTags;
-import net.minecraft.server.commands.SummonCommand;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffect;
