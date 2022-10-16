@@ -2,13 +2,16 @@ package com.massinissadjellouli.RPGmod.item.custom;
 
 import com.massinissadjellouli.RPGmod.Elements.Elements;
 import com.massinissadjellouli.RPGmod.tags.ModTags.EntityTypes.EntityTags;
-import com.massinissadjellouli.effects.ElementalMobEffectInstance;
+import com.massinissadjellouli.RPGmod.effects.ElementalMobEffectInstance;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.SwordItem;
 import net.minecraft.world.item.Tier;
+import net.minecraft.world.level.Level;
 
 import static com.massinissadjellouli.RPGmod.tags.RarityTags.*;
 
@@ -31,6 +34,14 @@ public class ElementalSwordItem extends SwordItem {
                 entityVulnerableToElement(pTarget),
                 entityResistantToElement(pTarget)));
         return super.hurtEnemy(pStack, pTarget, pAttacker);
+    }
+
+    @Override
+    public InteractionResultHolder<ItemStack> use(Level pLevel, Player pPlayer, InteractionHand pUsedHand) {
+        if(this instanceof SpecialItem specialItem){
+            specialItem.act(pLevel,pPlayer,pUsedHand);
+        }
+        return super.use(pLevel, pPlayer, pUsedHand);
     }
 
     private int getAmplifier(ItemStack pStack) {

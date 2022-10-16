@@ -1,36 +1,29 @@
-package com.massinissadjellouli.effects;
+package com.massinissadjellouli.RPGmod.effects;
 //Source : https://www.youtube.com/watch?v=fm7urzE4pmo&t=206s&ab_channel=ModdingbyKaupenjoe
-
 import com.massinissadjellouli.RPGmod.events.RPGModEventFactory;
-import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectCategory;
-import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.MobSpawnType;
 
-public class LightningEffect extends MobEffect implements DamagingMobEffect{
+public class FreezeEffect extends MobEffect implements DamagingMobEffect{
 
-    int ticksSinceLastLigtning = 0;
     boolean isVulnerable = false;
-    final int TICKS_BETWEEN_LIGHTNINGS = 20;
-    protected LightningEffect(MobEffectCategory pCategory, int pColor) {
+    protected FreezeEffect(MobEffectCategory pCategory, int pColor) {
         super(pCategory, pColor);
     }
 
     @Override
     public void applyEffectTick(LivingEntity pLivingEntity, int pAmplifier) {
-        if(!pLivingEntity.level.isClientSide && pLivingEntity.getLevel() instanceof ServerLevel serverLevel){
-            if(ticksSinceLastLigtning >= TICKS_BETWEEN_LIGHTNINGS){
-                ticksSinceLastLigtning = 0;
-                EntityType.LIGHTNING_BOLT.spawn(serverLevel,null,null,
-                        pLivingEntity.blockPosition(), MobSpawnType.COMMAND,true,false);
-                if(isVulnerable){
-                    pLivingEntity.hurt(DamageSource.MAGIC,4);
-                }
-            }else{
-                ticksSinceLastLigtning++;
+        if(!pLivingEntity.level.isClientSide){
+            double x = pLivingEntity.getX();
+            double y = pLivingEntity.getY();
+            double z = pLivingEntity.getZ();
+
+            pLivingEntity.teleportTo(x,y,z);
+            pLivingEntity.setDeltaMovement(0,0,0);
+            if(isVulnerable){
+                pLivingEntity.hurt(DamageSource.MAGIC,1);
             }
         }
 

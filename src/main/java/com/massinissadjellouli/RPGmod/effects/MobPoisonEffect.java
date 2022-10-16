@@ -1,33 +1,30 @@
-package com.massinissadjellouli.effects;
+package com.massinissadjellouli.RPGmod.effects;
+//Source : https://www.youtube.com/watch?v=fm7urzE4pmo&t=206s&ab_channel=ModdingbyKaupenjoe
 import com.massinissadjellouli.RPGmod.events.RPGModEventFactory;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectCategory;
 import net.minecraft.world.entity.LivingEntity;
 
-public class BurningEffect extends MobEffect implements DamagingMobEffect{
+public class MobPoisonEffect extends MobEffect implements DamagingMobEffect{
 
-    boolean isVulnerable = false;
-    protected BurningEffect(MobEffectCategory pCategory, int pColor) {
+
+    private boolean isVulnerable = false;
+    protected MobPoisonEffect(MobEffectCategory pCategory, int pColor) {
         super(pCategory, pColor);
     }
-
     @Override
     public void applyElementalEffectTickFromPlayer(LivingEntity pLivingEntity){
         applyEffectTick(pLivingEntity,1);
-        if(!pLivingEntity.isAlive()){
+        if(pLivingEntity.getHealth() == 0 && !pLivingEntity.isAlive()){
             RPGModEventFactory.onKilledBySwordEffect(pLivingEntity);
             pLivingEntity.removeEffect(this);
         }
     }
     @Override
     public void applyEffectTick(LivingEntity pLivingEntity, int pAmplifier) {
-        if(!pLivingEntity.level.isClientSide){
-            pLivingEntity.setSecondsOnFire(1);
-        }
-        if(isVulnerable){
-            pLivingEntity.hurt(DamageSource.MAGIC,1);
-        }
+        int hurt = isVulnerable?2:1;
+        pLivingEntity.hurt(DamageSource.MAGIC, hurt);
         super.applyEffectTick(pLivingEntity, pAmplifier);
     }
 

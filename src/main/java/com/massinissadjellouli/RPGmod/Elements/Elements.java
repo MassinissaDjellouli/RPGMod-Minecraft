@@ -1,9 +1,9 @@
 package com.massinissadjellouli.RPGmod.Elements;
 
-import com.massinissadjellouli.effects.ModEffects;
+import com.massinissadjellouli.RPGmod.effects.ModEffects;
 import net.minecraft.world.effect.MobEffect;
 
-import static com.massinissadjellouli.effects.ModEffects.RPGModEffects.*;
+import static com.massinissadjellouli.RPGmod.effects.ModEffects.RPGModEffects.*;
 
 
 public enum Elements {

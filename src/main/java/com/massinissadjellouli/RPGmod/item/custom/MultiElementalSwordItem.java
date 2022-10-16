@@ -2,7 +2,7 @@ package com.massinissadjellouli.RPGmod.item.custom;
 
 import com.massinissadjellouli.RPGmod.Elements.Elements;
 import com.massinissadjellouli.RPGmod.tags.ModTags.EntityTypes.EntityTags;
-import com.massinissadjellouli.effects.ElementalMobEffectInstance;
+import com.massinissadjellouli.RPGmod.effects.ElementalMobEffectInstance;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;

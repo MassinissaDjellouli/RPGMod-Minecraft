@@ -2,9 +2,7 @@ package com.massinissadjellouli.RPGmod.item;
 
 import com.massinissadjellouli.RPGmod.Elements.Elements;
 import com.massinissadjellouli.RPGmod.RPGMod;
-import com.massinissadjellouli.RPGmod.item.custom.CompressedCoalItem;
-import com.massinissadjellouli.RPGmod.item.custom.ElementalSwordItem;
-import com.massinissadjellouli.RPGmod.item.custom.MultiElementalSwordItem;
+import com.massinissadjellouli.RPGmod.item.custom.*;
 import net.minecraft.world.item.*;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.registries.DeferredRegister;
@@ -93,8 +91,12 @@ public class ModItems {
     public static final RegistryObject<ElementalSwordItem> POISON_SWORD =
             createElementalSword("poison_sword", ToolTiers.REINFORCED_TITANIUM, POISON);
 
-    public static final RegistryObject<ElementalSwordItem> THORS_HAMMER =
-            createElementalSword("thors_hammer", ToolTiers.DIVINE_ALLOY, LIGHTNING);
+    public static final RegistryObject<ElementalSwordItem> THORS_HAMMER = ITEM_DEFERRED_REGISTER.register(
+            "thors_hammer",() -> {
+            return new ThorsHammerItem(
+                    ToolTiers.DIVINE_ALLOY,4,-2.4f,
+                    new Item.Properties().tab(CreativeModeTab.TAB_COMBAT), LIGHTNING, 5);
+    });
 
     static final RegistryObject<MultiElementalSwordItem> HELL_SWORD =
             createMultiElementalSword("hell_sword", ToolTiers.HELL_ALLOY, POISON, FIRE);
@@ -108,6 +110,7 @@ public class ModItems {
                         tier,4,-2.4f,
                         new Item.Properties().tab(CreativeModeTab.TAB_COMBAT)));
     }
+
     private static RegistryObject<ElementalSwordItem> createElementalSword(String name, Tier tier, Elements element){
         return ITEM_DEFERRED_REGISTER.register(name,
                 ()-> new ElementalSwordItem(

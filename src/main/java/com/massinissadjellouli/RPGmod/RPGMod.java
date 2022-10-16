@@ -12,7 +12,7 @@ import com.massinissadjellouli.RPGmod.screen.ModMenuTypes;
 import com.massinissadjellouli.RPGmod.screen.RarityTableScreen;
 import com.massinissadjellouli.RPGmod.world.features.ModConfiguredFeatures;
 import com.massinissadjellouli.RPGmod.world.features.ModPlacedFeatures;
-import com.massinissadjellouli.effects.ModEffects;
+import com.massinissadjellouli.RPGmod.effects.ModEffects;
 import net.minecraft.client.gui.screens.MenuScreens;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.eventbus.api.IEventBus;

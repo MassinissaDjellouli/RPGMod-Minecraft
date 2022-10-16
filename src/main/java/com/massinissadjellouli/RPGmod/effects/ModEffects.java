@@ -1,4 +1,4 @@
-package com.massinissadjellouli.effects;
+package com.massinissadjellouli.RPGmod.effects;
 
 import com.massinissadjellouli.RPGmod.RPGMod;
 import net.minecraft.world.effect.MobEffect;
