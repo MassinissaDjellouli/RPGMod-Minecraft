@@ -103,19 +103,19 @@
 > #### Cristal de feu
 >![Block](images/image61.png)
 > <br>Outil requis: **Pioche**
-> <br>Materiel requis: Titane renforcé
+> <br>Materiel requis: Titane
 > <br>Drop: 1-3x crystal de feu
 
 > #### Cristal de glace
 >![Block](images/image62.png)
 > <br>Outil requis: **Pioche**
-> <br>Materiel requis: Titane renforcé
+> <br>Materiel requis: Titane
 > <br>Drop: 1-3x crystal de glace
 
 > #### Cristal de poison
 >![Block](images/image63.png)
 > <br>Outil requis: **Pioche**
-> <br>Materiel requis: Titane renforcé
+> <br>Materiel requis: Titane
 > <br>Drop: 1-3x crystal de poison
 
 > #### Multi cristal
