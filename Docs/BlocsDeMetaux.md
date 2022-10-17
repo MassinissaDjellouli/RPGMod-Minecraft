@@ -1,4 +1,4 @@
-[<h3>Retour au docs</h3>](../README.md#blocs-de-métaux)
+### [Retour au docs](../README.md#blocs-de-métaux)
 
 **Recettes:**
 

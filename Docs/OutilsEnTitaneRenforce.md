@@ -1,4 +1,4 @@
-[<h3>Retour au docs</h3>](../README.md#outils-en-titane-renforce)
+### [Retour au docs](../README.md#outils-en-titane-renforce)
 
 **Recettes:**
 

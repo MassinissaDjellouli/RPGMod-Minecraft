@@ -1,4 +1,4 @@
-[<h3>Retour au docs</h3>](../README.md#matériaux-compréssés)
+### [Retour au docs](../README.md#matériaux-compréssés)
 
 **Recettes:**
 

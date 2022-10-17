@@ -1,4 +1,4 @@
-[<h3>Retour au docs</h3>](../README.md#table-de-rareté)
+### [Retour au docs](../README.md#table-de-rareté)
 
 ## **Recettes:**
 
