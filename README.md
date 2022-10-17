@@ -6,20 +6,20 @@
 > *Utilitée: Materiel*
 >##### **Recettes:**
 >![Recette](images/image4.png)
->![Recette](images/image24.png)
+><br>![Recette](images/image24.png)
 
 > #### Lingot de titane
 > *Utilitée: Materiel*
 > ##### **Recettes:**
 > ![Recette](images/image50.png)
-> ![Recette](images/image33.png)
+> <br>![Recette](images/image33.png)
 
 
 > #### Lingot de titane renforcé
 > *Utilitée: Materiel*
 > ##### **Recettes:**
 > ![Recette](images/image31.png)
-> ![Recette](images/image9.png)
+> <br>![Recette](images/image9.png)
 
 > #### Matériaux compréssés
 > [**Recettes**](Docs/MateriauxCompresses.md)
@@ -54,19 +54,19 @@
 > *Brule les ennemis.*
 > ##### **Recette:**
 >![Recette](images/image55.png)
->*Utilise le [compresseur a item](#compresseur-a-item)*
+>*<br>Utilise le [compresseur a item](#compresseur-a-item)*
     
 >##### Épée de glace
 >*Gèle les ennemis sur place. Fait des dégats a ceux vulnérable.* 
 >##### **Recette:**
 >![Recette](images/image41.png)
->*Utilise le [compresseur a item](#compresseur-a-item)*
+>*<br>Utilise le [compresseur a item](#compresseur-a-item)*
 
 >##### Épée de poison
 >*Empoisonne les ennemis d'un venim mortel.*
 >##### **Recette:**
 >![Recette](images/image32.png)
->*Utilise le [compresseur a item](#compresseur-a-item)*
+>*<br>Utilise le [compresseur a item](#compresseur-a-item)*
 #### Marteau de thor
 *Épée elementaire spéciale. (Pas de recette pour l'instant)*  
 
@@ -270,4 +270,4 @@
 
 > #### Soldat
 >Compétence: Attaque
-><br>À chaque bloc miné avec une pioche, l'xp de classe est augmenté de 100.
+><br>À chaque entité tuée avec une épée, l'xp de classe est augmenté de 100.
