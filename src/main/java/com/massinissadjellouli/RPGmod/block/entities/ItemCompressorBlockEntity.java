@@ -217,7 +217,6 @@ public class ItemCompressorBlockEntity extends BlockEntity implements MenuProvid
     }
 
     private static void craftItem(ItemCompressorBlockEntity itemCompressor) {
-        Level level = itemCompressor.level;
 
         Optional<ItemCompressorRecipe> recipe = getRecipe(itemCompressor);
         if(hasRecipe(itemCompressor)  && hasEnergy(itemCompressor)){

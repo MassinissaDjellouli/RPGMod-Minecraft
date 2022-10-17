@@ -24,7 +24,7 @@ public class ToolTiers {
             new ForgeTier(5,1900,12,5f,22, ModTags.Blocks.NEEDS_TITANIUM_TOOLS,
             () -> Ingredient.of(ModItems.TITANIUM_INGOT.get()));
     public static final Tier REINFORCED_TITANIUM =
-            new ForgeTier(5,5095,14,6f,25, ModTags.Blocks.NEEDS_TITANIUM_TOOLS,
+            new ForgeTier(5,5095,14,6f,25, null,
             () -> Ingredient.of(ModItems.REINFORCED_TITANIUM_INGOT.get()));
     public static final Tier HELL_ALLOY =
             new ForgeTier(6,16000,16,25f,25, ModTags.Blocks.NEEDS_TITANIUM_TOOLS, Ingredient::of);
