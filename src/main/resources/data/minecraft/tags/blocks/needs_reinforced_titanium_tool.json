@@ -1,0 +1,10 @@
+{
+  "replace": false,
+  "values": [
+    "rpgmod:rarity_table",
+    "rpgmod:reinforced_titanium_block",
+    "rpgmod:deepslate_multi_crystal_ore",
+    "rpgmod:item_compressor",
+    "rpgmod:multi_crystal_ore"
+  ]
+}

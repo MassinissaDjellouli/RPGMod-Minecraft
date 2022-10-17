@@ -9,6 +9,7 @@ import com.massinissadjellouli.RPGmod.client.MessagesHudOverlay;
 import com.massinissadjellouli.RPGmod.client.ThirstHudOverlay;
 import com.massinissadjellouli.RPGmod.damageIndicator.ActiveDamageIndicators;
 import com.massinissadjellouli.RPGmod.damageIndicator.DamageIndicatorData;
+import com.massinissadjellouli.RPGmod.item.ModItems;
 import com.massinissadjellouli.RPGmod.networking.ModPackets;
 import com.massinissadjellouli.RPGmod.networking.packet.*;
 import com.massinissadjellouli.RPGmod.skills.PlayerSkillData;
@@ -50,6 +51,7 @@ import net.minecraftforge.event.level.BlockEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.registries.ForgeRegistries;
+import net.minecraftforge.registries.tags.ITag;
 import net.minecraftforge.registries.tags.ITagManager;
 
 import java.math.RoundingMode;
@@ -339,6 +341,8 @@ public class ClientEvents {
     public static void onPlayerTick(TickEvent.PlayerTickEvent event) {
         if (event.side.isClient()) {
 
+            ITag<Block> tag = ForgeRegistries.BLOCKS.tags().getTag(ModTags.Blocks.NEEDS_TITANIUM_TOOLS);
+            PickaxeItem pickaxeItem = ModItems.TITANIUM_PICKAXE.get();
             if (event.player.isSprinting()) {
                 PlayerThirst.setReduceByTick(PlayerThirst.getReduceByTick() + 0.4f);
             }
@@ -716,8 +720,6 @@ public class ClientEvents {
             event.registerAboveAll("thirst_hud", ThirstHudOverlay.HUD_THIRST);
             event.registerAboveAll("message_hud", MessagesHudOverlay.HUD_MESSAGE);
         }
-
-
 
         @SubscribeEvent
         public static void onKeyRegister(RegisterKeyMappingsEvent event){

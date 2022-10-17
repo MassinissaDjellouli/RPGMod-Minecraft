@@ -89,7 +89,10 @@ public class ModTags {
     }
 
     public static class Blocks {
-        public static final TagKey<Block> NEEDS_TITANIUM_TOOLS = createTag("needs_titanium_tool");
+        public static final TagKey<Block> NEEDS_TITANIUM_TOOLS = BlockTags.create(new ResourceLocation("minecraft:needs_titanium_tool"));
+        public static final TagKey<Block> NEEDS_REINFORCED_TITANIUM_TOOLS = BlockTags.create(new ResourceLocation("minecraft:needs_reinforced_titanium_tool"));
+        public static final TagKey<Block> NEEDS_COPPER_TOOLS = BlockTags.create(new ResourceLocation("minecraft:needs_copper_tool"));
+        public static final TagKey<Block> NEEDS_STEEL_TOOLS = BlockTags.create(new ResourceLocation("minecraft:needs_steel_tool"));
         public static final TagKey<Block> ORES_TITANIUM = createTag("ores/titanium");
         public static final TagKey<Block> ORES_CRYSTAL = createTag("ores/crystal");
 
@@ -100,8 +103,6 @@ public class ModTags {
     }
 
     public static class Items {
-
-
 
         public static final TagKey<Item> COMMON = createTag("rarity/common");
         public static final TagKey<Item> UNCOMMON = createTag("rarity/uncommon");
