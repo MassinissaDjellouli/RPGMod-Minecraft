@@ -339,10 +339,10 @@ public class ClientEvents {
 
     @SubscribeEvent
     public static void onPlayerTick(TickEvent.PlayerTickEvent event) {
-        if (event.side.isClient()) {
+         if (event.side.isClient()) {
 
-            ITag<Block> tag = ForgeRegistries.BLOCKS.tags().getTag(ModTags.Blocks.NEEDS_TITANIUM_TOOLS);
-            PickaxeItem pickaxeItem = ModItems.TITANIUM_PICKAXE.get();
+            ForgeRegistries.BLOCKS.tags().getTag(ModTags.Blocks.NEEDS_TITANIUM_TOOLS);
+            ModItems.TITANIUM_PICKAXE.get();
             if (event.player.isSprinting()) {
                 PlayerThirst.setReduceByTick(PlayerThirst.getReduceByTick() + 0.4f);
             }
@@ -536,6 +536,9 @@ public class ClientEvents {
     }
 
     private static void setItemIdIfNecessary(ItemStack item) {
+        if(itemHasNoRarity(item)){
+            return;
+        }
         if(itemHasNoId(item)){
             item.addTagElement("item_uuid", StringTag.valueOf(UUID.randomUUID().toString()));
         }
