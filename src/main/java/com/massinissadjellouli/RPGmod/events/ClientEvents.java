@@ -6,9 +6,13 @@ import com.massinissadjellouli.RPGmod.classSystem.PlayerClassProvider;
 import com.massinissadjellouli.RPGmod.client.ClientGamemodeData;
 import com.massinissadjellouli.RPGmod.client.ClientLastMessageReceived;
 import com.massinissadjellouli.RPGmod.client.MessagesHudOverlay;
+import com.massinissadjellouli.RPGmod.client.Models.GoblinModel;
 import com.massinissadjellouli.RPGmod.client.ThirstHudOverlay;
+import com.massinissadjellouli.RPGmod.client.renderer.GoblinRenderer;
 import com.massinissadjellouli.RPGmod.damageIndicator.ActiveDamageIndicators;
 import com.massinissadjellouli.RPGmod.damageIndicator.DamageIndicatorData;
+import com.massinissadjellouli.RPGmod.entities.Goblin;
+import com.massinissadjellouli.RPGmod.entities.ModEntities;
 import com.massinissadjellouli.RPGmod.item.ModItems;
 import com.massinissadjellouli.RPGmod.networking.ModPackets;
 import com.massinissadjellouli.RPGmod.networking.packet.*;
@@ -29,6 +33,7 @@ import net.minecraft.tags.TagKey;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobSpawnType;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
@@ -37,11 +42,13 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.*;
 import net.minecraft.world.level.block.Block;
 import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.client.event.EntityRenderersEvent;
 import net.minecraftforge.client.event.InputEvent;
 import net.minecraftforge.client.event.RegisterGuiOverlaysEvent;
 import net.minecraftforge.client.event.RegisterKeyMappingsEvent;
 import net.minecraftforge.common.Tags;
 import net.minecraftforge.event.TickEvent;
+import net.minecraftforge.event.entity.EntityAttributeCreationEvent;
 import net.minecraftforge.event.entity.living.LivingEntityUseItemEvent;
 import net.minecraftforge.event.entity.living.LivingEvent;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
@@ -724,6 +731,18 @@ public class ClientEvents {
             event.registerAboveAll("message_hud", MessagesHudOverlay.HUD_MESSAGE);
         }
 
+        @SubscribeEvent
+        public static void entityRenderers(EntityRenderersEvent.RegisterRenderers event){
+            event.registerEntityRenderer(ModEntities.GOBLIN.get(), GoblinRenderer::new);
+        }
+        @SubscribeEvent
+        public static void entityAttr(EntityAttributeCreationEvent event){
+            event.put(ModEntities.GOBLIN.get(), Goblin.getGoblinAttributes().build());
+        }
+        @SubscribeEvent
+        public static void registerLayerDefinitions(EntityRenderersEvent.RegisterLayerDefinitions event){
+            event.registerLayerDefinition(GoblinModel.LAYER_LOCATION,GoblinModel::createBodyLayer);
+        }
         @SubscribeEvent
         public static void onKeyRegister(RegisterKeyMappingsEvent event){
             event.register(KeyBinding.OPEN_MENU_KEY);

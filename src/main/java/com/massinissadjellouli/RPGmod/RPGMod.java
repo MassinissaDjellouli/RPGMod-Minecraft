@@ -2,6 +2,7 @@ package com.massinissadjellouli.RPGmod;
 
 import com.massinissadjellouli.RPGmod.block.ModBlocks;
 import com.massinissadjellouli.RPGmod.block.entities.ModBlockEntities;
+import com.massinissadjellouli.RPGmod.entities.ModEntities;
 import com.massinissadjellouli.RPGmod.item.ModItems;
 import com.massinissadjellouli.RPGmod.item.ToolTiers;
 import com.massinissadjellouli.RPGmod.networking.ModPackets;
@@ -48,6 +49,7 @@ public class RPGMod
         ModPlacedFeatures.registerPlacedFeatures(modEventBus);
         ModRecipes.register(modEventBus);
         ModEffects.register(modEventBus);
+        ModEntities.register(modEventBus);
     }
 
     @Mod.EventBusSubscriber(modid = MODID,bus = Mod.EventBusSubscriber.Bus.MOD)
