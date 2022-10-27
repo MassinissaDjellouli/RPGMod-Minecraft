@@ -70,6 +70,8 @@
     "effect.rpgmod.freeze": "Gelé",
     "effect.rpgmod.burning": "En feu",
     "effect.rpgmod.poison": "Envenimé",
-    "effect.rpgmod.lightning": "Éléctrifié"
+    "effect.rpgmod.lightning": "Éléctrifié",
+
+    "entity.rpgmod.goblin": "Goblin"
 
 }

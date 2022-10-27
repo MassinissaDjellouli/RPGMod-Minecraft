@@ -1,6 +1,7 @@
 package com.massinissadjellouli.RPGmod.entities;
 
 import com.massinissadjellouli.RPGmod.RPGMod;
+import com.massinissadjellouli.RPGmod.entities.custom.Goblin;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobCategory;
 import net.minecraftforge.eventbus.api.IEventBus;
@@ -16,5 +17,5 @@ public class ModEntities {
     }
 
     public static final RegistryObject<EntityType<Goblin>> GOBLIN =
-            ENTITIES.register("goblin",() -> EntityType.Builder.of(Goblin::new, MobCategory.MONSTER).build("Goblin"));
+            ENTITIES.register("goblin",() -> EntityType.Builder.of(Goblin::new, MobCategory.MONSTER).sized(1,1).build("Goblin"));
 }
