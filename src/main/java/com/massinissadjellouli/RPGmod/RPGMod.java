@@ -15,6 +15,9 @@ import com.massinissadjellouli.RPGmod.world.features.ModConfiguredFeatures;
 import com.massinissadjellouli.RPGmod.world.features.ModPlacedFeatures;
 import com.massinissadjellouli.RPGmod.effects.ModEffects;
 import net.minecraft.client.gui.screens.MenuScreens;
+import net.minecraft.world.entity.SpawnPlacements;
+import net.minecraft.world.entity.monster.Monster;
+import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -39,7 +42,13 @@ public class RPGMod
     }
 
     private void commonSetup(final FMLCommonSetupEvent event){
-        ModPackets.register();
+        event.enqueueWork(() -> {
+            ModPackets.register();
+            SpawnPlacements.register(ModEntities.GOBLIN.get(),
+                    SpawnPlacements.Type.ON_GROUND,
+                    Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
+                    Monster::checkMonsterSpawnRules);
+        });
     }
     private void register(IEventBus modEventBus){
         ToolTiers.registerTiers();
