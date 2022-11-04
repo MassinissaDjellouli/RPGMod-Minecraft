@@ -9,10 +9,12 @@ import com.massinissadjellouli.RPGmod.client.MessagesHudOverlay;
 import com.massinissadjellouli.RPGmod.client.Models.GoblinModel;
 import com.massinissadjellouli.RPGmod.client.ThirstHudOverlay;
 import com.massinissadjellouli.RPGmod.client.renderer.GoblinRenderer;
+import com.massinissadjellouli.RPGmod.client.renderer.HobogoblinRenderer;
 import com.massinissadjellouli.RPGmod.damageIndicator.ActiveDamageIndicators;
 import com.massinissadjellouli.RPGmod.damageIndicator.DamageIndicatorData;
 import com.massinissadjellouli.RPGmod.entities.custom.Goblin;
 import com.massinissadjellouli.RPGmod.entities.ModEntities;
+import com.massinissadjellouli.RPGmod.entities.custom.Hobogoblin;
 import com.massinissadjellouli.RPGmod.item.ModItems;
 import com.massinissadjellouli.RPGmod.networking.ModPackets;
 import com.massinissadjellouli.RPGmod.networking.packet.*;
@@ -732,10 +734,12 @@ public class ClientEvents {
         @SubscribeEvent
         public static void entityRenderers(EntityRenderersEvent.RegisterRenderers event){
             event.registerEntityRenderer(ModEntities.GOBLIN.get(), GoblinRenderer::new);
+            event.registerEntityRenderer(ModEntities.HOBOGOBLIN.get(), HobogoblinRenderer::new);
         }
         @SubscribeEvent
         public static void entityAttr(EntityAttributeCreationEvent event){
             event.put(ModEntities.GOBLIN.get(), Goblin.getGoblinAttributes().build());
+            event.put(ModEntities.HOBOGOBLIN.get(), Hobogoblin.getHobogoblinAttributes().build());
         }
 
         @SubscribeEvent
