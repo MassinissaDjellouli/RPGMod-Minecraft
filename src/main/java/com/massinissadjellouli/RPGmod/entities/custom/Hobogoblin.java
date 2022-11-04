@@ -71,6 +71,9 @@ public class Hobogoblin extends Monster implements IAnimatable {
         return PlayState.CONTINUE;
     }
 
+
+
+
     @Override
     public void registerControllers(AnimationData data) {
         data.addAnimationController(new AnimationController(this,"controller", 0, this::predicate));

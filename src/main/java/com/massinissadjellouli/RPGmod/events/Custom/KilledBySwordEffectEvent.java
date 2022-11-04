@@ -1,4 +1,4 @@
-package com.massinissadjellouli.RPGmod.events;
+package com.massinissadjellouli.RPGmod.events.Custom;
 
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraftforge.event.entity.living.LivingEvent;

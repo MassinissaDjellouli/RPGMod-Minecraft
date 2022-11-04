@@ -1,4 +1,4 @@
-package com.massinissadjellouli.RPGmod.events;
+package com.massinissadjellouli.RPGmod.events.Custom;
 
 import com.massinissadjellouli.RPGmod.skills.PlayerSkillData.PlayerSkillEnum;
 import net.minecraft.world.entity.player.Player;

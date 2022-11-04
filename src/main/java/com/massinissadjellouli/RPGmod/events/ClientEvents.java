@@ -6,7 +6,6 @@ import com.massinissadjellouli.RPGmod.classSystem.PlayerClassProvider;
 import com.massinissadjellouli.RPGmod.client.ClientGamemodeData;
 import com.massinissadjellouli.RPGmod.client.ClientLastMessageReceived;
 import com.massinissadjellouli.RPGmod.client.MessagesHudOverlay;
-import com.massinissadjellouli.RPGmod.client.Models.GoblinModel;
 import com.massinissadjellouli.RPGmod.client.ThirstHudOverlay;
 import com.massinissadjellouli.RPGmod.client.renderer.GoblinRenderer;
 import com.massinissadjellouli.RPGmod.client.renderer.HobogoblinRenderer;
@@ -15,6 +14,9 @@ import com.massinissadjellouli.RPGmod.damageIndicator.DamageIndicatorData;
 import com.massinissadjellouli.RPGmod.entities.custom.Goblin;
 import com.massinissadjellouli.RPGmod.entities.ModEntities;
 import com.massinissadjellouli.RPGmod.entities.custom.Hobogoblin;
+import com.massinissadjellouli.RPGmod.events.Custom.KilledBySwordEffectEvent;
+import com.massinissadjellouli.RPGmod.events.Custom.LevelUpEvent;
+import com.massinissadjellouli.RPGmod.events.Custom.RandomEventLaunchEvent;
 import com.massinissadjellouli.RPGmod.item.ModItems;
 import com.massinissadjellouli.RPGmod.networking.ModPackets;
 import com.massinissadjellouli.RPGmod.networking.packet.*;
@@ -345,9 +347,13 @@ public class ClientEvents {
     }
 
     @SubscribeEvent
+    public static void onRandomEvent(RandomEventLaunchEvent event) {
+        event.launch();
+    }
+
+    @SubscribeEvent
     public static void onPlayerTick(TickEvent.PlayerTickEvent event) {
          if (event.side.isClient()) {
-
             ForgeRegistries.BLOCKS.tags().getTag(ModTags.Blocks.NEEDS_TITANIUM_TOOLS);
             ModItems.TITANIUM_PICKAXE.get();
             if (event.player.isSprinting()) {
@@ -358,6 +364,9 @@ public class ClientEvents {
             ModPackets.sendToServer(new GamemodeDataSyncC2SPacket());
             ModPackets.sendToServer(new ThirstEffectC2SPacket());
         }else{
+             if(isEventTime()){
+                 RPGModEventFactory.onRandomEventLaunch((ServerPlayer) event.player,(ServerLevel) event.player.level);
+             }
             ItemStack item = event.player.getItemInHand(MAIN_HAND);
             setupCurrentItem(item);
             if(itemHasNoRarity(item) || itemHasNoId(item)){
@@ -367,6 +376,10 @@ public class ClientEvents {
             saveItemRegularTooltip(itemOriginalTooltips, getTag(getItemRarity(item)),getItemId(item));
             setAttributes(item);
         }
+    }
+
+    private static boolean isEventTime() {
+        return new Random().nextInt(20) == 0;
     }
 
 
