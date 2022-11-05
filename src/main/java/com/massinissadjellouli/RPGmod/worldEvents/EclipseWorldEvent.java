@@ -1,4 +1,4 @@
-package com.massinissadjellouli.RPGmod.events.Custom.WorldEvents;
+package com.massinissadjellouli.RPGmod.worldEvents;
 
 public class EclipseWorldEvent extends WorldEvent {
     @Override

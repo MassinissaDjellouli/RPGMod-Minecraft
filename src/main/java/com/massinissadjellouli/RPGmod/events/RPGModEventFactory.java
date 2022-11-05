@@ -3,7 +3,7 @@ package com.massinissadjellouli.RPGmod.events;
 import com.massinissadjellouli.RPGmod.events.Custom.KilledBySwordEffectEvent;
 import com.massinissadjellouli.RPGmod.events.Custom.LevelUpEvent;
 import com.massinissadjellouli.RPGmod.events.Custom.WorldEventLaunchEvent;
-import com.massinissadjellouli.RPGmod.events.Custom.WorldEvents.RPGModWorldEventType;
+import com.massinissadjellouli.RPGmod.worldEvents.RPGModWorldEventType;
 import com.massinissadjellouli.RPGmod.skills.PlayerSkillData.PlayerSkillEnum;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;

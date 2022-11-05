@@ -3,10 +3,7 @@ package com.massinissadjellouli.RPGmod.events;
 import com.massinissadjellouli.RPGmod.RPGMod;
 import com.massinissadjellouli.RPGmod.Utils.KeyBinding;
 import com.massinissadjellouli.RPGmod.classSystem.PlayerClassProvider;
-import com.massinissadjellouli.RPGmod.client.ClientGamemodeData;
-import com.massinissadjellouli.RPGmod.client.ClientLastMessageReceived;
-import com.massinissadjellouli.RPGmod.client.MessagesHudOverlay;
-import com.massinissadjellouli.RPGmod.client.ThirstHudOverlay;
+import com.massinissadjellouli.RPGmod.client.*;
 import com.massinissadjellouli.RPGmod.client.renderer.GoblinRenderer;
 import com.massinissadjellouli.RPGmod.client.renderer.HobogoblinRenderer;
 import com.massinissadjellouli.RPGmod.commands.WorldEventCommand;
@@ -18,7 +15,7 @@ import com.massinissadjellouli.RPGmod.entities.custom.Hobogoblin;
 import com.massinissadjellouli.RPGmod.events.Custom.KilledBySwordEffectEvent;
 import com.massinissadjellouli.RPGmod.events.Custom.LevelUpEvent;
 import com.massinissadjellouli.RPGmod.events.Custom.WorldEventLaunchEvent;
-import com.massinissadjellouli.RPGmod.events.Custom.WorldEvents.WorldEvent;
+import com.massinissadjellouli.RPGmod.worldEvents.WorldEvent;
 import com.massinissadjellouli.RPGmod.item.ModItems;
 import com.massinissadjellouli.RPGmod.networking.ModPackets;
 import com.massinissadjellouli.RPGmod.networking.packet.*;
@@ -30,7 +27,6 @@ import com.massinissadjellouli.RPGmod.thirst.PlayerThirst;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.player.LocalPlayer;
-import net.minecraft.commands.Commands;
 import net.minecraft.nbt.StringTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
@@ -353,7 +349,7 @@ public class ClientEvents {
 
     @SubscribeEvent
     public static void onRandomEvent(WorldEventLaunchEvent event) {
-        event.launch();
+        event.launch(event.isFromCommand());
     }
 
     @SubscribeEvent
@@ -365,10 +361,12 @@ public class ClientEvents {
                 PlayerThirst.setReduceByTick(PlayerThirst.getReduceByTick() + 0.4f);
             }
             ClientLastMessageReceived.incrementTick();
+            ClientLastTitleReceived.incrementTick();
             ModPackets.sendToServer(new ReduceThirstByTickC2SPacket());
             ModPackets.sendToServer(new GamemodeDataSyncC2SPacket());
             ModPackets.sendToServer(new ThirstEffectC2SPacket());
         }else{
+             WorldEvent.currentEventTick();
              if(isEventTime()){
                  RPGModEventFactory.onRandomEventLaunch((ServerPlayer) event.player,(ServerLevel) event.player.level);
              }
@@ -384,7 +382,7 @@ public class ClientEvents {
     }
 
     private static boolean isEventTime() {
-        if(WorldEvent.ongoingEvent != null){
+        if(WorldEvent.ongoingEvent != null || Minecraft.getInstance().player == null){
             return false;
         }
         return new Random().nextInt(20) == 0;
@@ -395,7 +393,6 @@ public class ClientEvents {
     public static void onServerTick(TickEvent.ServerTickEvent event) {
         if (event.side.isServer()) {
             ActiveDamageIndicators.updateCurrentDamageIndicators();
-            WorldEvent.currentEventTick();
         }
     }
 
@@ -743,6 +740,39 @@ public class ClientEvents {
         if(KeyBinding.OPEN_MENU_KEY.consumeClick()){
             ModPackets.sendToServer(new OpenClassMenuC2SPacket());
 
+        }
+    }
+    @SubscribeEvent
+    public static void onCommandsRegister(RegisterCommandsEvent event) {
+        new WorldEventCommand(event.getDispatcher());
+        ConfigCommand.register(event.getDispatcher());
+
+    }
+    @Mod.EventBusSubscriber(modid = RPGMod.MODID, value = Dist.CLIENT, bus = Mod.EventBusSubscriber.Bus.MOD)
+    public static class ClientModBusEvents {
+
+        @SubscribeEvent
+        public static void registerGuiOverlays(RegisterGuiOverlaysEvent event) {
+            event.registerAboveAll("thirst_hud", ThirstHudOverlay.HUD_THIRST);
+            event.registerAboveAll("message_hud", MessagesHudOverlay.HUD_MESSAGE);
+            event.registerAboveAll("title_hud", MessagesHudOverlay.HUD_TITLE);
+            event.registerAboveAll("event_countdown_hud", MessagesHudOverlay.HUD_WORLD_EVEN_COUNTDOWN);
+        }
+
+        @SubscribeEvent
+        public static void entityRenderers(EntityRenderersEvent.RegisterRenderers event){
+            event.registerEntityRenderer(ModEntities.GOBLIN.get(), GoblinRenderer::new);
+            event.registerEntityRenderer(ModEntities.HOBOGOBLIN.get(), HobogoblinRenderer::new);
+        }
+        @SubscribeEvent
+        public static void entityAttr(EntityAttributeCreationEvent event){
+            event.put(ModEntities.GOBLIN.get(), Goblin.getGoblinAttributes().build());
+            event.put(ModEntities.HOBOGOBLIN.get(), Hobogoblin.getHobogoblinAttributes().build());
+        }
+
+        @SubscribeEvent
+        public static void onKeyRegister(RegisterKeyMappingsEvent event){
+            event.register(KeyBinding.OPEN_MENU_KEY);
         }
     }
 

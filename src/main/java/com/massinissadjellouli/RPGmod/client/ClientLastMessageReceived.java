@@ -1,5 +1,7 @@
 package com.massinissadjellouli.RPGmod.client;
 
+import net.minecraft.ChatFormatting;
+
 public class ClientLastMessageReceived {
     private static String lastMessage = "";
     private static boolean important = false;
@@ -39,4 +41,6 @@ public class ClientLastMessageReceived {
     public static boolean isImportant() {
         return important;
     }
+
+
 }

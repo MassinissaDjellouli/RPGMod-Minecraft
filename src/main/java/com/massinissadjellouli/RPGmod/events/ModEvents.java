@@ -1,33 +1,23 @@
 package com.massinissadjellouli.RPGmod.events;
 
 import com.massinissadjellouli.RPGmod.RPGMod;
-import com.massinissadjellouli.RPGmod.Utils.KeyBinding;
 import com.massinissadjellouli.RPGmod.classSystem.PlayerClassProvider;
-import com.massinissadjellouli.RPGmod.client.MessagesHudOverlay;
-import com.massinissadjellouli.RPGmod.client.ThirstHudOverlay;
-import com.massinissadjellouli.RPGmod.client.renderer.GoblinRenderer;
-import com.massinissadjellouli.RPGmod.client.renderer.HobogoblinRenderer;
 import com.massinissadjellouli.RPGmod.commands.WorldEventCommand;
-import com.massinissadjellouli.RPGmod.entities.ModEntities;
-import com.massinissadjellouli.RPGmod.entities.custom.Goblin;
-import com.massinissadjellouli.RPGmod.entities.custom.Hobogoblin;
+import com.massinissadjellouli.RPGmod.worldEvents.WorldEvent;
 import com.massinissadjellouli.RPGmod.skills.PlayerSkillProvider;
 import com.massinissadjellouli.RPGmod.skills.PlayerSkills;
 import com.massinissadjellouli.RPGmod.skills.PlayerSkillsData.SkillData;
 import com.massinissadjellouli.RPGmod.thirst.PlayerThirst;
 import com.massinissadjellouli.RPGmod.thirst.PlayerThirstProvider;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.client.event.EntityRenderersEvent;
-import net.minecraftforge.client.event.RegisterGuiOverlaysEvent;
-import net.minecraftforge.client.event.RegisterKeyMappingsEvent;
 import net.minecraftforge.common.capabilities.RegisterCapabilitiesEvent;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
 import net.minecraftforge.event.RegisterCommandsEvent;
-import net.minecraftforge.event.entity.EntityAttributeCreationEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -57,28 +47,6 @@ public class ModEvents {
         ConfigCommand.register(event.getDispatcher());
 
     }
-    @SubscribeEvent
-    public static void registerGuiOverlays(RegisterGuiOverlaysEvent event) {
-        event.registerAboveAll("thirst_hud", ThirstHudOverlay.HUD_THIRST);
-        event.registerAboveAll("message_hud", MessagesHudOverlay.HUD_MESSAGE);
-    }
-
-    @SubscribeEvent
-    public static void entityRenderers(EntityRenderersEvent.RegisterRenderers event){
-        event.registerEntityRenderer(ModEntities.GOBLIN.get(), GoblinRenderer::new);
-        event.registerEntityRenderer(ModEntities.HOBOGOBLIN.get(), HobogoblinRenderer::new);
-    }
-    @SubscribeEvent
-    public static void entityAttr(EntityAttributeCreationEvent event){
-        event.put(ModEntities.GOBLIN.get(), Goblin.getGoblinAttributes().build());
-        event.put(ModEntities.HOBOGOBLIN.get(), Hobogoblin.getHobogoblinAttributes().build());
-    }
-
-    @SubscribeEvent
-    public static void onKeyRegister(RegisterKeyMappingsEvent event){
-        event.register(KeyBinding.OPEN_MENU_KEY);
-    }
-
 
     @SubscribeEvent
     public static void onPlayerCloned(PlayerEvent.Clone event) {
@@ -97,6 +65,9 @@ public class ModEvents {
         }
         event.getEntity().getAttributes().assignValues(event.getOriginal().getAttributes());
         resetBonusesEffects(event.getEntity());
+        if(WorldEvent.ongoingEvent != null && event.getEntity() instanceof ServerPlayer){
+            WorldEvent.ongoingEvent.setPlayer((ServerPlayer) event.getEntity());
+        }
     }
 
     private static void resetBonusesEffects(Player player) {
