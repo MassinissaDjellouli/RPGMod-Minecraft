@@ -7,23 +7,37 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.eventbus.api.Event;
 
-import java.util.HashMap;
-
-public class RandomEventLaunchEvent extends Event {
+public class WorldEventLaunchEvent extends Event {
     private final RPGModWorldEventType eventType;
     private final ServerPlayer player;
     private final ServerLevel level;
-    public RandomEventLaunchEvent(ServerPlayer player, ServerLevel level) {
+    public WorldEventLaunchEvent(ServerPlayer player, ServerLevel level) {
         this.player = player;
         this.level = level;
-        eventType = getEventType(level);
+        eventType = getRandomEventType(level);
+    }
+    public WorldEventLaunchEvent(ServerPlayer player, ServerLevel level, RPGModWorldEventType eventType) {
+        this.player = player;
+        this.level = level;
+        this.eventType = eventType;
     }
 
-    private RPGModWorldEventType getEventType(Level level) {
+    private RPGModWorldEventType getRandomEventType(Level level) {
         boolean invalidEvent = true;
         RPGModWorldEventType value = null;
         while (invalidEvent){
             value = RPGModWorldEventType.values()[level.random.nextInt(RPGModWorldEventType.values().length)];
+            if (WorldEvent.getLastEvent() != null && WorldEvent.getLastEvent().equals(value.getEvent())){
+                continue;
+            }
+            switch (value){
+                case SOLEIL_PUISSANT,ECLIPSE -> {
+                    if (!level.isDay()) continue;
+                }
+                case INVASION_NETHER -> {
+                    if (!level.dimension().location().toString().equals("minecraft:overworld")) continue;
+                }
+            }
             invalidEvent = false;
         }
         return value;
@@ -33,6 +47,6 @@ public class RandomEventLaunchEvent extends Event {
         WorldEvent event = eventType.getEvent();
         event.setLevel(level);
         event.setPlayer(player);
-        event.launch();
+        event.start();
     }
 }
