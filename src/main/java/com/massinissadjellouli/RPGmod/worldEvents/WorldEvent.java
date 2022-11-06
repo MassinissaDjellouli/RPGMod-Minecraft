@@ -48,10 +48,10 @@ public abstract class WorldEvent {
         if(titleShown(ongoingEvent)){
             return;
         }
-        if(ongoingEvent.startProgress < ongoingEvent.SECONDS_BEFORE_START * TICK_PER_SECONDS){
+        if(ongoingEvent.startProgress < SECONDS_BEFORE_START * TICK_PER_SECONDS){
             ongoingEvent.startProgress++;
             if(ongoingEvent.startProgress % TICK_PER_SECONDS == 0){
-                int secondsRemaining = ongoingEvent.SECONDS_BEFORE_START - ongoingEvent.startProgress / TICK_PER_SECONDS;
+                int secondsRemaining = SECONDS_BEFORE_START - ongoingEvent.startProgress / TICK_PER_SECONDS;
                 ClientLastTitleReceived.set(secondsRemaining == 0
                         ?""
                         :String.valueOf(secondsRemaining));
@@ -67,7 +67,7 @@ public abstract class WorldEvent {
             return false;
         }
         ongoingEvent.titleShown++;
-        return ongoingEvent.titleShown  < ongoingEvent.SECONDS_TITLE_SHOWN * TICK_PER_SECONDS;
+        return ongoingEvent.titleShown  < SECONDS_TITLE_SHOWN * TICK_PER_SECONDS;
     }
 
     protected abstract void launch();
@@ -78,7 +78,7 @@ public abstract class WorldEvent {
             System.out.println("Event can't be launched. Ongoing event");
             return;
         }
-        duration = getRandomDuration(1000, 2000);
+        duration = getRandomDuration(getEventRange());
         if(!fromCommand &&
                 (player == null ||
                         level == null|| !ClientGamemodeData.isSurvival())) {
@@ -88,14 +88,20 @@ public abstract class WorldEvent {
         ongoingEvent = this;
         launch();
     }
+
+    protected abstract int[] getEventRange();
+
     public void end() {
         resetOngoingEvent();
         lastEvent = ongoingEvent;
         ongoingEvent = null;
     }
 
-    protected int getRandomDuration(int min, int max) {
-        return new Random().nextInt(max - min) + min;
+    protected int getRandomDuration(int[] range) {
+        if(range.length != 2){
+            throw new IllegalArgumentException("Range needs to have 2 numbers. Minimum and maximum");
+        }
+        return new Random().nextInt(range[1] - range[0]) + range[0];
     }
 
     public String getRemainingTime() {
