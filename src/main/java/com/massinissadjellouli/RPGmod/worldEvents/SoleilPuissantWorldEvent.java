@@ -14,6 +14,7 @@ public class SoleilPuissantWorldEvent extends WorldEvent {
         level.setDayTime(0);
     }
     public SoleilPuissantWorldEvent() {
+        super("Soleil puissant");
         showTitle = true;
     }
     @Override

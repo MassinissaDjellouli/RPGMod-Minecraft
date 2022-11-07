@@ -8,6 +8,7 @@ import static com.massinissadjellouli.RPGmod.worldEvents.SoleilPuissantWorldEven
 public class EclipseWorldEvent extends WorldEvent {
     private long currentDayTime;
     public EclipseWorldEvent() {
+        super("Éclipse solaire");
         showTitle = true;
     }
 

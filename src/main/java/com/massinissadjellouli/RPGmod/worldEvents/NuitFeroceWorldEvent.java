@@ -7,6 +7,7 @@ import static com.massinissadjellouli.RPGmod.worldEvents.SoleilPuissantWorldEven
 
 public class NuitFeroceWorldEvent extends WorldEvent {
     public NuitFeroceWorldEvent() {
+        super("Nuit féroce");
         showTitle = true;
     }
 

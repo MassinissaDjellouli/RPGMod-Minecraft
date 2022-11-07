@@ -24,8 +24,11 @@ public class MessagesHudOverlay {
         }
         Font font = Minecraft.getInstance().font;
         MutableComponent component = Component.literal(WorldEvent.ongoingEvent.getRemainingTime()).withStyle(ChatFormatting.WHITE);
-        MutableComponent text = Component.literal("Temps restant à l'event:").withStyle(ChatFormatting.WHITE);
+        MutableComponent text = Component.literal("Temps restant:").withStyle(ChatFormatting.WHITE);
+        MutableComponent event = Component.literal(WorldEvent.ongoingEvent.getName()).withStyle(ChatFormatting.WHITE);
         poseStack.pushPose();
+        font.drawShadow(poseStack,event
+                ,screenWidth - font.width(event),screenHeight - 30,10);
         font.drawShadow(poseStack,text
                 ,screenWidth - font.width(text),screenHeight - 20,10);
         font.drawShadow(poseStack,component

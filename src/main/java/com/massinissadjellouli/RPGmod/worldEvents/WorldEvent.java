@@ -11,6 +11,7 @@ public abstract class WorldEvent {
     protected static final int TICK_PER_SECONDS = 40;
     private static final int SECONDS_BEFORE_START = 5;
     private static final int SECONDS_TITLE_SHOWN = 3;
+    private String name;
     private static WorldEvent lastEvent;
     public static WorldEvent ongoingEvent;
     protected int eventProgress = 0;
@@ -31,6 +32,9 @@ public abstract class WorldEvent {
         }
     }
 
+    public WorldEvent(String name){
+        this.name = name;
+    }
     public void setLevel(ServerLevel level) {
         this.level = level;
     }
@@ -86,7 +90,12 @@ public abstract class WorldEvent {
             return;
         }
         ongoingEvent = this;
-        launch();
+        try {
+            launch();
+        }catch (Exception e){
+            e.printStackTrace();
+            end();
+        }
     }
 
     protected abstract int[] getEventRange();
@@ -117,5 +126,9 @@ public abstract class WorldEvent {
         ongoingEvent.level = null;
         ongoingEvent.player = null;
         ongoingEvent.duration = 0;
+    }
+
+    public String getName() {
+        return name;
     }
 }

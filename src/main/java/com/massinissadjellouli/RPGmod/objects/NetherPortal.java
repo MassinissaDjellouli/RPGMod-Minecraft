@@ -14,6 +14,7 @@ import java.util.List;
 import java.util.Random;
 
 public class NetherPortal {
+    private ServerLevel level;
     private BlockPos portalStart;
     private BlockPos portalEnd;
     private BlockPos portalFrameStart;
@@ -23,14 +24,15 @@ public class NetherPortal {
     private int spreadProgress;
     private final static int SPREAD_RADIUS_MAX = 30;
     private final static int SPREAD_HEIGHT_MAX = 10;
-    private final static int SPREAD_PROGRESS_DURATION = 20;
-    public NetherPortal(BlockPos portalStart, BlockPos portalEnd) {
+    private final static int SPREAD_PROGRESS_DURATION = 100;
+    public NetherPortal(BlockPos portalStart, BlockPos portalEnd, ServerLevel level) {
         this.portalStart = portalStart;
         this.portalEnd = portalEnd;
         this.portalFrameStart = getPortalFrameStart();
         this.portalFrameEnd = getPortalFrameEnd();
         this.isSpreading = false;
         this.spreadRadius = 0;
+        this.level = level;
     }
 
     private BlockPos getPortalFrameEnd() {
@@ -82,7 +84,7 @@ public class NetherPortal {
         this.isSpreading = false;
         this.spreadRadius = 0;
     }
-    public void tick(ServerLevel level){
+    public void tick(){
         if (!isSpreading){
             return;
         }
@@ -93,13 +95,13 @@ public class NetherPortal {
         if(spreadRadius < SPREAD_RADIUS_MAX){
             spreadRadius++;
             spreadProgress = 0;
-            spread(level);
+            spread();
             return;
         }
         end();
     }
 
-    private void spread(ServerLevel level) {
+    private void spread() {
         if(middle() == null){
             return;
         }
@@ -152,7 +154,7 @@ public class NetherPortal {
         return true;
     }
 
-    private BlockPos middle() {
+    public BlockPos middle() {
         if (portalFrameStart == null || portalFrameEnd == null) {
             return null;
         }

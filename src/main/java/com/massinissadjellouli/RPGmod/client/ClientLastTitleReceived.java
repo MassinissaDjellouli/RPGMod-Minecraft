@@ -4,7 +4,7 @@ import net.minecraft.ChatFormatting;
 
 public class ClientLastTitleReceived {
     private static String lastTitle = "";
-    private static ChatFormatting color = ChatFormatting.GOLD;
+    private static ChatFormatting color = ChatFormatting.WHITE;
     private static int ticksSinceLastMessage;
     private static final int TICKS_BEFORE_DELETE = 200;
     private static String lastSubTitle = "";

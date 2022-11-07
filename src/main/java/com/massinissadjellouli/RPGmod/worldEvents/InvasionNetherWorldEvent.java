@@ -1,29 +1,27 @@
 package com.massinissadjellouli.RPGmod.worldEvents;
 
 import com.massinissadjellouli.RPGmod.client.ClientLastTitleReceived;
+import com.massinissadjellouli.RPGmod.entities.ModEntities;
 import com.massinissadjellouli.RPGmod.objects.NetherPortal;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Vec3i;
-import net.minecraft.network.chat.MutableComponent;
-import net.minecraft.world.level.block.Block;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.MobSpawnType;
 import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.border.WorldBorder;
 import net.minecraft.world.phys.AABB;
 
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.*;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
-
-import static net.minecraft.core.BlockPos.withinManhattanStream;
 
 public class InvasionNetherWorldEvent extends WorldEvent {
     List<NetherPortal> netherPortals = new ArrayList<>();
+    private final static int SPAWN_DELAY = 1000;
+    private int spawnProgress;
+
 
     public InvasionNetherWorldEvent() {
+        super("Invasion du Nether");
         showTitle = true;
     }
 
@@ -89,7 +87,7 @@ public class InvasionNetherWorldEvent extends WorldEvent {
                     blockPosition -> blockPosition.getZ() == maxZ && blockPosition.getX() == x
             ).max(Comparator.comparingInt(Vec3i::getY)).get().getY();
 
-            netherPortals.add(new NetherPortal(new BlockPos(x, minY, minZ), new BlockPos(x, maxY, maxZ)));
+            netherPortals.add(new NetherPortal(new BlockPos(x, minY, minZ), new BlockPos(x, maxY, maxZ),level));
         });
         zMap.forEach((z, bp) -> {
             int maxX = bp.stream().max(Comparator.comparingInt(Vec3i::getX)).get().getX();
@@ -101,10 +99,11 @@ public class InvasionNetherWorldEvent extends WorldEvent {
             ).min(Comparator.comparingInt(Vec3i::getY)).get().getY();
             int maxY = blockPos.stream().filter(blockPosition -> blockPosition.getX() == maxX && blockPosition.getZ() == z
             ).max(Comparator.comparingInt(Vec3i::getY)).get().getY();
-            netherPortals.add(new NetherPortal(new BlockPos(minX, minY, z), new BlockPos(maxX, maxY, z)));
+            netherPortals.add(new NetherPortal(new BlockPos(minX, minY, z), new BlockPos(maxX, maxY, z),level));
         });
         return netherPortals;
     }
+
 
     private <K, V> void addToOrInitMap(Map<K, List<V>> map, K key, V value) {
         if (map.containsKey(key)) {
@@ -118,9 +117,54 @@ public class InvasionNetherWorldEvent extends WorldEvent {
 
     @Override
     protected void tick() {
+        spawnProgress++;
+        netherPortals.forEach(NetherPortal::tick);
+        if(spawnProgress < SPAWN_DELAY){
+            return;
+        }
         netherPortals.forEach(netherPortal -> {
-            netherPortal.tick(level);
-        });
+        for (int i = 0; i < netherPortal.size() / 2; i++) {
+            int neg1 = new Random().nextInt(2) == 1?-1:1;
+            int neg2 = new Random().nextInt(2) == 1?-1:1;
+            getRandomEntity().spawn(level, null, player,
+                    netherPortal.middle().above(8)
+                            .north(neg1 * (new Random().nextInt(netherPortal.length()) + netherPortal.length() / 2))
+                            .east(neg2 * (new Random().nextInt(netherPortal.length()) + netherPortal.length() / 2))
+                    , MobSpawnType.EVENT, false, false);
+        }
+    });
+        spawnProgress = 0;
+    }
+
+    private EntityType<?> getRandomEntity() {
+        int random = new Random().nextInt(100);
+        int randomEntity;
+        if(random < 10) {
+            randomEntity = 1;
+        } else if(random < 30) {
+            randomEntity = 2;
+        } else if(random < 45) {
+            randomEntity = 3;
+        } else if(random < 75) {
+            randomEntity = 4;
+        }else if(random < 80) {
+            randomEntity = 5;
+        }else if(random < 98) {
+            randomEntity = 6;
+        } else{
+            randomEntity = 7;
+        }
+
+        return switch (randomEntity) {
+            case 1 -> EntityType.BLAZE;
+            case 2 -> EntityType.MAGMA_CUBE;
+            case 3 -> EntityType.WITHER_SKELETON;
+            case 4 -> ModEntities.GOBLIN.get();
+            case 5 -> EntityType.ZOGLIN;
+            case 6 -> EntityType.ZOMBIFIED_PIGLIN;
+            case 7 -> EntityType.GHAST;
+            default -> EntityType.SKELETON;
+        };
     }
 
     @Override

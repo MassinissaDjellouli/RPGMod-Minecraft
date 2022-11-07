@@ -5,6 +5,7 @@ import net.minecraft.ChatFormatting;
 
 public class GoldRushWorldEvent extends WorldEvent {
     public GoldRushWorldEvent() {
+        super("Gold Rush");
         showTitle = true;
     }
 
