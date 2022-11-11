@@ -3,16 +3,12 @@ package com.massinissadjellouli.RPGmod.entities.custom;
 import net.minecraft.core.BlockPos;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
-import net.minecraft.world.InteractionHand;
-import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.*;
-import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal;
 import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
 import net.minecraft.world.entity.animal.IronGolem;
 import net.minecraft.world.entity.animal.Pig;
@@ -35,17 +31,19 @@ public class Hobogoblin extends Monster implements IAnimatable {
     private boolean canHurt = false;
 
     private Entity toHurt;
+
     public Hobogoblin(EntityType<? extends Monster> pEntityType, Level pLevel) {
         super(pEntityType, pLevel);
     }
 
     private int swingTicks = 0;
     private final int SWING_TIME = 30;
-    public static AttributeSupplier.Builder getHobogoblinAttributes(){
-        return Mob.createMobAttributes().add(Attributes.MOVEMENT_SPEED,0.1)
-                .add(Attributes.MAX_HEALTH,200)
-                .add(Attributes.ATTACK_DAMAGE,15)
-                .add(Attributes.KNOCKBACK_RESISTANCE,1);
+
+    public static AttributeSupplier.Builder getHobogoblinAttributes() {
+        return Mob.createMobAttributes().add(Attributes.MOVEMENT_SPEED, 0.1)
+                .add(Attributes.MAX_HEALTH, 200)
+                .add(Attributes.ATTACK_DAMAGE, 15)
+                .add(Attributes.KNOCKBACK_RESISTANCE, 1);
     }
 
     @Override
@@ -62,51 +60,54 @@ public class Hobogoblin extends Monster implements IAnimatable {
 
     }
 
-    private <E extends IAnimatable>PlayState predicate(AnimationEvent<E> event){
-        if(event.isMoving()){
-            event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.hobogoblin.walk",true));
+    private <E extends IAnimatable> PlayState predicate(AnimationEvent<E> event) {
+        if (event.isMoving()) {
+            event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.hobogoblin.walk", true));
             return PlayState.CONTINUE;
         }
-        event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.hobogoblin.idle",true));
+        event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.hobogoblin.idle", true));
         return PlayState.CONTINUE;
     }
 
 
-
-
     @Override
     public void registerControllers(AnimationData data) {
-        data.addAnimationController(new AnimationController(this,"controller", 0, this::predicate));
-        data.addAnimationController(new AnimationController(this,"attack_controller", 0, this::attackPredicate));
+        data.addAnimationController(new AnimationController(this, "controller", 0, this::predicate));
+        data.addAnimationController(new AnimationController(this, "attack_controller", 0, this::attackPredicate));
     }
 
     private PlayState attackPredicate(AnimationEvent event) {
-        if(this.swinging && event.getController().getAnimationState().equals(AnimationState.Stopped)){
+        if (this.swinging && event.getController().getAnimationState().equals(AnimationState.Stopped)) {
             event.getController().markNeedsReload();
-            event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.hobogoblin.attack",false));
+            event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.hobogoblin.attack", false));
             this.swinging = false;
         }
         return PlayState.CONTINUE;
     }
 
 
-    protected void playStepSound(BlockPos pos, BlockState blockIn){
-        this.playSound(blockIn.getSoundType().getStepSound(),0.15f,1);
+    protected void playStepSound(BlockPos pos, BlockState blockIn) {
+        this.playSound(blockIn.getSoundType().getStepSound(), 0.15f, 1);
     }
+
     @Override
     public boolean doHurtTarget(Entity pEntity) {
         return super.doHurtTarget(pEntity);
     }
 
-    protected SoundEvent getAmbiantSound(){
+    protected SoundEvent getAmbiantSound() {
         return SoundEvents.PILLAGER_AMBIENT;
     }
-    protected SoundEvent getHurtSound(){
+
+    protected SoundEvent getHurtSound() {
         return SoundEvents.PILLAGER_HURT;
     }
-    protected SoundEvent getDeathSound(){
+
+    protected SoundEvent getDeathSound() {
         return SoundEvents.PILLAGER_DEATH;
-    }    protected float getSoundVolume(){
+    }
+
+    protected float getSoundVolume() {
         return 0.2f;
     }
 

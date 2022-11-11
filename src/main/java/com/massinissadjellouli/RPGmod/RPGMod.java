@@ -2,6 +2,7 @@ package com.massinissadjellouli.RPGmod;
 
 import com.massinissadjellouli.RPGmod.block.ModBlocks;
 import com.massinissadjellouli.RPGmod.block.entities.ModBlockEntities;
+import com.massinissadjellouli.RPGmod.effects.ModEffects;
 import com.massinissadjellouli.RPGmod.entities.ModEntities;
 import com.massinissadjellouli.RPGmod.item.ModItems;
 import com.massinissadjellouli.RPGmod.item.ToolTiers;
@@ -13,7 +14,6 @@ import com.massinissadjellouli.RPGmod.screen.ModMenuTypes;
 import com.massinissadjellouli.RPGmod.screen.RarityTableScreen;
 import com.massinissadjellouli.RPGmod.world.features.ModConfiguredFeatures;
 import com.massinissadjellouli.RPGmod.world.features.ModPlacedFeatures;
-import com.massinissadjellouli.RPGmod.effects.ModEffects;
 import net.minecraft.client.gui.screens.MenuScreens;
 import net.minecraft.world.entity.SpawnPlacements;
 import net.minecraft.world.entity.monster.Monster;
@@ -28,11 +28,10 @@ import software.bernie.geckolib3.GeckoLib;
 
 // The value here should match an entry in the META-INF/mods.toml file
 @Mod(RPGMod.MODID)
-public class RPGMod
-{
+public class RPGMod {
     public static final String MODID = "rpgmod";
-    public RPGMod()
-    {
+
+    public RPGMod() {
         IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
 
         register(modEventBus);
@@ -41,7 +40,7 @@ public class RPGMod
         MinecraftForge.EVENT_BUS.register(this);
     }
 
-    private void commonSetup(final FMLCommonSetupEvent event){
+    private void commonSetup(final FMLCommonSetupEvent event) {
         event.enqueueWork(() -> {
             ModPackets.register();
             SpawnPlacements.register(ModEntities.GOBLIN.get(),
@@ -50,7 +49,8 @@ public class RPGMod
                     Monster::checkMonsterSpawnRules);
         });
     }
-    private void register(IEventBus modEventBus){
+
+    private void register(IEventBus modEventBus) {
         ToolTiers.registerTiers();
         ModItems.registerItems(modEventBus);
         ModBlocks.registerBlocks(modEventBus);
@@ -63,10 +63,10 @@ public class RPGMod
         ModEntities.register(modEventBus);
     }
 
-    @Mod.EventBusSubscriber(modid = MODID,bus = Mod.EventBusSubscriber.Bus.MOD)
-    public static class ClientModEvents{
+    @Mod.EventBusSubscriber(modid = MODID, bus = Mod.EventBusSubscriber.Bus.MOD)
+    public static class ClientModEvents {
         @SubscribeEvent
-        public static void onClientSetup(FMLCommonSetupEvent event){
+        public static void onClientSetup(FMLCommonSetupEvent event) {
             MenuScreens.register(ModMenuTypes.ITEM_COMPRESSOR_MENU.get(), ItemCompressorScreen::new);
             MenuScreens.register(ModMenuTypes.RARITY_TABLE_MENU.get(), RarityTableScreen::new);
             MenuScreens.register(ModMenuTypes.CHANGE_CLASS_MENU.get(), ClassChangeScreen::new);

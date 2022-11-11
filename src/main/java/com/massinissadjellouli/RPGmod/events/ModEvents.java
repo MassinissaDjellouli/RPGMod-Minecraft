@@ -3,17 +3,19 @@ package com.massinissadjellouli.RPGmod.events;
 import com.massinissadjellouli.RPGmod.RPGMod;
 import com.massinissadjellouli.RPGmod.classSystem.PlayerClassProvider;
 import com.massinissadjellouli.RPGmod.commands.WorldEventCommand;
-import com.massinissadjellouli.RPGmod.worldEvents.WorldEvent;
 import com.massinissadjellouli.RPGmod.skills.PlayerSkillProvider;
 import com.massinissadjellouli.RPGmod.skills.PlayerSkills;
 import com.massinissadjellouli.RPGmod.skills.PlayerSkillsData.SkillData;
 import com.massinissadjellouli.RPGmod.thirst.PlayerThirst;
 import com.massinissadjellouli.RPGmod.thirst.PlayerThirstProvider;
+import com.massinissadjellouli.RPGmod.worldEvents.WorldEvent;
+import com.massinissadjellouli.RPGmod.worldEvents.WorldEventCapablityProvider;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.Level;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.common.capabilities.RegisterCapabilitiesEvent;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
@@ -28,19 +30,27 @@ import static com.massinissadjellouli.RPGmod.skills.PlayerSkillData.PlayerSkillE
 @Mod.EventBusSubscriber(modid = RPGMod.MODID, value = Dist.CLIENT)
 public class ModEvents {
     @SubscribeEvent
-    public static void onAttachCapabilitiesPlayer(AttachCapabilitiesEvent event) {
-        if (event.getObject() instanceof Player) {
-            if (!((Player) event.getObject()).getCapability(PlayerThirstProvider.PLAYER_THIRST).isPresent()) {
+    public static void onAttachCapabilitiesPlayer(AttachCapabilitiesEvent<Player> event) {
+        if (event.getObject() != null) {
+            if (!( event.getObject()).getCapability(PlayerThirstProvider.PLAYER_THIRST).isPresent()) {
                 event.addCapability(new ResourceLocation(RPGMod.MODID, "thirst"), new PlayerThirstProvider());
             }
-            if (!((Player) event.getObject()).getCapability(PlayerSkillProvider.PLAYER_SKILLS).isPresent()) {
+            if (!(event.getObject()).getCapability(PlayerSkillProvider.PLAYER_SKILLS).isPresent()) {
                 event.addCapability(new ResourceLocation(RPGMod.MODID, "skills"), new PlayerSkillProvider());
             }
-            if (!((Player) event.getObject()).getCapability(PlayerClassProvider.PLAYER_CLASS).isPresent()) {
+            if (!(event.getObject()).getCapability(PlayerClassProvider.PLAYER_CLASS).isPresent()) {
                 event.addCapability(new ResourceLocation(RPGMod.MODID, "class"), new PlayerClassProvider());
             }
         }
     }
+
+    @SubscribeEvent
+    public static void onAttachCapabilitiesLevel(AttachCapabilitiesEvent<Level> event) {
+        if (!(event.getObject()).getCapability(WorldEventCapablityProvider.WORLD_EVENT).isPresent()) {
+            event.addCapability(new ResourceLocation(RPGMod.MODID, "event"), new WorldEventCapablityProvider());
+        }
+    }
+
     @SubscribeEvent
     public static void onCommandsRegister(RegisterCommandsEvent event) {
         new WorldEventCommand(event.getDispatcher());
@@ -65,7 +75,7 @@ public class ModEvents {
         }
         event.getEntity().getAttributes().assignValues(event.getOriginal().getAttributes());
         resetBonusesEffects(event.getEntity());
-        if(WorldEvent.ongoingEvent != null && event.getEntity() instanceof ServerPlayer){
+        if (WorldEvent.ongoingEvent != null && event.getEntity() instanceof ServerPlayer) {
             WorldEvent.ongoingEvent.setPlayer((ServerPlayer) event.getEntity());
         }
     }

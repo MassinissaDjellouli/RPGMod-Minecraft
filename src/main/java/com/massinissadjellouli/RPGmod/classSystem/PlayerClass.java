@@ -17,9 +17,9 @@ public class PlayerClass {
     }
 
     private Map<PlayerClassType, PlayerClassLevel> initClassLevels() {
-        HashMap<PlayerClassType,PlayerClassLevel> levels = new HashMap<>();
+        HashMap<PlayerClassType, PlayerClassLevel> levels = new HashMap<>();
         Arrays.stream(PlayerClassType.values()).forEach(playerClassType -> {
-            levels.put(playerClassType,new PlayerClassLevel(0,0));
+            levels.put(playerClassType, new PlayerClassLevel(0, 0));
         });
         return levels;
     }
@@ -29,14 +29,15 @@ public class PlayerClass {
         classLevels = playerClass.classLevels;
     }
 
-    public int getCurrentClassLevel(){
-        return classLevels.containsKey(currentClass)?classLevels.get(currentClass).getLevel():0;
+    public int getCurrentClassLevel() {
+        return classLevels.containsKey(currentClass) ? classLevels.get(currentClass).getLevel() : 0;
     }
+
     public void saveNBTData(CompoundTag nbt) {
         nbt.putString("current_class", currentClass.toString());
         CompoundTag classLevelsMap = new CompoundTag();
         classLevels.forEach((playerClassType, level) -> {
-            classLevelsMap.put(playerClassType.name(),level.saveData(playerClassType));
+            classLevelsMap.put(playerClassType.name(), level.saveData(playerClassType));
         });
         nbt.put("class_levels", classLevelsMap);
     }
@@ -49,23 +50,24 @@ public class PlayerClass {
                 .forEach(playerClassType -> {
                     if (classLevelsTag.contains(playerClassType.name())) {
                         CompoundTag compound = classLevelsTag.getCompound(playerClassType.name());
-                        classLevels.put(playerClassType,PlayerClassLevel.loadNBT(compound,playerClassType));
-                    }else {
-                        classLevels.put(playerClassType,new PlayerClassLevel(0,0));
+                        classLevels.put(playerClassType, PlayerClassLevel.loadNBT(compound, playerClassType));
+                    } else {
+                        classLevels.put(playerClassType, new PlayerClassLevel(0, 0));
                     }
                 });
     }
 
-    public boolean isCurrently(PlayerClassType playerClassType){
+    public boolean isCurrently(PlayerClassType playerClassType) {
         return playerClassType == currentClass;
     }
-    public void increaseXp(int xp){
+
+    public void increaseXp(int xp) {
         PlayerClassLevel playerClassLevel = classLevels.get(currentClass);
-        int levelMultiplier = playerClassLevel.getLevel() % 2 == 0? playerClassLevel.getLevel() / 2
-                : (playerClassLevel.getLevel() - 1 ) /  2;
+        int levelMultiplier = playerClassLevel.getLevel() % 2 == 0 ? playerClassLevel.getLevel() / 2
+                : (playerClassLevel.getLevel() - 1) / 2;
         playerClassLevel.addXp(xp * levelMultiplier);
-        if(playerClassLevel.getXp() >=
-                getXpNeededForNextLevel(playerClassLevel.getLevel())){
+        if (playerClassLevel.getXp() >=
+                getXpNeededForNextLevel(playerClassLevel.getLevel())) {
             playerClassLevel.resetXp(
                     playerClassLevel.getXp() - getXpNeededForNextLevel(playerClassLevel.getLevel())
             );

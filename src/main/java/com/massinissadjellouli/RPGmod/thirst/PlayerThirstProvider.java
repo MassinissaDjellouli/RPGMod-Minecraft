@@ -13,14 +13,15 @@ import org.jetbrains.annotations.Nullable;
 
 public class PlayerThirstProvider implements ICapabilityProvider, INBTSerializable<CompoundTag> {
     public static Capability<PlayerThirst> PLAYER_THIRST = CapabilityManager.get(
-            new CapabilityToken<>() {}
+            new CapabilityToken<>() {
+            }
     );
 
     private PlayerThirst thirst;
     private final LazyOptional<PlayerThirst> optional = LazyOptional.of(this::createPlayerThirst);
 
     private @NotNull PlayerThirst createPlayerThirst() {
-        if(this.thirst == null){
+        if (this.thirst == null) {
             thirst = new PlayerThirst();
         }
         return thirst;
@@ -28,7 +29,7 @@ public class PlayerThirstProvider implements ICapabilityProvider, INBTSerializab
 
     @Override
     public @NotNull <T> LazyOptional<T> getCapability(@NotNull Capability<T> cap, @Nullable Direction side) {
-        if(cap == PLAYER_THIRST){
+        if (cap == PLAYER_THIRST) {
             return optional.cast();
         }
         return LazyOptional.empty();

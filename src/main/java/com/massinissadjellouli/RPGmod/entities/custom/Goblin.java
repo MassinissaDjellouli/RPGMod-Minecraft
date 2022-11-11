@@ -13,14 +13,11 @@ import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal;
 import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
 import net.minecraft.world.entity.animal.IronGolem;
 import net.minecraft.world.entity.animal.Pig;
-import net.minecraft.world.entity.monster.Blaze;
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.npc.AbstractVillager;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraftforge.common.ForgeMod;
-import net.minecraftforge.registries.ForgeRegistries;
 import software.bernie.geckolib3.core.AnimationState;
 import software.bernie.geckolib3.core.IAnimatable;
 import software.bernie.geckolib3.core.PlayState;
@@ -32,16 +29,17 @@ import software.bernie.geckolib3.core.manager.AnimationFactory;
 
 public class Goblin extends Monster implements IAnimatable {
     private final AnimationFactory factory = new AnimationFactory(this);
+
     public Goblin(EntityType<? extends Monster> pEntityType, Level pLevel) {
         super(pEntityType, pLevel);
     }
 
-    public static AttributeSupplier.Builder getGoblinAttributes(){
+    public static AttributeSupplier.Builder getGoblinAttributes() {
         return Mob.createMobAttributes()
-                .add(Attributes.MOVEMENT_SPEED,0.3)
-                .add(Attributes.MAX_HEALTH,50)
-                .add(Attributes.ATTACK_DAMAGE,7)
-                .add(Attributes.KNOCKBACK_RESISTANCE,1);
+                .add(Attributes.MOVEMENT_SPEED, 0.3)
+                .add(Attributes.MAX_HEALTH, 50)
+                .add(Attributes.ATTACK_DAMAGE, 7)
+                .add(Attributes.KNOCKBACK_RESISTANCE, 1);
 
     }
 
@@ -64,44 +62,48 @@ public class Goblin extends Monster implements IAnimatable {
         this.targetSelector.addGoal(5, new NearestAttackableTargetGoal<>(this, Pig.class, true, false));
     }
 
-    private <E extends IAnimatable>PlayState predicate(AnimationEvent<E> event){
-        if(event.isMoving()){
-            event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.goblin.walk",true));
+    private <E extends IAnimatable> PlayState predicate(AnimationEvent<E> event) {
+        if (event.isMoving()) {
+            event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.goblin.walk", true));
             return PlayState.CONTINUE;
         }
-        event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.goblin.idle",true));
+        event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.goblin.idle", true));
         return PlayState.CONTINUE;
     }
 
     @Override
     public void registerControllers(AnimationData data) {
-        data.addAnimationController(new AnimationController(this,"controller", 0, this::predicate));
-        data.addAnimationController(new AnimationController(this,"attack_controller", 0, this::attackPredicate));
+        data.addAnimationController(new AnimationController(this, "controller", 0, this::predicate));
+        data.addAnimationController(new AnimationController(this, "attack_controller", 0, this::attackPredicate));
     }
 
     private PlayState attackPredicate(AnimationEvent event) {
-        if(this.swinging && event.getController().getAnimationState().equals(AnimationState.Stopped)){
+        if (this.swinging && event.getController().getAnimationState().equals(AnimationState.Stopped)) {
             event.getController().markNeedsReload();
-            event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.goblin.attack",false));
+            event.getController().setAnimation(new AnimationBuilder().addAnimation("animation.goblin.attack", false));
             this.swinging = false;
         }
         return PlayState.CONTINUE;
     }
 
 
-    protected void playStepSound(BlockPos pos, BlockState blockIn){
-        this.playSound(blockIn.getSoundType().getStepSound(),0.15f,1);
+    protected void playStepSound(BlockPos pos, BlockState blockIn) {
+        this.playSound(blockIn.getSoundType().getStepSound(), 0.15f, 1);
     }
 
-    protected SoundEvent getAmbiantSound(){
+    protected SoundEvent getAmbiantSound() {
         return SoundEvents.PILLAGER_AMBIENT;
     }
-    protected SoundEvent getHurtSound(){
+
+    protected SoundEvent getHurtSound() {
         return SoundEvents.PILLAGER_HURT;
     }
-    protected SoundEvent getDeathSound(){
+
+    protected SoundEvent getDeathSound() {
         return SoundEvents.PILLAGER_DEATH;
-    }    protected float getSoundVolume(){
+    }
+
+    protected float getSoundVolume() {
         return 0.2f;
     }
 

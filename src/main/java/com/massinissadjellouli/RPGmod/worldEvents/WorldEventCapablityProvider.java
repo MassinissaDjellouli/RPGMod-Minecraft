@@ -1,4 +1,4 @@
-package com.massinissadjellouli.RPGmod.skills;
+package com.massinissadjellouli.RPGmod.worldEvents;
 
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
@@ -11,25 +11,25 @@ import net.minecraftforge.common.util.LazyOptional;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public class PlayerSkillProvider implements ICapabilityProvider, INBTSerializable<CompoundTag> {
-    public static Capability<PlayerSkills> PLAYER_SKILLS = CapabilityManager.get(
+public class WorldEventCapablityProvider implements ICapabilityProvider, INBTSerializable<CompoundTag> {
+    public static Capability<WorldEvent> WORLD_EVENT = CapabilityManager.get(
             new CapabilityToken<>() {
             }
     );
 
-    private PlayerSkills skills;
-    private final LazyOptional<PlayerSkills> optional = LazyOptional.of(this::createPlayerSkills);
+    private WorldEvent ongoingWorldEvent;
+    private final LazyOptional<WorldEvent> optional = LazyOptional.of(this::createWorldEvent);
 
-    private @NotNull PlayerSkills createPlayerSkills() {
-        if (this.skills == null) {
-            skills = new PlayerSkills();
+    private WorldEvent createWorldEvent() {
+        if (this.ongoingWorldEvent == null && WorldEvent.ongoingEvent != null) {
+            ongoingWorldEvent = WorldEvent.ongoingEvent;
         }
-        return skills;
+        return ongoingWorldEvent;
     }
 
     @Override
     public @NotNull <T> LazyOptional<T> getCapability(@NotNull Capability<T> cap, @Nullable Direction side) {
-        if (cap == PLAYER_SKILLS) {
+        if (cap == WORLD_EVENT) {
             return optional.cast();
         }
         return LazyOptional.empty();
@@ -38,13 +38,12 @@ public class PlayerSkillProvider implements ICapabilityProvider, INBTSerializabl
     @Override
     public CompoundTag serializeNBT() {
         CompoundTag nbt = new CompoundTag();
-        createPlayerSkills().saveNBTData(nbt);
+        WorldEvent.saveNBTData(nbt);
         return nbt;
     }
 
     @Override
     public void deserializeNBT(CompoundTag nbt) {
-        createPlayerSkills().loadNBTData(nbt);
+        WorldEvent.loadNBTData(nbt);
     }
-
 }

@@ -29,7 +29,6 @@ public class ThirstEffectC2SPacket {
         ServerPlayer player = context.getSender();
 
 
-
         context.enqueueWork(() -> {
             float attributeMultiplier;
             if (ClientThirstData.get() >= PlayerThirst.MAX_THIRST / 2)
@@ -41,12 +40,12 @@ public class ThirstEffectC2SPacket {
 
 
             final AttributeModifier MOVE_MODIFIER =
-                    new AttributeModifier( UUID.fromString("0b73b5a1-6503-434a-ba6b-c563f2979286"), "MULTIPLY_MODIFIER",
+                    new AttributeModifier(UUID.fromString("0b73b5a1-6503-434a-ba6b-c563f2979286"), "MULTIPLY_MODIFIER",
                             attributeMultiplier, AttributeModifier.Operation.MULTIPLY_TOTAL);
 
             if (player.gameMode.isSurvival()) {
-                    removeModifiers(player,MOVE_MODIFIER);
-                    addModifiers(player, MOVE_MODIFIER);
+                removeModifiers(player, MOVE_MODIFIER);
+                addModifiers(player, MOVE_MODIFIER);
 
             }
 
@@ -55,12 +54,12 @@ public class ThirstEffectC2SPacket {
     }
 
     private void addModifiers(ServerPlayer player, AttributeModifier MOVE_MODIFIER) {
-        if(!player.getAttribute(Attributes.MOVEMENT_SPEED).hasModifier(MOVE_MODIFIER))
+        if (!player.getAttribute(Attributes.MOVEMENT_SPEED).hasModifier(MOVE_MODIFIER))
             player.getAttribute(Attributes.MOVEMENT_SPEED).addPermanentModifier(MOVE_MODIFIER);
     }
 
     private void removeModifiers(ServerPlayer player, AttributeModifier MOVE_MODIFIER) {
-        if(player.getAttribute(Attributes.MOVEMENT_SPEED).hasModifier(MOVE_MODIFIER))
+        if (player.getAttribute(Attributes.MOVEMENT_SPEED).hasModifier(MOVE_MODIFIER))
             player.getAttribute(Attributes.MOVEMENT_SPEED).removePermanentModifier(MOVE_MODIFIER.getId());
 
     }

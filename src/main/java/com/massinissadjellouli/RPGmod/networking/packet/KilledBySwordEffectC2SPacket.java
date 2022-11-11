@@ -10,6 +10,7 @@ import java.util.function.Supplier;
 
 public class KilledBySwordEffectC2SPacket {
     final EntityType<?> entity;
+
     public KilledBySwordEffectC2SPacket(EntityType entity) {
         this.entity = entity;
     }
@@ -27,9 +28,8 @@ public class KilledBySwordEffectC2SPacket {
         ServerPlayer player = context.getSender();
 
 
-
         context.enqueueWork(() -> {
-            ClientEvents.givePlayerKillXp(entity,player);
+            ClientEvents.givePlayerKillXp(entity, player);
         });
         return true;
     }

@@ -8,21 +8,22 @@ import java.util.function.Supplier;
 
 public class GamemodeDataSyncC2SPacket {
 
-    public GamemodeDataSyncC2SPacket(){
-
-    }
-    public GamemodeDataSyncC2SPacket(FriendlyByteBuf buf){
+    public GamemodeDataSyncC2SPacket() {
 
     }
 
-    public void toBytes(FriendlyByteBuf buf){
+    public GamemodeDataSyncC2SPacket(FriendlyByteBuf buf) {
 
     }
 
-    public boolean handle(Supplier<NetworkEvent.Context> supplier){
+    public void toBytes(FriendlyByteBuf buf) {
+
+    }
+
+    public boolean handle(Supplier<NetworkEvent.Context> supplier) {
         NetworkEvent.Context context = supplier.get();
 
-        context.enqueueWork(()->{
+        context.enqueueWork(() -> {
 
             ClientGamemodeData.setIsSurvival(context.getSender().gameMode.isSurvival());
         });

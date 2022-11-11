@@ -25,7 +25,7 @@ public class ElementalMobEffectInstance extends MobEffectInstance {
             if (isVulnerable) {
                 effect.setIsVulnerable();
             }
-            if (fromPlayerSword){
+            if (fromPlayerSword) {
                 effect.applyElementalEffectTickFromPlayer(pEntity);
                 return;
             }

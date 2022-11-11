@@ -1,20 +1,22 @@
 package com.massinissadjellouli.RPGmod.worldEvents;
 
-public enum RPGModWorldEventType  {
+public enum RPGModWorldEventType {
     NUIT_FEROCE(new NuitFeroceWorldEvent()),
     INVASION_NETHER(new InvasionNetherWorldEvent()),
     SOLEIL_PUISSANT(new SoleilPuissantWorldEvent()),
     GOLD_RUSH(new GoldRushWorldEvent()),
     ECLIPSE(new EclipseWorldEvent());
     private final WorldEvent event;
-    public WorldEvent getEvent(){
+
+    public WorldEvent getEvent() {
         return event;
     }
-    RPGModWorldEventType(WorldEvent event){
+
+    RPGModWorldEventType(WorldEvent event) {
         this.event = event;
     }
 
-    public static String getName(RPGModWorldEventType eventType){
+    public static String getName(RPGModWorldEventType eventType) {
         return switch (eventType) {
             case NUIT_FEROCE -> "NuitFeroce";
             case INVASION_NETHER -> "InvasionNether";
@@ -23,7 +25,8 @@ public enum RPGModWorldEventType  {
             case ECLIPSE -> "Eclipse";
         };
     }
-    public static RPGModWorldEventType getTypeFromName(String name){
+
+    public static RPGModWorldEventType getTypeFromName(String name) {
         return switch (name) {
             case "NuitFeroce" -> NUIT_FEROCE;
             case "InvasionNether" -> INVASION_NETHER;

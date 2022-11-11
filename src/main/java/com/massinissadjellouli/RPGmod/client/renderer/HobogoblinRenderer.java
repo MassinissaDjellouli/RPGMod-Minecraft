@@ -1,9 +1,7 @@
 package com.massinissadjellouli.RPGmod.client.renderer;
 
 import com.massinissadjellouli.RPGmod.RPGMod;
-import com.massinissadjellouli.RPGmod.client.Models.GoblinModel;
 import com.massinissadjellouli.RPGmod.client.Models.HobogoblinModel;
-import com.massinissadjellouli.RPGmod.entities.custom.Goblin;
 import com.massinissadjellouli.RPGmod.entities.custom.Hobogoblin;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
@@ -15,7 +13,8 @@ import org.jetbrains.annotations.Nullable;
 import software.bernie.geckolib3.renderers.geo.GeoEntityRenderer;
 
 public class HobogoblinRenderer extends GeoEntityRenderer<Hobogoblin> {
-    public static final ResourceLocation TEXTURE = new ResourceLocation(RPGMod.MODID,"textures/entities/hobogoblin.png");
+    public static final ResourceLocation TEXTURE = new ResourceLocation(RPGMod.MODID, "textures/entities/hobogoblin.png");
+
     public HobogoblinRenderer(EntityRendererProvider.Context pContext) {
         super(pContext, new HobogoblinModel());
         shadowRadius = 0.5f;
@@ -29,7 +28,7 @@ public class HobogoblinRenderer extends GeoEntityRenderer<Hobogoblin> {
                                     @Nullable VertexConsumer vertexBuilder,
                                     int packedLightIn,
                                     ResourceLocation textureLocation) {
-        stack.scale(1.3f,1.3f,1.3f);
+        stack.scale(1.3f, 1.3f, 1.3f);
         return super.getRenderType(animatable, partialTicks, stack, renderTypeBuffer, vertexBuilder, packedLightIn, textureLocation);
     }
 

@@ -8,13 +8,13 @@ import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
-import net.minecraft.client.renderer.entity.MobRenderer;
 import net.minecraft.resources.ResourceLocation;
 import org.jetbrains.annotations.Nullable;
 import software.bernie.geckolib3.renderers.geo.GeoEntityRenderer;
 
 public class GoblinRenderer extends GeoEntityRenderer<Goblin> {
-    public static final ResourceLocation TEXTURE = new ResourceLocation(RPGMod.MODID,"textures/entities/goblin.png");
+    public static final ResourceLocation TEXTURE = new ResourceLocation(RPGMod.MODID, "textures/entities/goblin.png");
+
     public GoblinRenderer(EntityRendererProvider.Context pContext) {
         super(pContext, new GoblinModel());
         shadowRadius = 0.5f;
@@ -28,7 +28,7 @@ public class GoblinRenderer extends GeoEntityRenderer<Goblin> {
                                     @Nullable VertexConsumer vertexBuilder,
                                     int packedLightIn,
                                     ResourceLocation textureLocation) {
-        stack.scale(0.5f,0.5f,0.5f);
+        stack.scale(0.5f, 0.5f, 0.5f);
         return super.getRenderType(animatable, partialTicks, stack, renderTypeBuffer, vertexBuilder, packedLightIn, textureLocation);
     }
 

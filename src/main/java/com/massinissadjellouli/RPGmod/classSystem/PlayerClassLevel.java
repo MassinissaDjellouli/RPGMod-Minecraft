@@ -32,15 +32,16 @@ public class PlayerClassLevel {
         this.xp = leftover;
     }
 
-    public static PlayerClassLevel loadNBT(CompoundTag nbt, PlayerClassType playerClassType){
+    public static PlayerClassLevel loadNBT(CompoundTag nbt, PlayerClassType playerClassType) {
         int level = nbt.getInt(playerClassType.name() + "_level");
         int xp = nbt.getInt(playerClassType.name() + "_xp");
-        return new PlayerClassLevel(level,xp);
+        return new PlayerClassLevel(level, xp);
     }
-    public CompoundTag saveData(PlayerClassType playerClassType){
+
+    public CompoundTag saveData(PlayerClassType playerClassType) {
         CompoundTag compoundTag = new CompoundTag();
-        compoundTag.putInt(playerClassType.name() + "_level",level);
-        compoundTag.putInt(playerClassType.name() + "_xp",xp);
+        compoundTag.putInt(playerClassType.name() + "_level", level);
+        compoundTag.putInt(playerClassType.name() + "_xp", xp);
         return compoundTag;
     }
 }

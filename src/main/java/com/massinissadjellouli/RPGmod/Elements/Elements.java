@@ -13,7 +13,8 @@ public enum Elements {
     FIRE(BURNING.effect);
 
     public final MobEffect effect;
-    Elements(MobEffect effect){
+
+    Elements(MobEffect effect) {
         this.effect = effect;
     }
 }

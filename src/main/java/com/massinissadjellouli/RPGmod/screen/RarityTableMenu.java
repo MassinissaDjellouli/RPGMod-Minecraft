@@ -35,12 +35,12 @@ public class RarityTableMenu extends AbstractContainerMenu {
         this.blockEntity.getCapability(ForgeCapabilities.ITEM_HANDLER).ifPresent(handler -> {
             for (int i = 0; i < AMOUNT_OF_SLOTS_TO_INSERT_ROWS; i++) {
                 for (int y = 0; y < AMOUNT_OF_SLOTS_TO_INSERT_COLS; y++) {
-                    this.addSlot(new SlotItemHandler(handler,i * AMOUNT_OF_SLOTS_TO_INSERT_ROWS + y,
-                            25 + i * 18,18 + y * 18));
+                    this.addSlot(new SlotItemHandler(handler, i * AMOUNT_OF_SLOTS_TO_INSERT_ROWS + y,
+                            25 + i * 18, 18 + y * 18));
                 }
             }
-            this.addSlot(new SlotItemHandler(handler,POSITION_OF_ITEM_SLOT,91,36));
-            this.addSlot(new SlotItemHandler(handler,POSITION_OF_RESULT_SLOT,135,36){
+            this.addSlot(new SlotItemHandler(handler, POSITION_OF_ITEM_SLOT, 91, 36));
+            this.addSlot(new SlotItemHandler(handler, POSITION_OF_RESULT_SLOT, 135, 36) {
 
                 @Override
                 public boolean mayPlace(ItemStack stack) {
@@ -50,6 +50,7 @@ public class RarityTableMenu extends AbstractContainerMenu {
         });
 
     }
+
     // CREDIT GOES TO: diesieben07 | https://github.com/diesieben07/SevenCommons
     // must assign a slot number to each of the slots used by the GUI.
     // For this container, we can see both the tile inventory's slots as well as the player inventory slots and the hotbar.
@@ -67,6 +68,7 @@ public class RarityTableMenu extends AbstractContainerMenu {
 
     // THIS YOU HAVE TO DEFINE!
     private static final int TE_INVENTORY_SLOT_COUNT = AMOUNT_OF_SLOTS;  // must be the number of slots you have!
+
     @Override
     public ItemStack quickMoveStack(Player playerIn, int index) {
         Slot sourceSlot = slots.get(index);
@@ -109,14 +111,15 @@ public class RarityTableMenu extends AbstractContainerMenu {
     private void addPlayerInventory(Inventory inventory) {
         for (int i = 0; i < 3; i++) {
             for (int y = 0; y < 9; y++) {
-                this.addSlot(new Slot(inventory, y + i * 9 + 9, 8 + y * 18,84 + i * 18));
+                this.addSlot(new Slot(inventory, y + i * 9 + 9, 8 + y * 18, 84 + i * 18));
             }
         }
     }
+
     private void addPlayerHotbar(Inventory inventory) {
-            for (int i = 0; i < 9; i++) {
-                this.addSlot(new Slot(inventory,i , 8 + i * 18, 142));
-            }
+        for (int i = 0; i < 9; i++) {
+            this.addSlot(new Slot(inventory, i, 8 + i * 18, 142));
+        }
     }
 
 

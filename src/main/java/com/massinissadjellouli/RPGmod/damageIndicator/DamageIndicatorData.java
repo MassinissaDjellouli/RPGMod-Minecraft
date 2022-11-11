@@ -7,14 +7,15 @@ public class DamageIndicatorData {
     private ArmorStand damageIndicator;
     private int ticksSinceSpawn;
 
-    public void addTick(int tick){
+    public void addTick(int tick) {
         ticksSinceSpawn += tick;
     }
-    public int getTicksSinceSpawn(){
+
+    public int getTicksSinceSpawn() {
         return ticksSinceSpawn;
     }
 
-    public void kill(){
+    public void kill() {
         damageIndicator.kill();
     }
 

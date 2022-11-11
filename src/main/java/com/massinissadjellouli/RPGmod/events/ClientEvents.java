@@ -9,13 +9,12 @@ import com.massinissadjellouli.RPGmod.client.renderer.HobogoblinRenderer;
 import com.massinissadjellouli.RPGmod.commands.WorldEventCommand;
 import com.massinissadjellouli.RPGmod.damageIndicator.ActiveDamageIndicators;
 import com.massinissadjellouli.RPGmod.damageIndicator.DamageIndicatorData;
-import com.massinissadjellouli.RPGmod.entities.custom.Goblin;
 import com.massinissadjellouli.RPGmod.entities.ModEntities;
+import com.massinissadjellouli.RPGmod.entities.custom.Goblin;
 import com.massinissadjellouli.RPGmod.entities.custom.Hobogoblin;
 import com.massinissadjellouli.RPGmod.events.Custom.KilledBySwordEffectEvent;
 import com.massinissadjellouli.RPGmod.events.Custom.LevelUpEvent;
 import com.massinissadjellouli.RPGmod.events.Custom.WorldEventLaunchEvent;
-import com.massinissadjellouli.RPGmod.worldEvents.WorldEvent;
 import com.massinissadjellouli.RPGmod.item.ModItems;
 import com.massinissadjellouli.RPGmod.networking.ModPackets;
 import com.massinissadjellouli.RPGmod.networking.packet.*;
@@ -24,6 +23,7 @@ import com.massinissadjellouli.RPGmod.skills.PlayerSkillProvider;
 import com.massinissadjellouli.RPGmod.tags.ModTags;
 import com.massinissadjellouli.RPGmod.tags.RarityTags;
 import com.massinissadjellouli.RPGmod.thirst.PlayerThirst;
+import com.massinissadjellouli.RPGmod.worldEvents.WorldEvent;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.player.LocalPlayer;
@@ -106,7 +106,7 @@ public class ClientEvents {
 
     @SubscribeEvent
     public static void onClose(PlayerEvent.PlayerLoggedOutEvent event) {
-       ActiveDamageIndicators.flush();
+        ActiveDamageIndicators.flush();
     }
 
     @SubscribeEvent
@@ -118,7 +118,7 @@ public class ClientEvents {
                             event.getPlayer().getMainHandItem().getItem())) {
                         int[] xp = {getXpFromBreakingBlock(event.getState().getBlock())};
                         event.getPlayer().getCapability(PlayerClassProvider.PLAYER_CLASS).ifPresent(playerClass -> {
-                                    if(playerClass.isCurrently(MINEUR)){
+                                    if (playerClass.isCurrently(MINEUR)) {
                                         playerClass.increaseXp(100);
                                         xp[0] = (xp[0] * (playerClass.getCurrentClassLevel() + 1));
 
@@ -136,7 +136,7 @@ public class ClientEvents {
                             event.getPlayer().getMainHandItem().getItem())) {
                         int[] xp = {getXpFromBreakingBlock(event.getState().getBlock())};
                         event.getPlayer().getCapability(PlayerClassProvider.PLAYER_CLASS).ifPresent(playerClass -> {
-                                    if(playerClass.isCurrently(BUCHERON)){
+                                    if (playerClass.isCurrently(BUCHERON)) {
                                         playerClass.increaseXp(100);
                                         xp[0] = (xp[0] * (playerClass.getCurrentClassLevel() + 1));
                                     }
@@ -311,25 +311,25 @@ public class ClientEvents {
 
             ActiveDamageIndicators.addDamageIndicator(new DamageIndicatorData(damageIndicator));
             if (event.getEntity().getHealth() - event.getAmount() <= 0) {
-                givePlayerKillXp(event.getEntity().getType(),player);
+                givePlayerKillXp(event.getEntity().getType(), player);
             }
         }
     }
 
-    public static void givePlayerKillXp(EntityType entity,Player player) {
+    public static void givePlayerKillXp(EntityType entity, Player player) {
         player.getCapability(PlayerSkillProvider.PLAYER_SKILLS).ifPresent(capability -> {
-                final int[] xp = {getXpFromKilling(entity)};
-                player.getCapability(PlayerClassProvider.PLAYER_CLASS).ifPresent(playerClass -> {
-                            if(playerClass.isCurrently(SOLDAT)){
-                                playerClass.increaseXp(200);
-                                xp[0] = xp[0] * (playerClass.getCurrentClassLevel() + 1);
-                            }
+            final int[] xp = {getXpFromKilling(entity)};
+            player.getCapability(PlayerClassProvider.PLAYER_CLASS).ifPresent(playerClass -> {
+                        if (playerClass.isCurrently(SOLDAT)) {
+                            playerClass.increaseXp(200);
+                            xp[0] = xp[0] * (playerClass.getCurrentClassLevel() + 1);
                         }
-                );
-                capability.addXP(xp[0],
-                        ATTACKING,
-                        player);
-                capability.entityKilled();
+                    }
+            );
+            capability.addXP(xp[0],
+                    ATTACKING,
+                    player);
+            capability.entityKilled();
         });
     }
 
@@ -354,7 +354,7 @@ public class ClientEvents {
 
     @SubscribeEvent
     public static void onPlayerTick(TickEvent.PlayerTickEvent event) {
-         if (event.side.isClient()) {
+        if (event.side.isClient()) {
             ForgeRegistries.BLOCKS.tags().getTag(ModTags.Blocks.NEEDS_TITANIUM_TOOLS);
             ModItems.TITANIUM_PICKAXE.get();
             if (event.player.isSprinting()) {
@@ -365,24 +365,35 @@ public class ClientEvents {
             ModPackets.sendToServer(new ReduceThirstByTickC2SPacket());
             ModPackets.sendToServer(new GamemodeDataSyncC2SPacket());
             ModPackets.sendToServer(new ThirstEffectC2SPacket());
-        }else{
-             WorldEvent.currentEventTick();
-             if(isEventTime()){
-                 RPGModEventFactory.onRandomEventLaunch((ServerPlayer) event.player,(ServerLevel) event.player.level);
-             }
+        } else {
+            if (event.player != null
+                    && WorldEvent.ongoingEvent != null
+                    && (WorldEvent.ongoingEvent.isWaitingForLevel() || WorldEvent.ongoingEvent.isWaitingForPlayer())
+                    && WorldEvent.ongoingEvent.isLoadedFromNBT()) {
+                if (WorldEvent.ongoingEvent.isWaitingForLevel()) {
+                    WorldEvent.ongoingEvent.setLevel((ServerLevel) event.player.level);
+                }
+                if (WorldEvent.ongoingEvent.isWaitingForPlayer()) {
+                    WorldEvent.ongoingEvent.setPlayer((ServerPlayer) event.player);
+                }
+            }
+            WorldEvent.currentEventTick();
+            if (isEventTime()) {
+                RPGModEventFactory.onRandomEventLaunch((ServerPlayer) event.player, (ServerLevel) event.player.level);
+            }
             ItemStack item = event.player.getItemInHand(MAIN_HAND);
             setupCurrentItem(item);
-            if(itemHasNoRarity(item) || itemHasNoId(item)){
+            if (itemHasNoRarity(item) || itemHasNoId(item)) {
                 return;
             }
             List<Component> itemOriginalTooltips = new ItemStack(item.getItem()).getTooltipLines(event.player, TooltipFlag.Default.ADVANCED);
-            saveItemRegularTooltip(itemOriginalTooltips, getTag(getItemRarity(item)),getItemId(item));
+            saveItemRegularTooltip(itemOriginalTooltips, getTag(getItemRarity(item)), getItemId(item));
             setAttributes(item);
         }
     }
 
     private static boolean isEventTime() {
-        if(WorldEvent.ongoingEvent != null || Minecraft.getInstance().player == null){
+        if (WorldEvent.ongoingEvent != null || Minecraft.getInstance().player == null) {
             return false;
         }
         return new Random().nextInt(20) == 0;
@@ -399,7 +410,7 @@ public class ClientEvents {
 
     private static void setWeaponAttributes(ItemStack weapon) {
         ITagManager<Item> tagManager = ITEMS.tags();
-        if(itemHasNoRarity(weapon)){
+        if (itemHasNoRarity(weapon)) {
             return;
         }
         RarityTags tagKey = getTag(getItemRarity(weapon));
@@ -426,7 +437,7 @@ public class ClientEvents {
 
     private static void setArmorAttributes(ItemStack armor) {
         ITagManager<Item> tagManager = ITEMS.tags();
-        if(itemHasNoRarity(armor)){
+        if (itemHasNoRarity(armor)) {
             return;
         }
         RarityTags tagKey = getTag(getItemRarity(armor));
@@ -482,24 +493,24 @@ public class ClientEvents {
         if (event.getEntity() != null && event.getEntity().level.isClientSide) {
             ItemStack item = event.getItemStack();
             setupCurrentItem(item);
-            if (itemHasNoRarity(item)){
+            if (itemHasNoRarity(item)) {
                 return;
             }
             String tagString = event.getItemStack().getTag().getString("item_rarity");
             RarityTags rarityTag = getTag(tagString);
             List<Component> tooltips;
             if (!Screen.hasAltDown() || rarityTag.level == 0) {
-                if(!savedItemRegularTooltips.containsKey(getItemId(item))){
-                    saveItemRegularTooltip(event,rarityTag);
+                if (!savedItemRegularTooltips.containsKey(getItemId(item))) {
+                    saveItemRegularTooltip(event, rarityTag);
                 }
-                 tooltips = savedItemRegularTooltips.get(getItemId(item));
-            }else {
-                if(!savedItemAltTooltips.containsKey(getItemId(item))){
-                    saveItemAltTooltip(event,rarityTag);
+                tooltips = savedItemRegularTooltips.get(getItemId(item));
+            } else {
+                if (!savedItemAltTooltips.containsKey(getItemId(item))) {
+                    saveItemAltTooltip(event, rarityTag);
                 }
                 tooltips = savedItemAltTooltips.get(getItemId(item));
             }
-            if(tooltips != null){
+            if (tooltips != null) {
                 event.getToolTip().clear();
                 event.getToolTip().addAll(tooltips);
             }
@@ -514,36 +525,37 @@ public class ClientEvents {
     private static void saveItemAltTooltip(ItemTooltipEvent event, RarityTags rarityTag) {
         List<Component> newTooltips = new ArrayList<>();
         List<Component> currentTooltips = savedItemRegularTooltips.get(getItemId(event.getItemStack()));
-        if(currentTooltips == null) {
+        if (currentTooltips == null) {
             return;
         }
         final int size = currentTooltips.size();
         for (int i = 0; i < size; i++) {
             newTooltips.add(currentTooltips.get(i));
-            if(i == size - 4 && rarityTag.level > 0){
+            if (i == size - 4 && rarityTag.level > 0) {
                 i++;
             }
-            if(i == size - 3 && rarityTag.level > 0){
-                newTooltips.addAll(getTooltipBody(event.getItemStack(),rarityTag.level));
+            if (i == size - 3 && rarityTag.level > 0) {
+                newTooltips.addAll(getTooltipBody(event.getItemStack(), rarityTag.level));
             }
         }
-        savedItemAltTooltips.put(getItemId(event.getItemStack()),newTooltips);
+        savedItemAltTooltips.put(getItemId(event.getItemStack()), newTooltips);
     }
 
-    private static void saveItemRegularTooltip(ItemTooltipEvent event,RarityTags rarityTag) {
+    private static void saveItemRegularTooltip(ItemTooltipEvent event, RarityTags rarityTag) {
         List<Component> currentTooltips = createTooltip(event.getToolTip(), rarityTag);
-        savedItemRegularTooltips.put(getItemId(event.getItemStack()),currentTooltips);
+        savedItemRegularTooltips.put(getItemId(event.getItemStack()), currentTooltips);
     }
-    private static void saveItemRegularTooltip(List<Component> currentTooltips,RarityTags rarityTag,String itemId) {
+
+    private static void saveItemRegularTooltip(List<Component> currentTooltips, RarityTags rarityTag, String itemId) {
         List<Component> newTooltips = createTooltip(currentTooltips, rarityTag);
-        savedItemRegularTooltips.put(itemId,newTooltips);
+        savedItemRegularTooltips.put(itemId, newTooltips);
     }
 
     private static List<Component> createTooltip(List<Component> currentTooltips, RarityTags rarityTag) {
         List<Component> newTooltips = new ArrayList<>();
         final int size = currentTooltips.size();
         for (int i = 0; i < size; i++) {
-            switch (i){
+            switch (i) {
                 case 0 -> newTooltips.add(currentTooltips.get(0).copy().withStyle(rarityTag.style));
                 case 1 -> {
                     newTooltips.add(Component.literal(rarityTag.name).withStyle(rarityTag.style));
@@ -552,7 +564,7 @@ public class ClientEvents {
 
                 default -> newTooltips.add(currentTooltips.get(i));
             }
-            if(i == size - 3 && rarityTag.level > 0){
+            if (i == size - 3 && rarityTag.level > 0) {
                 newTooltips.add(Component.literal(
                         "Appuyer sur Alt pour plus de détails").withStyle(AQUA)
                 );
@@ -562,10 +574,10 @@ public class ClientEvents {
     }
 
     private static void setItemIdIfNecessary(ItemStack item) {
-        if(itemHasNoRarity(item)){
+        if (itemHasNoRarity(item)) {
             return;
         }
-        if(itemHasNoId(item)){
+        if (itemHasNoId(item)) {
             item.addTagElement("item_uuid", StringTag.valueOf(UUID.randomUUID().toString()));
         }
     }
@@ -580,14 +592,14 @@ public class ClientEvents {
     }
 
     private static void setItemRarityIfNecessary(ItemStack item) {
-        if(itemHasNoRarity(item)){
+        if (itemHasNoRarity(item)) {
             for (RarityTags tagKey : RarityTags.values()) {
                 ITagManager<Item> tagManager = ITEMS.tags();
                 TagKey<Item> tag = tagKey.tagKey;
                 if (tagManager.getTag(tag).contains(item.getItem())) {
                     item.addTagElement("item_rarity", StringTag.valueOf(tagKey.name));
                     break;
-                }else{
+                } else {
                     item.addTagElement("item_rarity", StringTag.valueOf("none"));
                 }
             }
@@ -608,14 +620,14 @@ public class ClientEvents {
         List<Component> tooltipBody = new ArrayList<>();
         Item item = itemStack.getItem();
         if (item instanceof SwordItem) {
-            tooltipBody.addAll(getSwordTooltips(itemStack,level));
+            tooltipBody.addAll(getSwordTooltips(itemStack, level));
         } else if (item instanceof ArmorItem) {
             tooltipBody.addAll(getArmorTooltips(itemStack, level, EMPTY_LIST, EMPTY_LIST));
         }
         return tooltipBody;
     }
 
-    private static List<Component> getArmorTooltips(ItemStack itemStack,int level
+    private static List<Component> getArmorTooltips(ItemStack itemStack, int level
             , List<String> additionnalAttr, List<String> bonuses) {
         List<Component> armorTooltips = new ArrayList<>();
         ITagManager<Item> tagManager = ITEMS.tags();
@@ -664,7 +676,7 @@ public class ClientEvents {
     }
 
 
-    private static List<Component> getSwordTooltips(ItemStack itemStack,int level) {
+    private static List<Component> getSwordTooltips(ItemStack itemStack, int level) {
         ITagManager<Item> tagManager = ITEMS.tags();
         SwordItem item = (SwordItem) itemStack.getItem();
         List<Component> swordTooltips = new ArrayList<>();
@@ -723,9 +735,10 @@ public class ClientEvents {
     }
 
     @SubscribeEvent
-    public static void onKilledByEffect(KilledBySwordEffectEvent event){
+    public static void onKilledByEffect(KilledBySwordEffectEvent event) {
         ModPackets.sendToServer(new KilledBySwordEffectC2SPacket(event.getEntity().getType()));
     }
+
     private static int getXpFromKilling(EntityType<?> entity) {
         if (entityTagHas(HARMLESS, entity)) return 10;
         if (entityTagHas(HARMFUL, entity)) return 30;
@@ -735,19 +748,22 @@ public class ClientEvents {
         return 10;
 
     }
+
     @SubscribeEvent
-    public static void onKeyInput(InputEvent.Key event){
-        if(KeyBinding.OPEN_MENU_KEY.consumeClick()){
+    public static void onKeyInput(InputEvent.Key event) {
+        if (KeyBinding.OPEN_MENU_KEY.consumeClick()) {
             ModPackets.sendToServer(new OpenClassMenuC2SPacket());
 
         }
     }
+
     @SubscribeEvent
     public static void onCommandsRegister(RegisterCommandsEvent event) {
         new WorldEventCommand(event.getDispatcher());
         ConfigCommand.register(event.getDispatcher());
 
     }
+
     @Mod.EventBusSubscriber(modid = RPGMod.MODID, value = Dist.CLIENT, bus = Mod.EventBusSubscriber.Bus.MOD)
     public static class ClientModBusEvents {
 
@@ -760,18 +776,19 @@ public class ClientEvents {
         }
 
         @SubscribeEvent
-        public static void entityRenderers(EntityRenderersEvent.RegisterRenderers event){
+        public static void entityRenderers(EntityRenderersEvent.RegisterRenderers event) {
             event.registerEntityRenderer(ModEntities.GOBLIN.get(), GoblinRenderer::new);
             event.registerEntityRenderer(ModEntities.HOBOGOBLIN.get(), HobogoblinRenderer::new);
         }
+
         @SubscribeEvent
-        public static void entityAttr(EntityAttributeCreationEvent event){
+        public static void entityAttr(EntityAttributeCreationEvent event) {
             event.put(ModEntities.GOBLIN.get(), Goblin.getGoblinAttributes().build());
             event.put(ModEntities.HOBOGOBLIN.get(), Hobogoblin.getHobogoblinAttributes().build());
         }
 
         @SubscribeEvent
-        public static void onKeyRegister(RegisterKeyMappingsEvent event){
+        public static void onKeyRegister(RegisterKeyMappingsEvent event) {
             event.register(KeyBinding.OPEN_MENU_KEY);
         }
     }

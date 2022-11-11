@@ -11,8 +11,6 @@ import net.minecraft.tags.TagKey;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
-import net.minecraftforge.registries.ForgeRegistries;
-import net.minecraftforge.registries.tags.ITagManager;
 
 import static net.minecraft.world.item.Items.COAL_BLOCK;
 import static net.minecraft.world.item.Items.LAVA_BUCKET;
@@ -53,7 +51,7 @@ public class ModTags {
             }
 
             public static EntityTags getResistance(Elements element) {
-                switch (element){
+                switch (element) {
                     case ICE -> {
                         return RESISTANT_TO_FREEZE;
                     }
@@ -66,8 +64,9 @@ public class ModTags {
                 }
                 return EntityTags.NO;
             }
+
             public static EntityTags getVulnerablility(Elements element) {
-                switch (element){
+                switch (element) {
                     case ICE -> {
                         return VULNERABLE_TO_FREEZE;
                     }

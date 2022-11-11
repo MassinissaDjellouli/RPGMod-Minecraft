@@ -18,31 +18,36 @@ public class ClientLastTitleReceived {
         ClientLastTitleReceived.lastTitle = lastMessage;
 
     }
-    public static void set(String lastMessage,ChatFormatting color) {
+
+    public static void set(String lastMessage, ChatFormatting color) {
         reset();
         ClientLastTitleReceived.lastTitle = lastMessage;
         ClientLastTitleReceived.color = color;
     }
-    public static void set(String lastMessage,String lastSubtitle) {
+
+    public static void set(String lastMessage, String lastSubtitle) {
         reset();
         ClientLastTitleReceived.lastTitle = lastMessage;
         ClientLastTitleReceived.lastSubTitle = lastSubtitle;
     }
-    public static void set(String lastMessage,String lastSubtitle,ChatFormatting color) {
+
+    public static void set(String lastMessage, String lastSubtitle, ChatFormatting color) {
         reset();
         ClientLastTitleReceived.lastTitle = lastMessage;
         ClientLastTitleReceived.lastSubTitle = lastSubtitle;
         ClientLastTitleReceived.color = color;
     }
-    private static boolean isLastMessageEmpty(){
+
+    private static boolean isLastMessageEmpty() {
         return lastTitle.isEmpty();
     }
-    public static void incrementTick(){
-        if(isLastMessageEmpty()){
+
+    public static void incrementTick() {
+        if (isLastMessageEmpty()) {
             return;
         }
         ticksSinceLastMessage++;
-        if(ticksSinceLastMessage >= TICKS_BEFORE_DELETE){
+        if (ticksSinceLastMessage >= TICKS_BEFORE_DELETE) {
             reset();
         }
     }

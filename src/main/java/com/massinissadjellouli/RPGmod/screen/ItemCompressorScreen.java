@@ -25,17 +25,16 @@ public class ItemCompressorScreen extends AbstractContainerScreen<ItemCompressor
             "textures/gui/item_compressor_screen_progress.png");
 
 
-
     @Override
     protected void renderBg(PoseStack stack, float pPartialTick, int pMouseX, int pMouseY) {
         RenderSystem.setShader(GameRenderer::getPositionTexShader);
-        RenderSystem.setShaderColor(1f,1f,1f,1f);
+        RenderSystem.setShaderColor(1f, 1f, 1f, 1f);
         RenderSystem.setShaderTexture(0, BG_TEXTURE);
         int x = (width - imageWidth) / 2;
         int y = (height - imageHeight) / 2;
 
-        this.blit(stack,this.leftPos,this.topPos,0,0,imageWidth,imageHeight,imageWidth,imageHeight);
-        renderProgressBar(stack,x,y);
+        this.blit(stack, this.leftPos, this.topPos, 0, 0, imageWidth, imageHeight, imageWidth, imageHeight);
+        renderProgressBar(stack, x, y);
         energyInfoArea.draw(stack);
     }
 
@@ -44,25 +43,25 @@ public class ItemCompressorScreen extends AbstractContainerScreen<ItemCompressor
     protected void renderLabels(PoseStack pPoseStack, int pMouseX, int pMouseY) {
         int x = (width - imageWidth) / 2;
         int y = (height - imageHeight) / 2;
-        renderEnergyAreaToolTips(pPoseStack,pMouseX,pMouseY,x,y);
+        renderEnergyAreaToolTips(pPoseStack, pMouseX, pMouseY, x, y);
     }
 
     private void renderEnergyAreaToolTips(PoseStack pPoseStack, int pMouseX, int pMouseY, int x, int y) {
-        if(isMouseOverArea(pMouseX,pMouseY,x,y,93,18,8,51)){
-            renderTooltip(pPoseStack,energyInfoArea.getTooltips(),
-                    Optional.empty(),pMouseX - x, pMouseY - y);
+        if (isMouseOverArea(pMouseX, pMouseY, x, y, 93, 18, 8, 51)) {
+            renderTooltip(pPoseStack, energyInfoArea.getTooltips(),
+                    Optional.empty(), pMouseX - x, pMouseY - y);
         }
     }
 
     private boolean isMouseOverArea(int pMouseX, int pMouseY, int x, int y, int offsetX, int offsetY, int width, int height) {
-        return MouseUtil.isMouseOver(pMouseX,pMouseY,x+offsetX,y+offsetY,width,height);
+        return MouseUtil.isMouseOver(pMouseX, pMouseY, x + offsetX, y + offsetY, width, height);
     }
 
     //148,17
     private void renderProgressBar(PoseStack stack, int x, int y) {
-        if(menu.isCrafting()){
+        if (menu.isCrafting()) {
             RenderSystem.setShaderTexture(0, PROGRESS_BAR_TEXTURE);
-            blit(stack,x + 148,y + 18, 176,0,4,menu.getScaledProgress());
+            blit(stack, x + 148, y + 18, 176, 0, 4, menu.getScaledProgress());
         }
     }
 
@@ -84,6 +83,6 @@ public class ItemCompressorScreen extends AbstractContainerScreen<ItemCompressor
     public void render(PoseStack pPoseStack, int mouseX, int mouseY, float delta) {
         renderBackground(pPoseStack);
         super.render(pPoseStack, mouseX, mouseY, delta);
-        renderTooltip(pPoseStack,mouseX,mouseY);
+        renderTooltip(pPoseStack, mouseX, mouseY);
     }
 }

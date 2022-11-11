@@ -7,16 +7,18 @@ import net.minecraftforge.event.entity.player.PlayerEvent;
 public class LevelUpEvent extends PlayerEvent {
     private final PlayerSkillEnum skill;
     private final int level;
-    public LevelUpEvent(Player player,PlayerSkillEnum skill,int level) {
+
+    public LevelUpEvent(Player player, PlayerSkillEnum skill, int level) {
         super(player);
         this.skill = skill;
         this.level = level;
     }
 
-    public PlayerSkillEnum getSkill(){
+    public PlayerSkillEnum getSkill() {
         return skill;
     }
-    public int getSkillLevel(){
+
+    public int getSkillLevel() {
         return level;
     }
 }

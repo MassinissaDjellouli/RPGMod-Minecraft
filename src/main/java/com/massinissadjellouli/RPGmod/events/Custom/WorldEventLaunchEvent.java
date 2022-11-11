@@ -12,12 +12,14 @@ public class WorldEventLaunchEvent extends Event {
     private final ServerPlayer player;
     private final ServerLevel level;
     private final boolean fromCommand;
+
     public WorldEventLaunchEvent(ServerPlayer player, ServerLevel level) {
         this.player = player;
         this.level = level;
         eventType = getRandomEventType(level);
         fromCommand = false;
     }
+
     public WorldEventLaunchEvent(ServerPlayer player, ServerLevel level, RPGModWorldEventType eventType) {
         this.player = player;
         this.level = level;
@@ -28,13 +30,13 @@ public class WorldEventLaunchEvent extends Event {
     private RPGModWorldEventType getRandomEventType(Level level) {
         boolean invalidEvent = true;
         RPGModWorldEventType value = null;
-        while (invalidEvent){
+        while (invalidEvent) {
             value = RPGModWorldEventType.values()[level.random.nextInt(RPGModWorldEventType.values().length)];
-            if (WorldEvent.getLastEvent() != null && WorldEvent.getLastEvent().equals(value.getEvent())){
+            if (WorldEvent.getLastEvent() != null && WorldEvent.getLastEvent().equals(value.getEvent())) {
                 continue;
             }
-            switch (value){
-                case SOLEIL_PUISSANT,ECLIPSE -> {
+            switch (value) {
+                case SOLEIL_PUISSANT, ECLIPSE -> {
                     if (!level.isDay()) continue;
                 }
                 case INVASION_NETHER -> {
@@ -53,7 +55,7 @@ public class WorldEventLaunchEvent extends Event {
         event.start(fromCommand);
     }
 
-    public boolean isFromCommand(){
+    public boolean isFromCommand() {
         return fromCommand;
     }
 }

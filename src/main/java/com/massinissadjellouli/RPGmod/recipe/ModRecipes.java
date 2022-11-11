@@ -10,13 +10,14 @@ import net.minecraftforge.registries.RegistryObject;
 
 public class ModRecipes {
     public static DeferredRegister<RecipeSerializer<?>> SERIALIZER =
-            DeferredRegister.create(ForgeRegistries.RECIPE_SERIALIZERS,RPGMod.MODID);
+            DeferredRegister.create(ForgeRegistries.RECIPE_SERIALIZERS, RPGMod.MODID);
 
     public static final RegistryObject<RecipeSerializer<ItemCompressorRecipe>> ITEM_COMPRESSOR_SERIALIZER =
             SERIALIZER.register("item_compressing", () -> ItemCompressorRecipe.Serializer.INSTANCE);
     public static final RegistryObject<RecipeSerializer<RarityTableRecipe>> RARITY_TABLE_SERIALIZER =
             SERIALIZER.register("item_rarifying", () -> RarityTableRecipe.Serializer.INSTANCE);
-    public static void register(IEventBus eventBus){
+
+    public static void register(IEventBus eventBus) {
         SERIALIZER.register(eventBus);
     }
 }

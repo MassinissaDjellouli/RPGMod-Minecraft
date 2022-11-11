@@ -32,7 +32,6 @@ public class OpenClassMenuC2SPacket {
         ServerPlayer player = context.getSender();
 
 
-
         context.enqueueWork(() -> {
             NetworkHooks.openScreen(player, new MenuProvider() {
 
@@ -46,10 +45,9 @@ public class OpenClassMenuC2SPacket {
                     return new ClassChangeMenu(id, inventory, new FriendlyByteBuf(Unpooled.buffer()).writeBlockPos(player.blockPosition()));
                 }
             }, player.blockPosition());
-    });
+        });
         return true;
     }
-
 
 
 }

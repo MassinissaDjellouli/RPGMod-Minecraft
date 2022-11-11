@@ -17,12 +17,12 @@ import static com.massinissadjellouli.RPGmod.block.entities.ItemCompressorBlockE
 
 public class ItemCompressorRecipe implements Recipe<SimpleContainer> {
     private final ResourceLocation id;
-    private  int count;
-    private  int duration;
+    private int count;
+    private int duration;
     private final ItemStack output;
     private final NonNullList<Ingredient> recipeItem;
 
-    public ItemCompressorRecipe(ResourceLocation id, ItemStack output, NonNullList<Ingredient> recipeItem,int count,int duration) {
+    public ItemCompressorRecipe(ResourceLocation id, ItemStack output, NonNullList<Ingredient> recipeItem, int count, int duration) {
         this.id = id;
         this.count = count;
         this.duration = duration;
@@ -35,17 +35,18 @@ public class ItemCompressorRecipe implements Recipe<SimpleContainer> {
         super.finalize();
     }
 
-    public int getDuration(){
+    public int getDuration() {
         return duration;
     }
+
     @Override
     public boolean matches(SimpleContainer pContainer, Level pLevel) {
-        if(pLevel.isClientSide()){
+        if (pLevel.isClientSide()) {
             return false;
         }
 
         boolean isValid = true;
-        switch (recipeItem.size()){
+        switch (recipeItem.size()) {
             case 1 -> {
                 isValid = false;
                 for (int i = 0; i < AMOUNT_OF_SLOTS_TO_COMPRESS; i++) {
@@ -58,7 +59,7 @@ public class ItemCompressorRecipe implements Recipe<SimpleContainer> {
                 for (int i = 0; i < AMOUNT_OF_SLOTS_TO_COMPRESS; i++) {
                     isValid = isValid && recipeItem.get(i).test(pContainer.getItem(i)) &&
                             (recipeItem.get(i).getItems()[0].getCount() <= pContainer.getItem(i).getCount()
-                            || recipeItem.get(i).getItems()[0].getMaxStackSize() == 1);
+                                    || recipeItem.get(i).getItems()[0].getMaxStackSize() == 1);
                 }
             }
         }
@@ -101,55 +102,57 @@ public class ItemCompressorRecipe implements Recipe<SimpleContainer> {
     }
 
     public static class Type implements RecipeType<ItemCompressorRecipe> {
-        private Type(){}
+        private Type() {
+        }
+
         public static final Type INSTANCE = new Type();
         public static final String ID = "item_compressing";
     }
 
-    public static class Serializer implements RecipeSerializer<ItemCompressorRecipe>{
+    public static class Serializer implements RecipeSerializer<ItemCompressorRecipe> {
         public static final Serializer INSTANCE = new Serializer();
-        public static final  ResourceLocation ID = new ResourceLocation(RPGMod.MODID,"item_compressing");
+        public static final ResourceLocation ID = new ResourceLocation(RPGMod.MODID, "item_compressing");
 
         @Override
         public ItemCompressorRecipe fromJson(ResourceLocation pRecipeId, JsonObject pSerializedRecipe) {
-            ItemStack output = ShapedRecipe.itemStackFromJson(GsonHelper.getAsJsonObject(pSerializedRecipe,"output"));
+            ItemStack output = ShapedRecipe.itemStackFromJson(GsonHelper.getAsJsonObject(pSerializedRecipe, "output"));
 
-            int count = GsonHelper.getAsInt(pSerializedRecipe,"count");
-            int duration = GsonHelper.getAsInt(pSerializedRecipe,"duration");
+            int count = GsonHelper.getAsInt(pSerializedRecipe, "count");
+            int duration = GsonHelper.getAsInt(pSerializedRecipe, "duration");
 
-            JsonArray ingredients = GsonHelper.getAsJsonArray(pSerializedRecipe,"ingredients");
-            NonNullList<Ingredient> inputs = NonNullList.withSize(ingredients.size(),Ingredient.EMPTY);
+            JsonArray ingredients = GsonHelper.getAsJsonArray(pSerializedRecipe, "ingredients");
+            NonNullList<Ingredient> inputs = NonNullList.withSize(ingredients.size(), Ingredient.EMPTY);
 
             for (int i = 0; i < inputs.size(); i++) {
                 Ingredient ingredient = Ingredient.fromJson(ingredients.get(i));
                 ingredient.getItems()[0].setCount(count);
-                inputs.set(i,ingredient);
+                inputs.set(i, ingredient);
             }
-            return new ItemCompressorRecipe(pRecipeId,output,inputs,count,duration);
+            return new ItemCompressorRecipe(pRecipeId, output, inputs, count, duration);
         }
 
         @Override
         public @Nullable ItemCompressorRecipe fromNetwork(ResourceLocation pRecipeId, FriendlyByteBuf pBuffer) {
-            NonNullList<Ingredient> inputs = NonNullList.withSize(pBuffer.readInt(),Ingredient.EMPTY);
+            NonNullList<Ingredient> inputs = NonNullList.withSize(pBuffer.readInt(), Ingredient.EMPTY);
 
             for (int i = 0; i < inputs.size(); i++) {
-                inputs.set(i,Ingredient.fromNetwork(pBuffer));
+                inputs.set(i, Ingredient.fromNetwork(pBuffer));
             }
 
             ItemStack output = pBuffer.readItem();
             int count = pBuffer.readInt();
             int duration = pBuffer.readInt();
-            return new ItemCompressorRecipe(pRecipeId,output,inputs,count,duration);
+            return new ItemCompressorRecipe(pRecipeId, output, inputs, count, duration);
         }
 
         @Override
         public void toNetwork(FriendlyByteBuf pBuffer, ItemCompressorRecipe pRecipe) {
             pBuffer.writeInt(pRecipe.getIngredients().size());
 
-            for (Ingredient ing: pRecipe.getIngredients()) {
+            for (Ingredient ing : pRecipe.getIngredients()) {
                 ing.toNetwork(pBuffer);
             }
-            pBuffer.writeItemStack(pRecipe.getResultItem(),false);
+            pBuffer.writeItemStack(pRecipe.getResultItem(), false);
             pBuffer.writeInt(pRecipe.count);
             pBuffer.writeInt(pRecipe.duration);
         }

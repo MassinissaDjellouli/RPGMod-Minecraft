@@ -39,7 +39,7 @@ public class ItemCompressorBlock extends BaseEntityBlock {
     @Nullable
     @Override
     public BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
-        return new ItemCompressorBlockEntity(pos,state);
+        return new ItemCompressorBlockEntity(pos, state);
     }
 
     @Override
@@ -49,60 +49,60 @@ public class ItemCompressorBlock extends BaseEntityBlock {
 
     @Override
     public void onRemove(BlockState pState, Level pLevel, BlockPos pPos, BlockState pNewState, boolean pIsMoving) {
-        if(pState.getBlock() != pNewState.getBlock()){
+        if (pState.getBlock() != pNewState.getBlock()) {
             BlockEntity blockEntity = pLevel.getBlockEntity(pPos);
             if (blockEntity instanceof ItemCompressorBlockEntity) {
                 ((ItemCompressorBlockEntity) blockEntity).drops();
             }
         }
-        super.onRemove(pState,pLevel,pPos,pNewState,pIsMoving);
+        super.onRemove(pState, pLevel, pPos, pNewState, pIsMoving);
     }
 
     @Override
     public InteractionResult use(BlockState pState, Level pLevel, BlockPos pPos, Player pPlayer,
                                  InteractionHand pHand, BlockHitResult pHit) {
-        if(!pLevel.isClientSide()){
+        if (!pLevel.isClientSide()) {
             BlockEntity entity = pLevel.getBlockEntity(pPos);
-            if(entity instanceof ItemCompressorBlockEntity blockEntity){
-                if(pPlayer.hasItemInSlot(EquipmentSlot.MAINHAND)){
+            if (entity instanceof ItemCompressorBlockEntity blockEntity) {
+                if (pPlayer.hasItemInSlot(EquipmentSlot.MAINHAND)) {
                     ItemStack itemInHand = pPlayer.getItemBySlot(EquipmentSlot.MAINHAND);
                     List<CompressorFuels> compressorFuelsList = Arrays.stream(CompressorFuels.values())
                             .filter(compressorFuels -> itemInHand.is(compressorFuels.item)).toList();
-                    if(compressorFuelsList.isEmpty()){
+                    if (compressorFuelsList.isEmpty()) {
                         NetworkHooks.openScreen((ServerPlayer) pPlayer, blockEntity, pPos);
-                    }else{
+                    } else {
                         int energy = compressorFuelsList.get(0).energy;
                         int count = 0;
                         int itemInHands = itemInHand.getCount();
                         int currentCapacityLeft = CAPACITY - blockEntity.getEnergyStorage().getEnergyStored();
 
-                        if(Screen.hasControlDown()){
+                        if (Screen.hasControlDown()) {
                             if (currentCapacityLeft > energy * itemInHands) {
                                 count = itemInHands;
                             } else if (currentCapacityLeft > 0) {
-                                    count = currentCapacityLeft / energy;
+                                count = currentCapacityLeft / energy;
                             }
-                        }else if(currentCapacityLeft > energy){
+                        } else if (currentCapacityLeft > energy) {
                             count = 1;
                         }
                         energy *= count;
-                        if(energy != 0) {
-                            if(itemInHand.is(CompressorFuels.LAVA.item)){
+                        if (energy != 0) {
+                            if (itemInHand.is(CompressorFuels.LAVA.item)) {
                                 pPlayer.setItemInHand(MAIN_HAND, new ItemStack(Items.BUCKET));
-                            }else if(itemInHand.getCount() >= 1){
+                            } else if (itemInHand.getCount() >= 1) {
                                 itemInHand.setCount(itemInHand.getCount() - count);
                                 pPlayer.setItemInHand(MAIN_HAND, itemInHand);
-                            }else{
-                                pPlayer.setItemInHand(MAIN_HAND,ItemStack.EMPTY);
+                            } else {
+                                pPlayer.setItemInHand(MAIN_HAND, ItemStack.EMPTY);
                             }
-                            blockEntity.addEnergy(blockEntity,energy);
+                            blockEntity.addEnergy(blockEntity, energy);
                         }
 
                     }
-                }else{
+                } else {
                     NetworkHooks.openScreen((ServerPlayer) pPlayer, (ItemCompressorBlockEntity) entity, pPos);
                 }
-            }else {
+            } else {
                 throw new IllegalStateException("Container provider manquant");
             }
         }
@@ -112,6 +112,6 @@ public class ItemCompressorBlock extends BaseEntityBlock {
     @Nullable
     @Override
     public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState state, BlockEntityType<T> type) {
-        return createTickerHelper(type, ModBlockEntities.ITEM_COMPRESSOR.get(),ItemCompressorBlockEntity::tick);
+        return createTickerHelper(type, ModBlockEntities.ITEM_COMPRESSOR.get(), ItemCompressorBlockEntity::tick);
     }
 }

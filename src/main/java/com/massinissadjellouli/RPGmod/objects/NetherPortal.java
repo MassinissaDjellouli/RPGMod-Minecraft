@@ -1,13 +1,10 @@
 package com.massinissadjellouli.RPGmod.objects;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.material.EmptyFluid;
-import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.phys.AABB;
 
 import java.util.List;
@@ -25,6 +22,7 @@ public class NetherPortal {
     private final static int SPREAD_RADIUS_MAX = 30;
     private final static int SPREAD_HEIGHT_MAX = 10;
     private final static int SPREAD_PROGRESS_DURATION = 100;
+
     public NetherPortal(BlockPos portalStart, BlockPos portalEnd, ServerLevel level) {
         this.portalStart = portalStart;
         this.portalEnd = portalEnd;
@@ -35,37 +33,39 @@ public class NetherPortal {
         this.level = level;
     }
 
+
+
     private BlockPos getPortalFrameEnd() {
-        return switch (direction()){
-            case "Z" -> new BlockPos(portalEnd.getX(),portalEnd.getY() + 1,portalEnd.getZ() + 1);
-            case "X" -> new BlockPos(portalEnd.getX() + 1,portalEnd.getY() + 1,portalEnd.getZ());
+        return switch (direction()) {
+            case "Z" -> new BlockPos(portalEnd.getX(), portalEnd.getY() + 1, portalEnd.getZ() + 1);
+            case "X" -> new BlockPos(portalEnd.getX() + 1, portalEnd.getY() + 1, portalEnd.getZ());
             default -> null;
         };
     }
 
     private BlockPos getPortalFrameStart() {
-        return switch (direction()){
-            case "Z" -> new BlockPos(portalStart.getX(),portalStart.getY() - 1,portalStart.getZ() - 1);
-            case "X" -> new BlockPos(portalStart.getX() - 1,portalStart.getY() - 1,portalStart.getZ());
+        return switch (direction()) {
+            case "Z" -> new BlockPos(portalStart.getX(), portalStart.getY() - 1, portalStart.getZ() - 1);
+            case "X" -> new BlockPos(portalStart.getX() - 1, portalStart.getY() - 1, portalStart.getZ());
             default -> null;
-            };
+        };
     }
 
-    public String direction(){
-        if(portalStart.getX() == portalEnd.getX()){
+    public String direction() {
+        if (portalStart.getX() == portalEnd.getX()) {
             return "Z";
         }
-        if(portalStart.getZ() == portalEnd.getZ()){
+        if (portalStart.getZ() == portalEnd.getZ()) {
             return "X";
         }
         return null;
     }
 
-    public int size(){
+    public int size() {
         return length() * height();
     }
 
-    public int length(){
+    public int length() {
         return switch (direction()) {
             case "X" -> portalEnd.getX() - portalStart.getX();
             case "Z" -> portalEnd.getZ() - portalStart.getZ();
@@ -73,26 +73,28 @@ public class NetherPortal {
         };
     }
 
-    public int height(){
-     return portalEnd.getY() - portalStart.getY();
+    public int height() {
+        return portalEnd.getY() - portalStart.getY();
     }
-    public void startSpread(){
+
+    public void startSpread() {
         this.isSpreading = true;
     }
 
-    public void end(){
+    public void end() {
         this.isSpreading = false;
         this.spreadRadius = 0;
     }
-    public void tick(){
-        if (!isSpreading){
+
+    public void tick() {
+        if (!isSpreading) {
             return;
         }
-        if(spreadProgress < SPREAD_PROGRESS_DURATION){
+        if (spreadProgress < SPREAD_PROGRESS_DURATION) {
             spreadProgress++;
             return;
         }
-        if(spreadRadius < SPREAD_RADIUS_MAX){
+        if (spreadRadius < SPREAD_RADIUS_MAX) {
             spreadRadius++;
             spreadProgress = 0;
             spread();
@@ -102,7 +104,10 @@ public class NetherPortal {
     }
 
     private void spread() {
-        if(middle() == null){
+        if(level == null){
+            return;
+        }
+        if (middle() == null) {
             return;
         }
         BlockPos beginingBP = middle()
@@ -119,31 +124,34 @@ public class NetherPortal {
                     return isSpreadableBlock(block);
                 })
                 .forEach(blockPosition -> {
-                    if (isAir(level.getBlockState(blockPosition).getBlock())){
-                        if (isSameBlock(level.getBlockState(blockPosition.below()).getBlock(), Blocks.NETHERRACK)) {
+                    if (isAir(level.getBlockState(blockPosition).getBlock())) {
+                        if (isSameBlock(level.getBlockState(blockPosition.below()).getBlock(), Blocks.NETHERRACK)
+                        || isSameBlock(level.getBlockState(blockPosition.below()).getBlock(), Blocks.SOUL_SAND)
+                        || isSameBlock(level.getBlockState(blockPosition.below()).getBlock(), Blocks.SOUL_SOIL)) {
                             level.setBlockAndUpdate(blockPosition, Blocks.FIRE.defaultBlockState());
                         }
-                        return;
+                            return;
                     }
-                    level.setBlockAndUpdate(blockPosition, switch (new Random().nextInt(15)){
+                    level.setBlockAndUpdate(blockPosition, switch (new Random().nextInt(15)) {
                         case 1 -> Blocks.SOUL_SOIL.defaultBlockState();
-                        case 2,3 -> Blocks.SOUL_SAND.defaultBlockState();
-                        case 4,5 -> Blocks.MAGMA_BLOCK.defaultBlockState();
-                        case 6,7,8 -> Blocks.NETHER_BRICKS.defaultBlockState();
+                        case 2, 3 -> Blocks.SOUL_SAND.defaultBlockState();
+                        case 4, 5 -> Blocks.MAGMA_BLOCK.defaultBlockState();
+                        case 6, 7, 8 -> Blocks.NETHER_BRICKS.defaultBlockState();
                         default -> Blocks.NETHERRACK.defaultBlockState();
                     });
                 });
     }
 
-    private boolean isSameBlock(Block block1, Block block2){
+    private boolean isSameBlock(Block block1, Block block2) {
         return block1.getName().equals(block2.getName());
     }
 
-    private boolean isAir(Block block){
+    private boolean isAir(Block block) {
         return isSameBlock(block, Blocks.AIR);
     }
+
     private boolean isSpreadableBlock(Block block) {
-        if(isAir(block) && new Random().nextInt(100) == 1){
+        if (isAir(block) && new Random().nextInt(500) == 1) {
             return true;
         }
         for (Block unspreadableBlock : unspreadableBlocks()) {
@@ -158,10 +166,10 @@ public class NetherPortal {
         if (portalFrameStart == null || portalFrameEnd == null) {
             return null;
         }
-        return switch (direction()){
+        return switch (direction()) {
             case "X" -> new BlockPos(
                     portalFrameStart.getX() + (portalFrameEnd.getX() - portalFrameStart.getX()) / 2
-                    ,portalFrameStart.getY(),
+                    , portalFrameStart.getY(),
                     portalFrameStart.getZ());
             case "Z" -> new BlockPos(
                     portalFrameStart.getX(),
@@ -171,7 +179,7 @@ public class NetherPortal {
         };
     }
 
-    private List<Block> unspreadableBlocks(){
+    private List<Block> unspreadableBlocks() {
         return List.of(
                 Blocks.OBSIDIAN,
                 Blocks.AIR,
@@ -242,5 +250,45 @@ public class NetherPortal {
                 Blocks.MAGMA_BLOCK
         );
 
+    }
+
+    public void saveData(String key, CompoundTag nbt) {
+        nbt.putInt(key + "_spread_radius", spreadRadius);
+        nbt.putInt(key + "_spread_progres", spreadProgress);
+        saveBlockPos(nbt, key + "_portal_frameStart", portalFrameStart);
+        saveBlockPos(nbt, key + "_portal_frameEnd", portalFrameEnd);
+        saveBlockPos(nbt, key + "_portal_start", portalStart);
+        saveBlockPos(nbt, key + "_portal_end", portalEnd);
+        nbt.putBoolean(key + "_is_spreading", isSpreading);
+    }
+
+    private void saveBlockPos(CompoundTag nbt, String key, BlockPos bp) {
+        if (bp != null) {
+            nbt.putInt(key + "_x", bp.getX());
+            nbt.putInt(key + "_y", bp.getY());
+            nbt.putInt(key + "_z", bp.getZ());
+        }
+    }
+    public NetherPortal(CompoundTag nbt, String key, ServerLevel level) {
+        spreadRadius = nbt.getInt(key + "_spread_radius");
+        spreadProgress = nbt.getInt(key + "_spread_progres");
+        portalFrameStart = loadBlockPos(nbt, key + "_portal_frameStart");
+        portalFrameEnd = loadBlockPos(nbt, key + "_portal_frameEnd");
+        portalStart = loadBlockPos(nbt, key + "_portal_start");
+        portalEnd = loadBlockPos(nbt, key + "_portal_end");
+        isSpreading = nbt.getBoolean(key + "_is_spreading");
+        this.level = level;
+    }
+
+    private BlockPos loadBlockPos(CompoundTag nbt, String key) {
+        if (nbt.contains(key + "_x") && nbt.contains(key + "_y") && nbt.contains(key + "_z")) {
+            int x = nbt.getInt(key + "_x");
+            int y = nbt.getInt(key + "_y");
+            int z = nbt.getInt(key + "_z");
+            return new BlockPos(x, y, z);
+        }
+        else {
+            return null;
+        }
     }
 }

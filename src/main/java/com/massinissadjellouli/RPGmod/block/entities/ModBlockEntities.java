@@ -10,19 +10,20 @@ import net.minecraftforge.registries.RegistryObject;
 
 public class ModBlockEntities {
     public static final DeferredRegister<BlockEntityType<?>> BLOCK_ENTITY_TYPE_DEFERRED_REGISTER =
-        DeferredRegister.create(ForgeRegistries.BLOCK_ENTITY_TYPES, RPGMod.MODID);
+            DeferredRegister.create(ForgeRegistries.BLOCK_ENTITY_TYPES, RPGMod.MODID);
 
     public static final RegistryObject<BlockEntityType<ItemCompressorBlockEntity>> ITEM_COMPRESSOR =
             BLOCK_ENTITY_TYPE_DEFERRED_REGISTER.register("item_compressor",
-                    ()->
-                BlockEntityType.Builder.of(ItemCompressorBlockEntity::new,
-                        ModBlocks.ITEM_COMPRESSOR.get()).build(null));
+                    () ->
+                            BlockEntityType.Builder.of(ItemCompressorBlockEntity::new,
+                                    ModBlocks.ITEM_COMPRESSOR.get()).build(null));
     public static final RegistryObject<BlockEntityType<RarityTableBlockEntity>> RARITY_TABLE =
             BLOCK_ENTITY_TYPE_DEFERRED_REGISTER.register("rarity_table",
-                    ()->
-                BlockEntityType.Builder.of(RarityTableBlockEntity::new,
-                        ModBlocks.RARITY_TABLE.get()).build(null));
-    public static void registerBlockEntities(IEventBus eventBus){
+                    () ->
+                            BlockEntityType.Builder.of(RarityTableBlockEntity::new,
+                                    ModBlocks.RARITY_TABLE.get()).build(null));
+
+    public static void registerBlockEntities(IEventBus eventBus) {
         BLOCK_ENTITY_TYPE_DEFERRED_REGISTER.register(eventBus);
     }
 }

@@ -10,6 +10,7 @@ import java.util.function.Supplier;
 
 public class ChangeClassC2SPacket {
     private final PlayerClassType newClass;
+
     public ChangeClassC2SPacket(PlayerClassType newClass) {
         this.newClass = newClass;
     }
@@ -28,10 +29,9 @@ public class ChangeClassC2SPacket {
         context.enqueueWork(() -> {
             player.getCapability(PlayerClassProvider.PLAYER_CLASS).ifPresent(playerClass ->
                     playerClass.change(newClass));
-    });
+        });
         return true;
     }
-
 
 
 }

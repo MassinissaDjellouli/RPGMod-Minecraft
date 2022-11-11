@@ -21,6 +21,7 @@ import java.util.Map;
 
 import static com.massinissadjellouli.RPGmod.block.entities.RarityTableBlockEntity.*;
 import static com.massinissadjellouli.RPGmod.tags.RarityTags.*;
+
 public class RarityTableRecipe implements Recipe<SimpleContainer> {
     private final ResourceLocation id;
     private final RarityTags rarity;

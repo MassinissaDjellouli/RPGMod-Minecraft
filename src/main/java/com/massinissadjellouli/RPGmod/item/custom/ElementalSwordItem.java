@@ -1,8 +1,8 @@
 package com.massinissadjellouli.RPGmod.item.custom;
 
 import com.massinissadjellouli.RPGmod.Elements.Elements;
-import com.massinissadjellouli.RPGmod.tags.ModTags.EntityTypes.EntityTags;
 import com.massinissadjellouli.RPGmod.effects.ElementalMobEffectInstance;
+import com.massinissadjellouli.RPGmod.tags.ModTags.EntityTypes.EntityTags;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.EntityType;
@@ -17,6 +17,7 @@ import static com.massinissadjellouli.RPGmod.tags.RarityTags.*;
 
 public class ElementalSwordItem extends SwordItem {
     Elements element;
+
     public ElementalSwordItem(Tier pTier, int pAttackDamageModifier, float pAttackSpeedModifier, Properties pProperties, Elements element) {
         super(pTier, pAttackDamageModifier, pAttackSpeedModifier, pProperties);
         this.element = element;
@@ -25,12 +26,12 @@ public class ElementalSwordItem extends SwordItem {
 
     @Override
     public boolean hurtEnemy(ItemStack pStack, LivingEntity pTarget, LivingEntity pAttacker) {
-        if(entityResistantToElement(pTarget)){
+        if (entityResistantToElement(pTarget)) {
             return super.hurtEnemy(pStack, pTarget, pAttacker);
         }
         int amplifier = getAmplifier(pStack);
-        pTarget.addEffect(new ElementalMobEffectInstance(element.effect,20 * (amplifier + 1),
-                        pAttacker instanceof Player,
+        pTarget.addEffect(new ElementalMobEffectInstance(element.effect, 20 * (amplifier + 1),
+                pAttacker instanceof Player,
                 entityVulnerableToElement(pTarget),
                 entityResistantToElement(pTarget)));
         return super.hurtEnemy(pStack, pTarget, pAttacker);
@@ -38,28 +39,31 @@ public class ElementalSwordItem extends SwordItem {
 
     @Override
     public InteractionResultHolder<ItemStack> use(Level pLevel, Player pPlayer, InteractionHand pUsedHand) {
-        if(this instanceof SpecialItem specialItem){
-            specialItem.act(pLevel,pPlayer,pUsedHand);
+        if (this instanceof SpecialItem specialItem) {
+            specialItem.act(pLevel, pPlayer, pUsedHand);
         }
         return super.use(pLevel, pPlayer, pUsedHand);
     }
 
     private int getAmplifier(ItemStack pStack) {
-        if(itemHasNoRarity(pStack)){
-            return  0;
-        }else{
+        if (itemHasNoRarity(pStack)) {
+            return 0;
+        } else {
             return getTag(getItemRarity(pStack)).level;
         }
     }
+
     private static boolean entityTagHas(EntityTags tag, EntityType<?> entity) {
-        if(tag == null || tag == EntityTags.NO) return false;
+        if (tag == null || tag == EntityTags.NO) return false;
         return entity.is(tag.tagKey);
     }
+
     private boolean entityResistantToElement(LivingEntity pTarget) {
-        return entityTagHas(EntityTags.getResistance(element),pTarget.getType());
+        return entityTagHas(EntityTags.getResistance(element), pTarget.getType());
 
     }
+
     private boolean entityVulnerableToElement(LivingEntity pTarget) {
-        return entityTagHas(EntityTags.getVulnerablility(element),pTarget.getType());
+        return entityTagHas(EntityTags.getVulnerablility(element), pTarget.getType());
     }
 }

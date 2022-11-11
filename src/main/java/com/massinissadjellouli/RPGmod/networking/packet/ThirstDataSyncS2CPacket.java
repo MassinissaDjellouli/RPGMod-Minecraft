@@ -8,31 +8,31 @@ import java.util.function.Supplier;
 
 public class ThirstDataSyncS2CPacket {
 
-        private final int thirst;
-        public ThirstDataSyncS2CPacket(int thirst){
-            this.thirst = thirst;
+    private final int thirst;
 
-        }
-        public ThirstDataSyncS2CPacket(FriendlyByteBuf buf){
-            this.thirst = buf.readInt();
+    public ThirstDataSyncS2CPacket(int thirst) {
+        this.thirst = thirst;
 
-        }
+    }
 
-        public void toBytes(FriendlyByteBuf buf){
-            buf.writeInt(thirst);
-        }
+    public ThirstDataSyncS2CPacket(FriendlyByteBuf buf) {
+        this.thirst = buf.readInt();
 
-        public boolean handle(Supplier<NetworkEvent.Context> supplier){
-            NetworkEvent.Context context = supplier.get();
+    }
 
-            context.enqueueWork(()->{
+    public void toBytes(FriendlyByteBuf buf) {
+        buf.writeInt(thirst);
+    }
+
+    public boolean handle(Supplier<NetworkEvent.Context> supplier) {
+        NetworkEvent.Context context = supplier.get();
+
+        context.enqueueWork(() -> {
 
             ClientThirstData.set(thirst);
-            });
-            return true;
-        }
-
-
+        });
+        return true;
+    }
 
 
 }

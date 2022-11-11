@@ -13,7 +13,8 @@ import org.jetbrains.annotations.Nullable;
 
 public class PlayerClassProvider implements ICapabilityProvider, INBTSerializable<CompoundTag> {
     public static Capability<PlayerClass> PLAYER_CLASS = CapabilityManager.get(
-            new CapabilityToken<>() {}
+            new CapabilityToken<>() {
+            }
     );
 
     private PlayerClass playerClass;
@@ -21,7 +22,7 @@ public class PlayerClassProvider implements ICapabilityProvider, INBTSerializabl
 
     @Override
     public @NotNull <T> LazyOptional<T> getCapability(@NotNull Capability<T> cap, @Nullable Direction side) {
-        if(cap == PLAYER_CLASS){
+        if (cap == PLAYER_CLASS) {
             return optional.cast();
         }
         return LazyOptional.empty();
@@ -38,13 +39,13 @@ public class PlayerClassProvider implements ICapabilityProvider, INBTSerializabl
     public void deserializeNBT(CompoundTag nbt) {
         createPlayerClass().loadNBTData(nbt);
     }
+
     private @NotNull PlayerClass createPlayerClass() {
-        if(this.playerClass == null){
+        if (this.playerClass == null) {
             playerClass = new PlayerClass();
         }
         return playerClass;
     }
-
 
 
 }

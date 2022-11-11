@@ -13,9 +13,10 @@ public class PlayerThirst {
     private int thirst = MAX_THIRST;
     private static int ticksSinceLastJump = 0;
 
-    public static int getTicksSinceLastJump(){
+    public static int getTicksSinceLastJump() {
         return ticksSinceLastJump;
     }
+
     public static void addTickSinceLastJump(int add) {
         ticksSinceLastJump += add;
 
@@ -25,30 +26,36 @@ public class PlayerThirst {
         return reduceByTick;
     }
 
-    public void addThirst(int toAdd){
-        thirst = Math.min(thirst + toAdd,MAX_THIRST);
+    public void addThirst(int toAdd) {
+        thirst = Math.min(thirst + toAdd, MAX_THIRST);
     }
-    public void reduceThirst(int toReduce){
-        thirst = Math.max(thirst - toReduce,MIN_THIRST);
+
+    public void reduceThirst(int toReduce) {
+        thirst = Math.max(thirst - toReduce, MIN_THIRST);
         System.out.println(thirst + ":" + reduceByTick);
     }
-    public void saveNBTData(CompoundTag nbt){
-        nbt.putInt("thirst",thirst);
+
+    public void saveNBTData(CompoundTag nbt) {
+        nbt.putInt("thirst", thirst);
     }
-    public void loadNBTData(CompoundTag nbt){
+
+    public void loadNBTData(CompoundTag nbt) {
         thirst = nbt.getInt("thirst");
     }
-    public void reduceTicks(){
+
+    public void reduceTicks() {
         ticksToReduce -= reduceByTick;
-        if(ticksToReduce <= 0){
+        if (ticksToReduce <= 0) {
             ticksToReduce = DEFAULT_TICK_TO_REDUCE_TIME;
             reduceThirst(1);
         }
     }
-    public static void setReduceByTick(float tick){
-        reduceByTick = Math.min(tick,PlayerThirst.MAX_REDUCE);
+
+    public static void setReduceByTick(float tick) {
+        reduceByTick = Math.min(tick, PlayerThirst.MAX_REDUCE);
     }
-    public int getThirstLevel(){
+
+    public int getThirstLevel() {
         return thirst;
     }
 }

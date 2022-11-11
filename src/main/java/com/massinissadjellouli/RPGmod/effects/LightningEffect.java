@@ -10,26 +10,27 @@ import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.MobSpawnType;
 
-public class LightningEffect extends MobEffect implements DamagingMobEffect{
+public class LightningEffect extends MobEffect implements DamagingMobEffect {
 
     int ticksSinceLastLigtning = 0;
     boolean isVulnerable = false;
     final int TICKS_BETWEEN_LIGHTNINGS = 7;
+
     protected LightningEffect(MobEffectCategory pCategory, int pColor) {
         super(pCategory, pColor);
     }
 
     @Override
     public void applyEffectTick(LivingEntity pLivingEntity, int pAmplifier) {
-        if(!pLivingEntity.level.isClientSide && pLivingEntity.getLevel() instanceof ServerLevel serverLevel){
-            if(ticksSinceLastLigtning >= TICKS_BETWEEN_LIGHTNINGS){
+        if (!pLivingEntity.level.isClientSide && pLivingEntity.getLevel() instanceof ServerLevel serverLevel) {
+            if (ticksSinceLastLigtning >= TICKS_BETWEEN_LIGHTNINGS) {
                 ticksSinceLastLigtning = 0;
-                EntityType.LIGHTNING_BOLT.spawn(serverLevel,null,null,
-                        pLivingEntity.blockPosition(), MobSpawnType.COMMAND,true,false);
-                if(isVulnerable){
-                    pLivingEntity.hurt(DamageSource.MAGIC,4);
+                EntityType.LIGHTNING_BOLT.spawn(serverLevel, null, null,
+                        pLivingEntity.blockPosition(), MobSpawnType.COMMAND, true, false);
+                if (isVulnerable) {
+                    pLivingEntity.hurt(DamageSource.MAGIC, 4);
                 }
-            }else{
+            } else {
                 ticksSinceLastLigtning++;
             }
         }
@@ -44,8 +45,8 @@ public class LightningEffect extends MobEffect implements DamagingMobEffect{
 
     @Override
     public void applyElementalEffectTickFromPlayer(LivingEntity pLivingEntity) {
-        applyEffectTick(pLivingEntity,1);
-        if(pLivingEntity.getHealth() == 0 && !pLivingEntity.isAlive()){
+        applyEffectTick(pLivingEntity, 1);
+        if (pLivingEntity.getHealth() == 0 && !pLivingEntity.isAlive()) {
             RPGModEventFactory.onKilledBySwordEffect(pLivingEntity);
             pLivingEntity.removeEffect(this);
         }

@@ -16,16 +16,18 @@ public class ModMenuTypes {
             DeferredRegister.create(ForgeRegistries.MENU_TYPES, RPGMod.MODID);
 
     public static final RegistryObject<MenuType<ItemCompressorMenu>> ITEM_COMPRESSOR_MENU =
-            registerMenuType(ItemCompressorMenu::new,"item_compressor_menu");
+            registerMenuType(ItemCompressorMenu::new, "item_compressor_menu");
     public static final RegistryObject<MenuType<RarityTableMenu>> RARITY_TABLE_MENU =
-            registerMenuType(RarityTableMenu::new,"rarity_table_menu");
+            registerMenuType(RarityTableMenu::new, "rarity_table_menu");
     public static final RegistryObject<MenuType<ClassChangeMenu>> CHANGE_CLASS_MENU =
-            registerMenuType(ClassChangeMenu::new,"change_class_menu");
-    private static <T extends AbstractContainerMenu>RegistryObject<MenuType<T>> registerMenuType(
-            IContainerFactory<T> factory, String name){
-        return MENU_TYPE_DEFERRED_REGISTER.register(name,()-> IForgeMenuType.create(factory));
+            registerMenuType(ClassChangeMenu::new, "change_class_menu");
+
+    private static <T extends AbstractContainerMenu> RegistryObject<MenuType<T>> registerMenuType(
+            IContainerFactory<T> factory, String name) {
+        return MENU_TYPE_DEFERRED_REGISTER.register(name, () -> IForgeMenuType.create(factory));
     }
-    public static void registerMenus(IEventBus eventBus){
+
+    public static void registerMenus(IEventBus eventBus) {
         MENU_TYPE_DEFERRED_REGISTER.register(eventBus);
     }
 }
