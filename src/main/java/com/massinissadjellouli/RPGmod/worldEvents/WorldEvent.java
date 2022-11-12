@@ -188,18 +188,22 @@ public abstract class WorldEvent {
         if (nbt == null) {
             return;
         }
-        RPGModWorldEventType eventType = RPGModWorldEventType.valueOf(nbt.getString("event_type"));
-        ongoingEvent = eventType.getEvent();
-        ongoingEvent.waitingForPlayer = ongoingEvent.player == null;
-        ongoingEvent.waitingForLevel = ongoingEvent.level == null;
-        ongoingEvent.loadedFromNBT = true;
-        ongoingEvent.name = nbt.getString("name");
-        ongoingEvent.eventProgress = nbt.getInt("event_progress");
-        ongoingEvent.startProgress = nbt.getInt("start_progress");
-        ongoingEvent.duration = nbt.getInt("duration");
-        ongoingEvent.showTitle = nbt.getBoolean("show_title");
-        ongoingEvent.titleShown = nbt.getInt("title_shown");
-        ongoingEvent.loadData(nbt);
+        try {
+            ongoingEvent.loadData(nbt);
+            RPGModWorldEventType eventType = RPGModWorldEventType.valueOf(nbt.getString("event_type"));
+            ongoingEvent = eventType.getEvent();
+            ongoingEvent.waitingForPlayer = ongoingEvent.player == null;
+            ongoingEvent.waitingForLevel = ongoingEvent.level == null;
+            ongoingEvent.loadedFromNBT = true;
+            ongoingEvent.name = nbt.getString("name");
+            ongoingEvent.eventProgress = nbt.getInt("event_progress");
+            ongoingEvent.startProgress = nbt.getInt("start_progress");
+            ongoingEvent.duration = nbt.getInt("duration");
+            ongoingEvent.showTitle = nbt.getBoolean("show_title");
+            ongoingEvent.titleShown = nbt.getInt("title_shown");
+        }catch (Exception e){
+            ongoingEvent = null;
+        }
     }
 
 
