@@ -12,6 +12,9 @@ import net.minecraftforge.common.util.LazyOptional;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 public class PlayerUIDCapabilityProvider implements ICapabilityProvider, INBTSerializable<CompoundTag> {
@@ -24,10 +27,26 @@ public class PlayerUIDCapabilityProvider implements ICapabilityProvider, INBTSer
 
     private String createPlayerUID() {
         if (this.uid == null) {
-            uid = UUID.randomUUID().toString().replace("-", "");
+            uid = generateId();
         }
         ClientPlayerUIDData.setUid(uid);
         return uid;
+    }
+
+    private String generateId() {
+        List<Character> letters = new ArrayList<>();
+        List<Character> numbers = new ArrayList<>();
+        String longId = UUID.randomUUID().toString().replace("-", "");
+        for (char c : longId.toCharArray()) {
+            if (Character.isDigit(c)) {
+                numbers.add(c);
+            }else {
+                letters.add(c);
+            }
+        }
+        Optional<Integer> reduce = numbers.stream().map(character -> Integer.parseInt(character.toString())).reduce(Integer::sum);
+        int sum = reduce.orElse(0);
+        return letters.stream().map(String::valueOf).reduce("", String::concat) + sum;
     }
 
     @Override

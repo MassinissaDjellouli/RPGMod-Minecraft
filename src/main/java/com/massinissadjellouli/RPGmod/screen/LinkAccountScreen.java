@@ -93,7 +93,7 @@ public class LinkAccountScreen extends AbstractContainerScreen<LinkAccountMenu> 
         poseStack.scale(0.7f, 0.7f, 0.7f);
         MutableComponent t1 = Component.literal("Cela vous permet de sauvegarder");
         MutableComponent t2 = Component.literal("vos statistiques pour ce monde");
-        this.font.draw(poseStack, code, 15, 130, -12829636);
+        this.font.draw(poseStack, code, imageWidth/2f - this.font.width(code)/2f + 30, 130, -12829636);
         this.font.draw(poseStack, t1, imageWidth/2f - this.font.width(t1)/2f + 30, 160, -12829636);
         this.font.draw(poseStack, t2, imageWidth/2f - this.font.width(t2)/2f + 30, 170, -12829636);
         poseStack.popPose();
@@ -110,7 +110,6 @@ public class LinkAccountScreen extends AbstractContainerScreen<LinkAccountMenu> 
     public void init() {
         super.init();
         this.minecraft.keyboardHandler.setSendRepeatsToGui(true);
-        ModPackets.sendToServer(new UpdatePlayerUIDBackendC2SPacket());
     }
 
 

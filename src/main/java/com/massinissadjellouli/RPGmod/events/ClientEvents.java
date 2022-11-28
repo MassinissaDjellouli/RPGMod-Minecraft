@@ -437,6 +437,10 @@ public class ClientEvents {
         }
     }
 
+    @SubscribeEvent
+    public static void onLoad(PlayerEvent.PlayerLoggedInEvent event){
+        ModPackets.sendToServer(new UpdatePlayerUIDBackendC2SPacket());
+    }
     private static void setArmorAttributes(ItemStack armor) {
         ITagManager<Item> tagManager = ITEMS.tags();
         if (itemHasNoRarity(armor)) {
