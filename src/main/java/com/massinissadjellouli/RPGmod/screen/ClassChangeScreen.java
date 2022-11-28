@@ -8,10 +8,12 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.components.Button;
+import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
+import net.minecraftforge.common.ForgeHooks;
 
 import static com.massinissadjellouli.RPGmod.classSystem.PlayerClassType.*;
 
@@ -72,15 +74,18 @@ public class ClassChangeScreen extends AbstractContainerScreen<ClassChangeMenu> 
         Minecraft.getInstance().keyboardHandler.setSendRepeatsToGui(false);
     }
 
+
+
     @Override
     public void init() {
         super.init();
 
         this.minecraft.keyboardHandler.setSendRepeatsToGui(true);
-
+        System.out.println("init");
         this.addRenderableWidget(new Button(this.leftPos + 54, this.topPos + 34, 51, 20, Component.literal("Mineur"),
                 e -> {
                     ModPackets.sendToServer(new ChangeClassC2SPacket(MINEUR));
+
                     onClose();
                     ClientLastMessageReceived.setImportant("Vous etes maintenant mineur!");
                 }));

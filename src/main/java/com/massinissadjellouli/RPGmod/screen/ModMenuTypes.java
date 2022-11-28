@@ -21,6 +21,8 @@ public class ModMenuTypes {
             registerMenuType(RarityTableMenu::new, "rarity_table_menu");
     public static final RegistryObject<MenuType<ClassChangeMenu>> CHANGE_CLASS_MENU =
             registerMenuType(ClassChangeMenu::new, "change_class_menu");
+    public static final RegistryObject<MenuType<LinkAccountMenu>> LINK_ACCOUNT_MENU =
+            registerMenuType(LinkAccountMenu::new, "link_account_menu");
 
     private static <T extends AbstractContainerMenu> RegistryObject<MenuType<T>> registerMenuType(
             IContainerFactory<T> factory, String name) {

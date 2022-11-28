@@ -18,6 +18,7 @@ import com.massinissadjellouli.RPGmod.events.Custom.WorldEventLaunchEvent;
 import com.massinissadjellouli.RPGmod.item.ModItems;
 import com.massinissadjellouli.RPGmod.networking.ModPackets;
 import com.massinissadjellouli.RPGmod.networking.packet.*;
+import com.massinissadjellouli.RPGmod.screen.LinkAccountScreen;
 import com.massinissadjellouli.RPGmod.skills.PlayerSkillData;
 import com.massinissadjellouli.RPGmod.skills.PlayerSkillProvider;
 import com.massinissadjellouli.RPGmod.tags.ModTags;
@@ -365,6 +366,7 @@ public class ClientEvents {
             ModPackets.sendToServer(new ReduceThirstByTickC2SPacket());
             ModPackets.sendToServer(new GamemodeDataSyncC2SPacket());
             ModPackets.sendToServer(new ThirstEffectC2SPacket());
+            ModPackets.sendToServer(new SendUserStatsToBackendC2SPacket());
         } else {
             if (event.player != null
                     && WorldEvent.ongoingEvent != null
@@ -751,9 +753,11 @@ public class ClientEvents {
 
     @SubscribeEvent
     public static void onKeyInput(InputEvent.Key event) {
-        if (KeyBinding.OPEN_MENU_KEY.consumeClick()) {
+        if (KeyBinding.OPEN_CLASS_MENU_KEY.consumeClick()) {
             ModPackets.sendToServer(new OpenClassMenuC2SPacket());
-
+        }
+        if (KeyBinding.OPEN_LINK_ACCOUNT_MENU.consumeClick()) {
+            ModPackets.sendToServer(new OpenLinkAccountMenuC2SPacket());
         }
     }
 
@@ -773,6 +777,7 @@ public class ClientEvents {
             event.registerAboveAll("message_hud", MessagesHudOverlay.HUD_MESSAGE);
             event.registerAboveAll("title_hud", MessagesHudOverlay.HUD_TITLE);
             event.registerAboveAll("event_countdown_hud", MessagesHudOverlay.HUD_WORLD_EVEN_COUNTDOWN);
+
         }
 
         @SubscribeEvent
@@ -789,7 +794,8 @@ public class ClientEvents {
 
         @SubscribeEvent
         public static void onKeyRegister(RegisterKeyMappingsEvent event) {
-            event.register(KeyBinding.OPEN_MENU_KEY);
+            event.register(KeyBinding.OPEN_CLASS_MENU_KEY);
+            event.register(KeyBinding.OPEN_LINK_ACCOUNT_MENU);
         }
     }
 

@@ -78,10 +78,25 @@ public class ModPackets {
                 .encoder(OpenClassMenuC2SPacket::toBytes)
                 .consumerMainThread(OpenClassMenuC2SPacket::handle)
                 .add();
+        net.messageBuilder(OpenLinkAccountMenuC2SPacket.class, id(), NetworkDirection.PLAY_TO_SERVER)
+                .decoder(OpenLinkAccountMenuC2SPacket::new)
+                .encoder(OpenLinkAccountMenuC2SPacket::toBytes)
+                .consumerMainThread(OpenLinkAccountMenuC2SPacket::handle)
+                .add();
         net.messageBuilder(ChangeClassC2SPacket.class, id(), NetworkDirection.PLAY_TO_SERVER)
                 .decoder(ChangeClassC2SPacket::new)
                 .encoder(ChangeClassC2SPacket::toBytes)
                 .consumerMainThread(ChangeClassC2SPacket::handle)
+                .add();
+        net.messageBuilder(SendUserStatsToBackendC2SPacket.class, id(), NetworkDirection.PLAY_TO_SERVER)
+                .decoder(SendUserStatsToBackendC2SPacket::new)
+                .encoder(SendUserStatsToBackendC2SPacket::toBytes)
+                .consumerMainThread(SendUserStatsToBackendC2SPacket::handle)
+                .add();
+        net.messageBuilder(UpdatePlayerUIDBackendC2SPacket.class, id(), NetworkDirection.PLAY_TO_SERVER)
+                .decoder(UpdatePlayerUIDBackendC2SPacket::new)
+                .encoder(UpdatePlayerUIDBackendC2SPacket::toBytes)
+                .consumerMainThread(UpdatePlayerUIDBackendC2SPacket::handle)
                 .add();
     }
 

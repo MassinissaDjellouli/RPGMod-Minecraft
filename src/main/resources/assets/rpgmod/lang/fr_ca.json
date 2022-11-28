@@ -66,6 +66,7 @@
 
     "key.category.rpgmod.rpgmod": "RPGMOD",
     "key.rpgmod.class_menu": "Menu de changement de classe",
+    "key.rpgmod.link_account_menu": "Lier son compte",
 
     "effect.rpgmod.freeze": "Gelé",
     "effect.rpgmod.burning": "En feu",

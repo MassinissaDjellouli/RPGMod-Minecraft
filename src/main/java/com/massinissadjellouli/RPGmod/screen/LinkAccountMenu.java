@@ -15,7 +15,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Supplier;
 
-public class ClassChangeMenu extends AbstractContainerMenu implements Supplier<Map<Integer, Slot>> {
+public class LinkAccountMenu extends AbstractContainerMenu implements Supplier<Map<Integer, Slot>> {
     public final static HashMap<String, Object> guistate = new HashMap<>();
     public final Level world;
     public final Player entity;
@@ -24,8 +24,8 @@ public class ClassChangeMenu extends AbstractContainerMenu implements Supplier<M
     private final Map<Integer, Slot> customSlots = new HashMap<>();
     private boolean bound = false;
 
-    public ClassChangeMenu(int id, Inventory inv, FriendlyByteBuf extraData) {
-        super(ModMenuTypes.CHANGE_CLASS_MENU.get(), id);
+    public LinkAccountMenu(int id, Inventory inv, FriendlyByteBuf extraData) {
+        super(ModMenuTypes.LINK_ACCOUNT_MENU.get(), id);
         this.entity = inv.player;
         this.world = inv.player.level;
         this.internal = new ItemStackHandler(0);
