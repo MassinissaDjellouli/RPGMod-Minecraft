@@ -3,6 +3,7 @@ package com.massinissadjellouli.RPGmod.events;
 import com.massinissadjellouli.RPGmod.RPGMod;
 import com.massinissadjellouli.RPGmod.classSystem.PlayerClassProvider;
 import com.massinissadjellouli.RPGmod.commands.WorldEventCommand;
+import com.massinissadjellouli.RPGmod.networking.rpgmodWebsiteNetworking.PlayerUIDCapabilityProvider;
 import com.massinissadjellouli.RPGmod.skills.PlayerSkillProvider;
 import com.massinissadjellouli.RPGmod.skills.PlayerSkills;
 import com.massinissadjellouli.RPGmod.skills.PlayerSkillsData.SkillData;
@@ -30,26 +31,29 @@ import static com.massinissadjellouli.RPGmod.skills.PlayerSkillData.PlayerSkillE
 @Mod.EventBusSubscriber(modid = RPGMod.MODID, value = Dist.CLIENT)
 public class ModEvents {
     @SubscribeEvent
-    public static void onAttachCapabilitiesPlayer(AttachCapabilitiesEvent<Player> event) {
-        if (event.getObject() != null) {
-            if (!( event.getObject()).getCapability(PlayerThirstProvider.PLAYER_THIRST).isPresent()) {
+    public static void onAttachCapabilitiesPlayer(AttachCapabilitiesEvent event) {
+        if (event.getObject() instanceof Player) {
+            if (!((Player) event.getObject()).getCapability(PlayerThirstProvider.PLAYER_THIRST).isPresent()) {
                 event.addCapability(new ResourceLocation(RPGMod.MODID, "thirst"), new PlayerThirstProvider());
             }
-            if (!(event.getObject()).getCapability(PlayerSkillProvider.PLAYER_SKILLS).isPresent()) {
+            if (!((Player) event.getObject()).getCapability(PlayerSkillProvider.PLAYER_SKILLS).isPresent()) {
                 event.addCapability(new ResourceLocation(RPGMod.MODID, "skills"), new PlayerSkillProvider());
             }
-            if (!(event.getObject()).getCapability(PlayerClassProvider.PLAYER_CLASS).isPresent()) {
+            if (!((Player) event.getObject()).getCapability(PlayerClassProvider.PLAYER_CLASS).isPresent()) {
                 event.addCapability(new ResourceLocation(RPGMod.MODID, "class"), new PlayerClassProvider());
+            }
+            if (!((Player) event.getObject()).getCapability(PlayerUIDCapabilityProvider.PLAYER_UID).isPresent()) {
+                event.addCapability(new ResourceLocation(RPGMod.MODID, "uid"), new PlayerUIDCapabilityProvider());
+            }
+        }
+        if (event.getObject() instanceof Level) {
+            if (!((Level)event.getObject()).getCapability(WorldEventCapablityProvider.WORLD_EVENT).isPresent()) {
+                event.addCapability(new ResourceLocation(RPGMod.MODID, "event"), new WorldEventCapablityProvider());
             }
         }
     }
 
-    @SubscribeEvent
-    public static void onAttachCapabilitiesLevel(AttachCapabilitiesEvent<Level> event) {
-        if (!(event.getObject()).getCapability(WorldEventCapablityProvider.WORLD_EVENT).isPresent()) {
-            event.addCapability(new ResourceLocation(RPGMod.MODID, "event"), new WorldEventCapablityProvider());
-        }
-    }
+
 
     @SubscribeEvent
     public static void onCommandsRegister(RegisterCommandsEvent event) {
