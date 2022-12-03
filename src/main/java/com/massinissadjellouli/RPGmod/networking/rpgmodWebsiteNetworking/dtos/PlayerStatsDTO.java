@@ -1,13 +1,13 @@
 package com.massinissadjellouli.RPGmod.networking.rpgmodWebsiteNetworking.dtos;
 
-import com.massinissadjellouli.RPGmod.classSystem.PlayerClass;
 import com.massinissadjellouli.RPGmod.classSystem.PlayerClassType;
 
-public class PlayerStats {
-    private final String MINING = "Minage";
-    private final String FORAGING = "Buchage";
-    private final String COMBAT = "Combat";
-    private final String userId;
+import static com.massinissadjellouli.RPGmod.networking.rpgmodWebsiteNetworking.WebsiteUtils.*;
+
+public class PlayerStatsDTO {
+
+    private final String worldId;
+    private final String username;
     private final int blocksMined;
     private final int mobsKilled;
     private final int blocksForaged;
@@ -25,8 +25,9 @@ public class PlayerStats {
     private final int highestLevel;
     private final int totalXp;
 
-    public PlayerStats(String userId,int blocksMined, int mobsKilled, int blocksForaged, PlayerClassType currentClass, int miningLevel, int miningXp, int totalMiningXp, int foragingLevel, int foragingXp, int totalForagingXp, int combatLevel, int combatXp, int totalCombatXp) {
-        this.userId = userId;
+    public PlayerStatsDTO(String username,String worldId, int blocksMined, int mobsKilled, int blocksForaged, PlayerClassType currentClass, int miningLevel, int miningXp, int totalMiningXp, int foragingLevel, int foragingXp, int totalForagingXp, int combatLevel, int combatXp, int totalCombatXp) {
+        this.username = username;
+        this.worldId = worldId;
         this.blocksMined = blocksMined;
         this.mobsKilled = mobsKilled;
         this.blocksForaged = blocksForaged;
@@ -46,10 +47,14 @@ public class PlayerStats {
     }
 
     private String getPlayerClass(PlayerClassType currentClass) {
+        if(currentClass == null){
+            return "Aucune";
+        }
         return switch (currentClass) {
             case MINEUR -> MINING;
             case BUCHERON -> FORAGING;
             case SOLDAT -> COMBAT;
+
         };
     }
 

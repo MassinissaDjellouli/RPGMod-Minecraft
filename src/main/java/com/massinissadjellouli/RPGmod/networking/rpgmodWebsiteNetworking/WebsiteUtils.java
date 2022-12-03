@@ -1,10 +1,10 @@
 package com.massinissadjellouli.RPGmod.networking.rpgmodWebsiteNetworking;
 
 public class WebsiteUtils {
-    public static String getWebsiteURL() {
-        return "http://localhost:5173";
-    }
+    public static final String MINING = "Minage";
+    public static final String FORAGING = "Buchage";
+    public static final String COMBAT = "Combat";
     public static String getEndpoint(String endpoint) {
-        return "http://localhost:5173/api/" + endpoint;
+        return "http://localhost:5555/api/" + endpoint;
     }
 }

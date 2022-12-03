@@ -86,4 +86,8 @@ public class PlayerClass {
     public void change(PlayerClassType type) {
         currentClass = type;
     }
+
+    public PlayerClassType getCurrentClass() {
+        return currentClass;
+    }
 }

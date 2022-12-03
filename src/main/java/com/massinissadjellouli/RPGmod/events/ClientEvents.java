@@ -18,6 +18,7 @@ import com.massinissadjellouli.RPGmod.events.Custom.WorldEventLaunchEvent;
 import com.massinissadjellouli.RPGmod.item.ModItems;
 import com.massinissadjellouli.RPGmod.networking.ModPackets;
 import com.massinissadjellouli.RPGmod.networking.packet.*;
+import com.massinissadjellouli.RPGmod.networking.rpgmodWebsiteNetworking.PlayerInfoCapability.PlayerUIDCapabilityProvider;
 import com.massinissadjellouli.RPGmod.screen.LinkAccountScreen;
 import com.massinissadjellouli.RPGmod.skills.PlayerSkillData;
 import com.massinissadjellouli.RPGmod.skills.PlayerSkillProvider;
@@ -28,6 +29,8 @@ import com.massinissadjellouli.RPGmod.worldEvents.WorldEvent;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.player.LocalPlayer;
+import net.minecraft.core.Registry;
+import net.minecraft.data.worldgen.DimensionTypes;
 import net.minecraft.nbt.StringTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
@@ -43,7 +46,10 @@ import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.decoration.ArmorStand;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.*;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.dimension.BuiltinDimensionTypes;
+import net.minecraft.world.level.dimension.DimensionType;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.EntityRenderersEvent;
 import net.minecraftforge.client.event.InputEvent;
@@ -59,6 +65,7 @@ import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import net.minecraftforge.event.entity.player.ItemTooltipEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.event.level.BlockEvent;
+import net.minecraftforge.event.level.LevelEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.registries.ForgeRegistries;
@@ -316,7 +323,12 @@ public class ClientEvents {
             }
         }
     }
-
+    @SubscribeEvent
+    public static void onWorldSave(LevelEvent.Save event) {
+        if (!event.getLevel().isClientSide() && ((ServerLevel)event.getLevel()).dimension() == Level.OVERWORLD) {
+            ModPackets.sendToServer(new SendUserStatsToBackendC2SPacket());
+        }
+    }
     public static void givePlayerKillXp(EntityType entity, Player player) {
         player.getCapability(PlayerSkillProvider.PLAYER_SKILLS).ifPresent(capability -> {
             final int[] xp = {getXpFromKilling(entity)};
@@ -349,6 +361,12 @@ public class ClientEvents {
     }
 
     @SubscribeEvent
+    public static void onPlayerLoad(PlayerEvent.PlayerLoggedInEvent event){
+        Player player = event.getEntity();
+        player.getCapability(PlayerUIDCapabilityProvider.PLAYER_UID).ifPresent(playerClass ->
+            ModPackets.sendToServer(new SendUserStatsToBackendC2SPacket()));
+    }
+    @SubscribeEvent
     public static void onRandomEvent(WorldEventLaunchEvent event) {
         event.launch(event.isFromCommand());
     }
@@ -366,7 +384,6 @@ public class ClientEvents {
             ModPackets.sendToServer(new ReduceThirstByTickC2SPacket());
             ModPackets.sendToServer(new GamemodeDataSyncC2SPacket());
             ModPackets.sendToServer(new ThirstEffectC2SPacket());
-            ModPackets.sendToServer(new SendUserStatsToBackendC2SPacket());
         } else {
             if (event.player != null
                     && WorldEvent.ongoingEvent != null

@@ -1,4 +1,4 @@
-package com.massinissadjellouli.RPGmod.networking.rpgmodWebsiteNetworking;
+package com.massinissadjellouli.RPGmod.networking.rpgmodWebsiteNetworking.PlayerInfoCapability;
 
 import com.massinissadjellouli.RPGmod.client.renderer.ClientPlayerUIDData;
 import net.minecraft.core.Direction;

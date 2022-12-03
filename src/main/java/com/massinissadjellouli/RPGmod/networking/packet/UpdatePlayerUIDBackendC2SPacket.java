@@ -1,6 +1,6 @@
 package com.massinissadjellouli.RPGmod.networking.packet;
 
-import com.massinissadjellouli.RPGmod.networking.rpgmodWebsiteNetworking.PlayerUIDCapabilityProvider;
+import com.massinissadjellouli.RPGmod.networking.rpgmodWebsiteNetworking.PlayerInfoCapability.PlayerUIDCapabilityProvider;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraftforge.network.NetworkEvent;

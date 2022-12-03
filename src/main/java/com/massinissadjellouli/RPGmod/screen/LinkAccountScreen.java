@@ -1,29 +1,15 @@
 package com.massinissadjellouli.RPGmod.screen;
 
 import com.massinissadjellouli.RPGmod.RPGMod;
-import com.massinissadjellouli.RPGmod.client.ClientLastMessageReceived;
 import com.massinissadjellouli.RPGmod.client.renderer.ClientPlayerUIDData;
-import com.massinissadjellouli.RPGmod.networking.ModPackets;
-import com.massinissadjellouli.RPGmod.networking.packet.ChangeClassC2SPacket;
-import com.massinissadjellouli.RPGmod.networking.packet.UpdatePlayerUIDBackendC2SPacket;
-import com.massinissadjellouli.RPGmod.networking.rpgmodWebsiteNetworking.PlayerUIDCapabilityProvider;
-import com.massinissadjellouli.RPGmod.networking.rpgmodWebsiteNetworking.WebsiteUtils;
-import com.massinissadjellouli.RPGmod.worldEvents.WorldEvent;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
-import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.Font;
-import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
-import net.minecraftforge.client.gui.overlay.IGuiOverlay;
-import net.minecraftforge.common.ForgeHooks;
-
-import static com.massinissadjellouli.RPGmod.classSystem.PlayerClassType.*;
 
 public class LinkAccountScreen extends AbstractContainerScreen<LinkAccountMenu> {
 

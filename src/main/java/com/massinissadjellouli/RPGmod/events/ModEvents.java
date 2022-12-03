@@ -3,7 +3,8 @@ package com.massinissadjellouli.RPGmod.events;
 import com.massinissadjellouli.RPGmod.RPGMod;
 import com.massinissadjellouli.RPGmod.classSystem.PlayerClassProvider;
 import com.massinissadjellouli.RPGmod.commands.WorldEventCommand;
-import com.massinissadjellouli.RPGmod.networking.rpgmodWebsiteNetworking.PlayerUIDCapabilityProvider;
+import com.massinissadjellouli.RPGmod.networking.rpgmodWebsiteNetworking.PlayerInfoCapability.PlayerLoginInfoCapabilityProvider;
+import com.massinissadjellouli.RPGmod.networking.rpgmodWebsiteNetworking.PlayerInfoCapability.PlayerUIDCapabilityProvider;
 import com.massinissadjellouli.RPGmod.skills.PlayerSkillProvider;
 import com.massinissadjellouli.RPGmod.skills.PlayerSkills;
 import com.massinissadjellouli.RPGmod.skills.PlayerSkillsData.SkillData;
@@ -44,6 +45,9 @@ public class ModEvents {
             }
             if (!((Player) event.getObject()).getCapability(PlayerUIDCapabilityProvider.PLAYER_UID).isPresent()) {
                 event.addCapability(new ResourceLocation(RPGMod.MODID, "uid"), new PlayerUIDCapabilityProvider());
+            }
+            if (!((Player) event.getObject()).getCapability(PlayerLoginInfoCapabilityProvider.PLAYER_LOGIN_INFO).isPresent()) {
+                event.addCapability(new ResourceLocation(RPGMod.MODID, "log_info"), new PlayerLoginInfoCapabilityProvider());
             }
         }
         if (event.getObject() instanceof Level) {
