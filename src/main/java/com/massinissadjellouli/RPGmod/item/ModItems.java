@@ -101,9 +101,9 @@ public class ModItems {
                         new Item.Properties().tab(CreativeModeTab.TAB_COMBAT), LIGHTNING, 5);
             });
 
-    static final RegistryObject<MultiElementalSwordItem> HELL_SWORD =
+    public static final RegistryObject<MultiElementalSwordItem> HELL_SWORD =
             createMultiElementalSword("hell_sword", ToolTiers.HELL_ALLOY, POISON, FIRE);
-    static final RegistryObject<MultiElementalSwordItem> GOD_SWORD =
+    public static final RegistryObject<MultiElementalSwordItem> GOD_SWORD =
             createMultiElementalSword("god_sword", ToolTiers.DIVINE_ALLOY, POISON, FIRE, ICE, LIGHTNING);
 
     //Create objects functions

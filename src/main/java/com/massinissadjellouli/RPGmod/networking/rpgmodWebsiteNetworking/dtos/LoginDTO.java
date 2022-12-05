@@ -8,9 +8,6 @@ public class LoginDTO {
     public LoginDTO(String username) {
         this.username = username;
     }
-    public static LoginDTO fromLoginInfo(PlayerLoginInfo loginInfo) {
-        return new LoginDTO(loginInfo.getUsername());
-    }
 
     public String getUsername() {
         return username;

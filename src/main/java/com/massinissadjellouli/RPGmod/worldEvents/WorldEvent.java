@@ -189,9 +189,9 @@ public abstract class WorldEvent {
             return;
         }
         try {
-            ongoingEvent.loadData(nbt);
             RPGModWorldEventType eventType = RPGModWorldEventType.valueOf(nbt.getString("event_type"));
             ongoingEvent = eventType.getEvent();
+            ongoingEvent.loadData(nbt);
             ongoingEvent.waitingForPlayer = ongoingEvent.player == null;
             ongoingEvent.waitingForLevel = ongoingEvent.level == null;
             ongoingEvent.loadedFromNBT = true;
@@ -205,6 +205,7 @@ public abstract class WorldEvent {
             ongoingEvent = null;
         }
     }
-
-
+    public boolean is(RPGModWorldEventType eventType){
+        return RPGModWorldEventType.getName(eventType).equals(RPGModWorldEventType.getName(getEventType()));
+    }
 }

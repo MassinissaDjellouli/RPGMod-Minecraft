@@ -25,6 +25,8 @@ import com.massinissadjellouli.RPGmod.skills.PlayerSkillProvider;
 import com.massinissadjellouli.RPGmod.tags.ModTags;
 import com.massinissadjellouli.RPGmod.tags.RarityTags;
 import com.massinissadjellouli.RPGmod.thirst.PlayerThirst;
+import com.massinissadjellouli.RPGmod.worldEvents.GoldRushWorldEvent;
+import com.massinissadjellouli.RPGmod.worldEvents.RPGModWorldEventType;
 import com.massinissadjellouli.RPGmod.worldEvents.WorldEvent;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.Screen;
@@ -120,6 +122,9 @@ public class ClientEvents {
     @SubscribeEvent
     public static void onBlockMined(BlockEvent.BreakEvent event) {
         if (!event.getPlayer().level.isClientSide) {
+            if(WorldEvent.ongoingEvent.is(RPGModWorldEventType.GOLD_RUSH)){
+                ((GoldRushWorldEvent) WorldEvent.ongoingEvent).minedBlock(event.getPlayer(),(ServerLevel) event.getLevel());
+            }
             event.getPlayer().getCapability(PlayerSkillProvider.PLAYER_SKILLS).ifPresent(capability -> {
                 if (blockTagHas(BlockTags.MINEABLE_WITH_PICKAXE, event.getState().getBlock())) {
                     if (itemTagHas(Tags.Items.TOOLS_PICKAXES,
