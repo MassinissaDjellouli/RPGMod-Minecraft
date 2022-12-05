@@ -123,7 +123,7 @@ public class ClientEvents {
     public static void onBlockMined(BlockEvent.BreakEvent event) {
         if (!event.getPlayer().level.isClientSide) {
             if(WorldEvent.ongoingEvent.is(RPGModWorldEventType.GOLD_RUSH)){
-                ((GoldRushWorldEvent) WorldEvent.ongoingEvent).minedBlock(event.getPlayer(),(ServerLevel) event.getLevel());
+                ((GoldRushWorldEvent) WorldEvent.ongoingEvent).minedBlock();
             }
             event.getPlayer().getCapability(PlayerSkillProvider.PLAYER_SKILLS).ifPresent(capability -> {
                 if (blockTagHas(BlockTags.MINEABLE_WITH_PICKAXE, event.getState().getBlock())) {

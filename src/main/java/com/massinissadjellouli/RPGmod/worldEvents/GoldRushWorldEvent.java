@@ -55,14 +55,14 @@ public class GoldRushWorldEvent extends WorldEvent {
         neededBlocks = new Random().nextInt(140) + 30;
     }
 
-    public void minedBlock(Player player, ServerLevel level) {
+    public void minedBlock() {
         blocksMined++;
         if(blocksMined >= neededBlocks){
-            offerReward(player, level);
+            offerReward();
         }
     }
 
-    private void offerReward(Player player, ServerLevel level) {
+    private void offerReward() {
         rewardOffered = true;
         player.giveExperiencePoints(4000);
         GoldRushReward randomReward = getRandomReward();
